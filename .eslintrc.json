@@ -12,7 +12,7 @@
     "eslint:recommended"
     /** @see https://github.com/typescript-eslint/typescript-eslint/tree/master/packages/eslint-plugin#recommended-configs */
   ],
-  "ignorePatterns": ["node_modules/**", "**/dist/**"],
+  "ignorePatterns": ["node_modules/**", "**/dist/**", "scripts/*"],
   "rules": {
     /**
      * Having a semicolon helps the optimizer interpret your code correctly.
