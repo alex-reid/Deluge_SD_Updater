@@ -52,7 +52,7 @@ app
 //       const {default: installExtension, VUEJS3_DEVTOOLS} =
 //         // @ts-expect-error Hotfix for https://github.com/cawa-93/vite-electron-builder/issues/915
 //         typeof module.default === 'function' ? module : (module.default as typeof module);
-//
+
 //       return installExtension(VUEJS3_DEVTOOLS, {
 //         loadExtensionOptions: {
 //           allowFileAccess: true,
