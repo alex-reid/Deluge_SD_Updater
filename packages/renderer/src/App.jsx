@@ -1,17 +1,27 @@
+import {useState} from 'react';
 import {Button, TextField, Typography} from '@mui/material';
+import {setTitle} from '#preload';
 
 const App = () => {
+  const [title, setTheTitle] = useState('');
   return (
-    <p>
+    <div>
       <Typography variant="h3">Deluge SD card Updater</Typography>
       <br />
-      <Button variant="contained">Hi There</Button>
+      <Button
+        variant="contained"
+        onClick={() => setTitle(title)}
+      >
+        Hi There
+      </Button>
       <br />
       <TextField
         variant="outlined"
-        label="I'm a text field"
+        label="title"
+        value={title}
+        onChange={e => setTheTitle(e.target.value)}
       ></TextField>
-    </p>
+    </div>
   );
 };
 export default App;

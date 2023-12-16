@@ -1,4 +1,4 @@
-import {app, BrowserWindow} from 'electron';
+import {app, BrowserWindow, ipcMain} from 'electron';
 import {join, resolve} from 'node:path';
 
 async function createWindow() {
@@ -13,6 +13,13 @@ async function createWindow() {
     },
     width: 1200,
     height: 800,
+  });
+
+  ipcMain.on('set-title', (event, title) => {
+    const webContents = event.sender;
+    const win = BrowserWindow.fromWebContents(webContents);
+    win.setTitle(title);
+    console.log(title);
   });
 
   /**
