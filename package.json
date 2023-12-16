@@ -1,12 +1,10 @@
 {
-  "name": "vite-electron-builder",
-  "description": "Secure boilerplate for Electron app based on Vite",
-  "version": "1.0.2",
+  "name": "deluge-sd-card-updater",
+  "description": "Update your old Deluge SD card to v4",
+  "version": "0.0.2",
   "private": true,
   "author": {
-    "email": "kozackunisoft@gmail.com",
-    "name": "Alex Kozack",
-    "url": "https://kozack.me"
+    "name": "Alex Reid"
   },
   "main": "packages/main/dist/index.cjs",
   "scripts": {
@@ -26,6 +24,7 @@
     "format": "npx prettier --write \"**/*.{js,mjs,cjs,mts,cts,json,jsx}\""
   },
   "devDependencies": {
+    "@vitejs/plugin-react": "^4.2.1",
     "cross-env": "7.0.3",
     "electron": "27.1.0",
     "electron-builder": "24.6.4",
@@ -42,7 +41,9 @@
     "vitest": "0.34.6"
   },
   "dependencies": {
-    "@vitejs/plugin-react": "^4.2.1",
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@mui/material": "^5.15.0",
     "electron-updater": "6.1.4"
   }
 }
