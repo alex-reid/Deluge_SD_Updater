@@ -44,6 +44,7 @@
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@mui/material": "^5.15.0",
+    "cheerio": "^1.0.0-rc.12",
     "electron-updater": "6.1.4"
   }
 }

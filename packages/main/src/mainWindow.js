@@ -1,5 +1,6 @@
 import {app, BrowserWindow, ipcMain} from 'electron';
 import {join, resolve} from 'node:path';
+import fileSystem from './delugefs/fileSystemClass';
 
 async function createWindow() {
   const browserWindow = new BrowserWindow({
@@ -15,13 +16,6 @@ async function createWindow() {
     height: 800,
   });
 
-  ipcMain.on('set-title', (event, title) => {
-    const webContents = event.sender;
-    const win = BrowserWindow.fromWebContents(webContents);
-    win.setTitle(title);
-    console.log(title);
-  });
-
   /**
    * If the 'show' property of the BrowserWindow's constructor is omitted from the initialization options,
    * it then defaults to 'true'. This can cause flickering as the window loads the html content,
@@ -32,6 +26,32 @@ async function createWindow() {
    */
   browserWindow.on('ready-to-show', () => {
     browserWindow?.show();
+
+    const D = new fileSystem();
+
+    D.init(
+      // "/Volumes/DELUGE"
+      //"./Deluge_v2",
+      //"./Deluge_v4",
+      '/Users/alexreid/work/deluge-node/DelugeSD',
+      // "/Users/alexreid/work/deluge-node/Deluge+OLED+V4p1p0+factory+card+contents",
+      {
+        renameToV4: true,
+        prettyNames: false,
+      },
+    ).then(() => {
+      browserWindow.webContents.send('files', {
+        kits: D.files.kits.map(v => ({name: v.fileName, path: v.path})),
+        synths: D.files.synths.map(v => ({name: v.fileName, path: v.path})),
+        songs: D.files.songs.map(v => ({name: v.fileName, path: v.path})),
+      });
+    });
+
+    ipcMain.on('set-title', (event, title) => {
+      const webContents = event.sender;
+      const win = BrowserWindow.fromWebContents(webContents);
+      win.setTitle(title);
+    });
 
     if (import.meta.env.DEV) {
       browserWindow?.webContents.openDevTools();
