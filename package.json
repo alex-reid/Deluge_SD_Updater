@@ -1,12 +1,12 @@
 {
-  "name": "vite-electron-builder",
-  "description": "Secure boilerplate for Electron app based on Vite",
-  "version": "1.0.2",
+  "name": "deluge-sd-card-updater",
+  "description": "Update your old Deluge SD card to v4",
+  "version": "0.0.2",
   "private": true,
   "author": {
-    "email": "kozackunisoft@gmail.com",
-    "name": "Alex Kozack",
-    "url": "https://kozack.me"
+    "name": "Alex Reid",
+    "email": "alex@alex-reid.com.au",
+    "url": "https://github.com/alex-reid/Deluge_SD_Updater/"
   },
   "main": "packages/main/dist/index.cjs",
   "scripts": {
@@ -14,7 +14,7 @@
     "build:main": "cd ./packages/main && vite build",
     "build:preload": "cd ./packages/preload && vite build",
     "build:renderer": "cd ./packages/renderer && vite build",
-    "compile": "cross-env MODE=production npm run build && electron-builder build --config .electron-builder.config.js --dir --config.asar=false",
+    "compile": "cross-env MODE=production npm run build && electron-builder build --config .electron-builder.config.js --dir --config.asar=false -c.mac.identity=null",
     "test": "npm run test:main && npm run test:preload && npm run test:renderer && npm run test:e2e",
     "test:e2e": "npm run build && vitest run",
     "test:main": "vitest run -r packages/main --passWithNoTests",
@@ -26,9 +26,16 @@
     "format": "npx prettier --write \"**/*.{js,mjs,cjs,mts,cts,json,jsx}\""
   },
   "devDependencies": {
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@mui/icons-material": "^5.15.0",
+    "@mui/material": "^5.15.0",
+    "@vitejs/plugin-react": "^4.2.1",
     "cross-env": "7.0.3",
     "electron": "27.1.0",
     "electron-builder": "24.6.4",
+    "electron-devtools-assembler": "^1.2.0",
+    "electron-devtools-installer": "^3.2.0",
     "eslint": "8.53.0",
     "eslint-plugin-react": "^7.33.2",
     "happy-dom": "12.10.3",
@@ -42,7 +49,7 @@
     "vitest": "0.34.6"
   },
   "dependencies": {
-    "@vitejs/plugin-react": "^4.2.1",
+    "cheerio": "^1.0.0-rc.12",
     "electron-updater": "6.1.4"
   }
 }

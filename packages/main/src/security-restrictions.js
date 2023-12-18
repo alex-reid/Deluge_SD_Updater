@@ -1,20 +1,12 @@
-import type {Session} from 'electron';
 import {app, shell} from 'electron';
 import {URL} from 'node:url';
-
-/**
- * Union for all existing permissions in electron
- */
-type Permission = Parameters<
-  Exclude<Parameters<Session['setPermissionRequestHandler']>[0], null>
->[1];
 
 /**
  * A list of origins that you allow open INSIDE the application and permissions for them.
  *
  * In development mode you need allow open `VITE_DEV_SERVER_URL`.
  */
-const ALLOWED_ORIGINS_AND_PERMISSIONS = new Map<string, Set<Permission>>(
+const ALLOWED_ORIGINS_AND_PERMISSIONS = new Map(
   import.meta.env.DEV && import.meta.env.VITE_DEV_SERVER_URL
     ? [[new URL(import.meta.env.VITE_DEV_SERVER_URL).origin, new Set()]]
     : [],
@@ -30,7 +22,7 @@ const ALLOWED_ORIGINS_AND_PERMISSIONS = new Map<string, Set<Permission>>(
  *   href="https://github.com/"
  * >
  */
-const ALLOWED_EXTERNAL_ORIGINS = new Set<`https://${string}`>(['https://github.com']);
+const ALLOWED_EXTERNAL_ORIGINS = new Set(['https://github.com']);
 
 app.on('web-contents-created', (_, contents) => {
   /**
@@ -85,7 +77,7 @@ app.on('web-contents-created', (_, contents) => {
   contents.setWindowOpenHandler(({url}) => {
     const {origin} = new URL(url);
 
-    if (ALLOWED_EXTERNAL_ORIGINS.has(origin as `https://${string}`)) {
+    if (ALLOWED_EXTERNAL_ORIGINS.has(origin)) {
       // Open url in default browser.
       shell.openExternal(url).catch(console.error);
     } else if (import.meta.env.DEV) {

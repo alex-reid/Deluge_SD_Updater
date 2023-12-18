@@ -1,5 +1,7 @@
-import {app, BrowserWindow} from 'electron';
+import {app, BrowserWindow, ipcMain} from 'electron';
 import {join, resolve} from 'node:path';
+import fileSystem from './delugefs/fileSystemClass';
+import {sendMainDelugeInfo} from './delugefs/ipcFuncs';
 
 async function createWindow() {
   const browserWindow = new BrowserWindow({
@@ -11,6 +13,23 @@ async function createWindow() {
       webviewTag: false, // The webview tag is not recommended. Consider alternatives like an iframe or Electron's BrowserView. @see https://www.electronjs.org/docs/latest/api/webview-tag#warning
       preload: join(app.getAppPath(), 'packages/preload/dist/index.cjs'),
     },
+    width: 1600,
+    height: 800,
+  });
+
+  const D = new fileSystem(browserWindow);
+
+  ipcMain.on('init-directory', (_event, directory) => {
+    if (directory) {
+      D.init(directory, {
+        renameToV4: true,
+        prettyNames: false,
+      })
+        .then(error => {
+          if (!error) sendMainDelugeInfo(D, browserWindow);
+        })
+        .catch(err => D.sendError(err));
+    }
   });
 
   /**

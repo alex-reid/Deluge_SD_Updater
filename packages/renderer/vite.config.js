@@ -45,7 +45,7 @@ const config = {
   plugins: [
     react(),
     renderer.vite({
-      preloadEntry: join(PACKAGE_ROOT, '../preload/src/index.ts'),
+      preloadEntry: join(PACKAGE_ROOT, '../preload/src/index.js'),
     }),
     injectAppVersion(),
   ],
