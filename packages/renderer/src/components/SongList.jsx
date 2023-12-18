@@ -4,7 +4,6 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {Box} from '@mui/system';
 import QueueMusicIcon from '@mui/icons-material/QueueMusic';
 
-
 const SongList = ({name, path, instruments, clips, firmwareVersion}) => {
   return (
     <Accordion>
