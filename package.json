@@ -4,7 +4,9 @@
   "version": "0.0.2",
   "private": true,
   "author": {
-    "name": "Alex Reid"
+    "name": "Alex Reid",
+    "email": "alex@alex-reid.com.au",
+    "url": "https://github.com/alex-reid/Deluge_SD_Updater/"
   },
   "main": "packages/main/dist/index.cjs",
   "scripts": {
