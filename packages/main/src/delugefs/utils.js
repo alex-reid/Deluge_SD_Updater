@@ -1,9 +1,10 @@
 import {letterToIndexMap, indexToLetterMap, typeMappings} from './definitions';
 
-const matchOldName = /^(SYNT|SONG|KIT|SAMP)(\d*)([a-zA-Z]?)( \d+)?/;
+const matchOldNameStrict = /^(SYNT|SONG|KIT|SAMP)(\d*)([a-zA-Z]?)( \d+)?$/i;
+const matchOldName = /^(SYNT|SONG|KIT|SAMP)(\d*)([a-zA-Z]?)( \d+)?(.+)?/i;
 
 function getOldTypeAndNumber(fileName) {
-  const fileData = fileName.match(matchOldName);
+  const fileData = fileName.match(matchOldNameStrict);
   if (fileData) {
     return {
       isOldName: true,
@@ -19,10 +20,10 @@ function getOldTypeAndNumber(fileName) {
 function prettyName(oldName) {
   const fileData = oldName.match(matchOldName);
   if (fileData) {
-    const [, type, slot, subSlot, version] = fileData;
-    return `${slot} ${getMapping(type, 'file', 'pretty')}${subSlot && ' ' + subSlot}${
-      version && version
-    }`;
+    const [, type, slot, subSlot, version, end] = fileData;
+    return `${slot} ${getMapping(type, 'file', 'pretty')}${subSlot ? ' ' + subSlot : ''}${
+      version ? version : ''
+    }${end ? end : ''}`;
   }
   return false;
 }

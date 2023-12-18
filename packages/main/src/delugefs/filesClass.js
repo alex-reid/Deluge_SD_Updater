@@ -7,8 +7,9 @@ import {Instrument, Clip} from './nodesClass';
 import {newNames} from './definitions';
 
 class File {
-  constructor(path, fileName) {
-    this.path = path;
+  constructor(path, fileName, rootPath) {
+    this.path = path.replace(rootPath, '');
+    this.rootPath = rootPath;
     this.fullFileName = fileName;
     this.fileName = fileName.replace(/\.xml$/i, '');
     this.XML = null;
@@ -18,7 +19,10 @@ class File {
 
   async loadXML() {
     try {
-      const xmlContent = await fs.readFile(path.join(this.path, this.fullFileName), 'utf-8');
+      const xmlContent = await fs.readFile(
+        path.join(this.rootPath, this.path, this.fullFileName),
+        'utf-8',
+      );
       this.XML = cheerio.load(
         xmlContent,
         {
@@ -34,7 +38,7 @@ class File {
     } catch (error) {
       console.error(
         'Error loading or parsing XML file:',
-        path.join(this.path, this.fileName),
+        path.join(this.rootPath, this.path, this.fileName),
         '\n',
         error,
       );
@@ -46,14 +50,14 @@ class File {
   async saveXML() {
     // Save the modified XML to a new file
     const modifiedXml = this.XML.xml();
-    const newXmlFilePath = path.join(this.path, this.fileName + '_v4.XML');
+    const newXmlFilePath = path.join(this.rootPath, this.path, this.fileName + '_v4.XML');
     fs.writeFile(newXmlFilePath, modifiedXml, 'utf-8');
   }
 }
 
 class Song extends File {
-  constructor(path, fileName, mappings) {
-    super(path, fileName);
+  constructor(path, fileName, mappings, rootPath) {
+    super(path, fileName, rootPath);
     this.mappings = mappings;
     this.elementsWithAttributes = null;
     this.elementsWithNames = null;
@@ -283,8 +287,8 @@ class Song extends File {
 }
 
 class Sound extends File {
-  constructor(path, fileName) {
-    super(path, fileName);
+  constructor(path, fileName, rootPath) {
+    super(path, fileName, rootPath);
     this.presetName = fileName.replace(/\.xml$/i, '');
     this.presetType = null;
     this.presetSlot = null;
@@ -306,21 +310,21 @@ class Sound extends File {
   }
 
   getNewName() {
-    let name = this.fileName;
+    let name;
     if (this.isOldName) {
       name = newNames[getFolderFromFileType(this.presetType)][this.presetSlot];
       if (this.presetSubSlot > -1) name += ' ' + (this.presetSubSlot + 2);
       if (this.v4versionNum) name += this.v4versionNum;
     }
-    return name;
+    return name || '';
   }
 
   renameFileToV4() {
     const newName = this.getNewName();
     if (this.isOldName) {
       fs.rename(
-        path.join(this.path, this.fileName + '.XML'),
-        path.join(this.path, newName + '.XML'),
+        path.join(this.rootPath, this.path, this.fileName + '.XML'),
+        path.join(this.rootPath, this.path, newName + '.XML'),
       )
         .then(() => console.log('Renamed', this.fileName + '.XML', 'to', newName + '.XML'))
         .catch(err => console.error(err));
@@ -329,15 +333,15 @@ class Sound extends File {
 }
 
 class Kit extends Sound {
-  constructor(path, fileName) {
-    super(path, fileName);
+  constructor(path, fileName, rootPath) {
+    super(path, fileName, rootPath);
     this.presetType = 'KIT';
   }
 }
 
 class Synth extends Sound {
-  constructor(path, fileName) {
-    super(path, fileName);
+  constructor(path, fileName, rootPath) {
+    super(path, fileName, rootPath);
     this.presetType = 'SYNT';
   }
 }

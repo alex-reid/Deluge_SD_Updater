@@ -47,18 +47,19 @@ app
 // if (import.meta.env.DEV) {
 //   app
 //     .whenReady()
-//     .then(() => import('electron-devtools-installer'))
+//     .then(() => import('electron-devtools-assembler'))
 //     .then(module => {
-//       const {default: installExtension, VUEJS3_DEVTOOLS} =
-//         // @ts-expect-error Hotfix for https://github.com/cawa-93/vite-electron-builder/issues/915
-//         typeof module.default === 'function' ? module : (module.default as typeof module);
+//       const {default: installExtension, REACT_DEVELOPER_TOOLS} =
+//         typeof module.default === 'function' ? module : module.default;
 
-//       return installExtension(VUEJS3_DEVTOOLS, {
+//       return installExtension(REACT_DEVELOPER_TOOLS, {
 //         loadExtensionOptions: {
 //           allowFileAccess: true,
 //         },
+//         // forceDownload: true,
 //       });
 //     })
+//     .then(name => console.log(`Added Extension:  ${name}`))
 //     .catch(e => console.error('Failed install extension:', e));
 // }
 

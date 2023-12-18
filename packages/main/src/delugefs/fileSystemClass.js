@@ -3,9 +3,11 @@ import fsSync from 'fs';
 import path from 'path';
 import {Song, Kit, Synth} from './filesClass';
 import {prettyName} from './utils';
+import {sendErrorMain} from './ipcFuncs';
 
 class fileSystem {
-  constructor() {
+  constructor(browser) {
+    this.browserWindow = browser;
     this.driveList = null;
     this.rootDir = null;
     this.isDelugeDrive = false;
@@ -30,6 +32,10 @@ class fileSystem {
     };
   }
 
+  sendError(error) {
+    sendErrorMain(error, this.browserWindow);
+  }
+
   getFileByName(name, type) {
     return this.files[type].find(file => name == file.fileName);
   }
@@ -44,45 +50,75 @@ class fileSystem {
     return this.getFileByName(name, 'kits');
   }
 
+  reset() {
+    this.driveList = null;
+    this.rootDir = null;
+    this.isDelugeDrive = false;
+    this.delugePaths = null;
+    this.renameToV4 = true;
+    this.prettyNames = false;
+    this.files = {
+      kits: [],
+      synths: [],
+      songs: [],
+      samples: [],
+    };
+    this.mappings = {
+      byName: {
+        kits: {},
+        synths: {},
+      },
+      byID: {
+        kits: [],
+        synths: [],
+      },
+    };
+  }
+
   async init(delugeSdPath, options) {
+    try {
+      if (!fsSync.lstatSync(delugeSdPath).isDirectory()) {
+        throw new Error();
+      }
+    } catch {
+      throw new Error('path given is not a directory');
+    }
+
+    this.reset();
     this.rootDir = delugeSdPath;
     this.renameToV4 = !!options.renameToV4;
     this.prettyNames = !!options.prettyNames;
 
     await this.isDelugeSD()
       .then(() => {
-        return this.buildSongList();
+        return this.buildSynthsAndKitsList();
       })
       .then(() => {
-        return this.buildSynthsAndKitsList();
+        return this.buildSongList();
       })
       .then(() => {
         return this.loadSongs();
       })
-      .then(() => console.log('ready'))
-      .catch(err => console.log('There was a problem initialising the system', err));
+      .then(() => {
+        console.log('ready');
+      });
   }
 
   async isDelugeSD() {
-    await fs
-      .readdir(this.rootDir, {withFileTypes: true})
-      .then(files => {
-        const dirs = files.reduce((a, c) => {
-          c.isDirectory() && a.push(c.name);
-          return a;
-        }, []);
+    await fs.readdir(this.rootDir, {withFileTypes: true}).then(files => {
+      const dirs = files.reduce((a, c) => {
+        c.isDirectory() && a.push(c.name);
+        return a;
+      }, []);
 
-        this.isDelugeDrive = ['KITS', 'SAMPLES', 'SYNTHS'].every(v => dirs.includes(v));
-        if (this.isDelugeDrive) {
-          this.addPaths();
-          return;
-        } else {
-          throw new Error("can't find deluge paths");
-        }
-      })
-      .catch(err => {
-        throw new Error('Unable to scan directory: ' + err);
-      });
+      this.isDelugeDrive = ['KITS', 'SAMPLES', 'SYNTHS'].every(v => dirs.includes(v));
+      if (this.isDelugeDrive) {
+        this.addPaths();
+        return;
+      } else {
+        throw new Error("can't find deluge paths");
+      }
+    });
   }
 
   addPaths() {
@@ -139,13 +175,13 @@ class fileSystem {
 
   async buildSynthsAndKitsList() {
     this.loopDirectoryRecursive(this.delugePaths.kits, (file, directory) => {
-      const sound = new Kit(directory, file);
+      const sound = new Kit(directory, file, this.rootDir);
       this.files.kits.push(sound);
       this.addNewMappings(sound, 'kits');
     });
     console.log(this.files.kits.length, 'kits(s) loaded from SD card');
     this.loopDirectoryRecursive(this.delugePaths.synths, (file, directory) => {
-      const sound = new Synth(directory, file);
+      const sound = new Synth(directory, file, this.rootDir);
       this.files.synths.push(sound);
       this.addNewMappings(sound, 'synths');
     });
@@ -177,10 +213,14 @@ class fileSystem {
   }
 
   buildSongList() {
-    this.loopDirectoryRecursive(this.delugePaths.songs, (file, directory) => {
-      this.files.songs.push(new Song(directory, file, this.mappings));
-    });
-    console.log(this.files.songs.length, 'song(s) loaded from SD card');
+    try {
+      this.loopDirectoryRecursive(this.delugePaths.songs, (file, directory) => {
+        this.files.songs.push(new Song(directory, file, this.mappings, this.rootDir));
+      });
+      console.log(this.files.songs.length, 'song(s) loaded from SD card');
+    } catch {
+      // we can load up fine without a songs directory
+    }
   }
 
   async loadSongs() {

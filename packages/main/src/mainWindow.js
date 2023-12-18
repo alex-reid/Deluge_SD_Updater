@@ -1,6 +1,7 @@
 import {app, BrowserWindow, ipcMain} from 'electron';
 import {join, resolve} from 'node:path';
 import fileSystem from './delugefs/fileSystemClass';
+import {sendMainDelugeInfo} from './delugefs/ipcFuncs';
 
 async function createWindow() {
   const browserWindow = new BrowserWindow({
@@ -12,8 +13,23 @@ async function createWindow() {
       webviewTag: false, // The webview tag is not recommended. Consider alternatives like an iframe or Electron's BrowserView. @see https://www.electronjs.org/docs/latest/api/webview-tag#warning
       preload: join(app.getAppPath(), 'packages/preload/dist/index.cjs'),
     },
-    width: 1200,
+    width: 1600,
     height: 800,
+  });
+
+  const D = new fileSystem(browserWindow);
+
+  ipcMain.on('init-directory', (_event, directory) => {
+    if (directory) {
+      D.init(directory, {
+        renameToV4: true,
+        prettyNames: false,
+      })
+        .then(error => {
+          if (!error) sendMainDelugeInfo(D, browserWindow);
+        })
+        .catch(err => D.sendError(err));
+    }
   });
 
   /**
@@ -26,32 +42,6 @@ async function createWindow() {
    */
   browserWindow.on('ready-to-show', () => {
     browserWindow?.show();
-
-    const D = new fileSystem();
-
-    D.init(
-      // "/Volumes/DELUGE"
-      //"./Deluge_v2",
-      //"./Deluge_v4",
-      '/Users/alexreid/work/deluge-node/DelugeSD',
-      // "/Users/alexreid/work/deluge-node/Deluge+OLED+V4p1p0+factory+card+contents",
-      {
-        renameToV4: true,
-        prettyNames: false,
-      },
-    ).then(() => {
-      browserWindow.webContents.send('files', {
-        kits: D.files.kits.map(v => ({name: v.fileName, path: v.path})),
-        synths: D.files.synths.map(v => ({name: v.fileName, path: v.path})),
-        songs: D.files.songs.map(v => ({name: v.fileName, path: v.path})),
-      });
-    });
-
-    ipcMain.on('set-title', (event, title) => {
-      const webContents = event.sender;
-      const win = BrowserWindow.fromWebContents(webContents);
-      win.setTitle(title);
-    });
 
     if (import.meta.env.DEV) {
       browserWindow?.webContents.openDevTools();

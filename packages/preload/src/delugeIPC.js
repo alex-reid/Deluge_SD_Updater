@@ -2,6 +2,11 @@ const {ipcRenderer} = require('electron/renderer');
 
 const setTitle = title => ipcRenderer.send('set-title', title);
 
-const sendFiles = callback => ipcRenderer.on('files', (_event, value) => callback(value));
+const init = directory => ipcRenderer.send('init-directory', directory);
 
-export {setTitle, sendFiles};
+const sendFiles = callback => {
+  const cbFunction = (_event, value) => callback(value);
+  ipcRenderer.on('files', cbFunction);
+};
+
+export {setTitle, sendFiles, init};
