@@ -7,8 +7,8 @@ import {Instrument, Clip} from './nodesClass';
 import {newNames} from './definitions';
 
 class File {
-  constructor(path, fileName, rootPath) {
-    this.path = path.replace(rootPath, '');
+  constructor(filePath, fileName, rootPath) {
+    this.path = filePath.replace(rootPath + path.sep, '');
     this.rootPath = rootPath;
     this.fullFileName = fileName;
     this.fileName = fileName.replace(/\.xml$/i, '');
@@ -227,8 +227,9 @@ class Song extends File {
     if (this.isLoaded) {
       this.clips = [];
       this.XML('sessionClips instrumentClip').each((_i, clip) => {
-        const attrs = this.XML(clip).find('kitParams, soundParams');
-        if (attrs.length > 0) this.clips.push(new Clip(clip, this.XML));
+        this.clips.push(new Clip(clip, this.XML));
+        // const attrs = this.XML(clip).find('kitParams, soundParams');
+        // if (attrs.length > 0) this.clips.push(new Clip(clip, this.XML));
       });
       // console.log(
       //   "----",
@@ -268,6 +269,20 @@ class Song extends File {
         instrument.presetSubSlot == clip.presetSubSlot &&
         instrument.presetName == clip.presetName,
     );
+  }
+
+  getInstrumentClipIndexs(instrument) {
+    return this.clips.reduce((acc, clip, index) => {
+      if (
+        instrument.presetType == clip.presetType &&
+        instrument.presetSlot == clip.presetSlot &&
+        instrument.presetSubSlot == clip.presetSubSlot &&
+        instrument.presetName == clip.presetName
+      ) {
+        return [...acc, index];
+      }
+      return acc;
+    }, []);
   }
 
   addClipIdsToInstruments() {

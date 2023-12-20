@@ -1,4 +1,4 @@
-import {getTypeMapping, getOldTypeAndNumber} from './utils';
+import {getTypeMapping, getOldTypeAndNumber, getOldNameFromSlot} from './utils';
 
 class Node {
   constructor(xmlData, xml) {
@@ -16,6 +16,8 @@ class Node {
     this.types = null;
     this.isV4 = false;
     this.renamed = false;
+    this.formatType = null;
+    this.patchName = '';
   }
   setupXml() {
     const $ = this.xml;
@@ -60,6 +62,12 @@ class Node {
     this.presetSubSlot = this.presetSubSlot && parseInt(this.presetSubSlot);
     this.types = getTypeMapping(this.presetType, 'xml');
     this.isV4 = !!(!this.presetSlot && !this.presetSubSlot && this.presetFolder && this.presetName);
+    this.formatType = this.getPresetType();
+    if (this.formatType == 'old') {
+      this.patchName = getOldNameFromSlot(this.presetType, this.presetSlot, this.presetSubSlot);
+    } else if (this.formatType == 'numsonly') {
+      this.patchName = this.types.file + this.presetName;
+    }
   }
 }
 
@@ -71,10 +79,10 @@ class Instrument extends Node {
   }
   getPresetData() {
     const {$, node} = this.setupXml();
-    this.presetName = $(node).attr('presetName') || null;
-    this.presetFolder = $(node).attr('presetFolder') || null;
     this.presetSlot = $(node).attr('presetSlot') || null;
     this.presetSubSlot = $(node).attr('presetSubSlot') || null;
+    this.presetName = $(node).attr('presetName') || null;
+    this.presetFolder = $(node).attr('presetFolder') || null;
     this.presetType = $(node)[0].name;
     this.getCommonPresetData();
   }

@@ -1,74 +1,11 @@
-import {ListItem, ListItemIcon, ListItemText, TextField, Typography, styled} from '@mui/material';
+import {ListItem, ListItemIcon, ListItemText, Typography} from '@mui/material';
 import React, {memo, useEffect, useState} from 'react';
 import PianoIcon from '@mui/icons-material/Piano';
 import AppsIcon from '@mui/icons-material/Apps';
 import {Box} from '@mui/system';
-import theme from '../theme';
 import EditIcon from '@mui/icons-material/Edit';
 import SdCardIcon from '@mui/icons-material/SdCard';
-
-const CssTextField = styled(TextField)({
-  // '& .MuiInput-underline:after': {
-  //   borderBottomColor: '#B2BAC2',
-  // },
-  margin: 0,
-  padding: 0,
-  minWidth: '28rem',
-  width: '50%',
-  marginBottom: '16px',
-  '&.Mui-error': {
-    color: theme.palette.primary.main,
-  },
-  '& .MuiFormHelperText-root': {
-    position: 'absolute',
-    top: '3.1rem',
-    fontSize: '1rem',
-    lineHeight: '1rem',
-    color: theme.palette.primary.main,
-  },
-  '& .MuiTextField-root': {
-    marginLeft: 0,
-  },
-  '& .MuiFormLabel-root': {
-    fontWeight: 700,
-    fontSize: '1.4rem',
-  },
-  '& .MuiFormLabel-root.Mui-focused, .MuiFormLabel-filled': {
-    fontWeight: 700,
-    fontSize: '1.2rem',
-    transform: 'translate(0px, 0px) scale(0.75)',
-    color: theme.palette.text.primary,
-    '&.Mui-error': {
-      color: theme.palette.primary.main,
-    },
-  },
-  '& .MuiInputBase-root': {
-    fontWeight: 700,
-    fontSize: '1.4rem',
-    '&::before': {
-      border: 'none',
-    },
-    '&::after': {
-      borderColor: theme.palette.primary.main,
-    },
-    '& input': {
-      padding: 0,
-      color: theme.palette.secondary.main,
-      '&[aria-invalid=true]': {
-        color: theme.palette.primary.main,
-      },
-    },
-    '&:hover::before': {
-      borderColor: 'rgb(255,255,255,0.5)', //'transparent',
-    },
-    '&:hover::after': {
-      borderColor: 'none', //'transparent',
-    },
-    '&.Mui-focused': {
-      borderColor: '#00f', //'transparent',
-    },
-  },
-});
+import {InstNameTextField} from './InstNameTextField';
 
 const InstrumentList = ({oldName, path, presetType, index, updateHandler, rewriteName}) => {
   const [name, setName] = useState(rewriteName);
@@ -113,7 +50,7 @@ const InstrumentList = ({oldName, path, presetType, index, updateHandler, rewrit
               justifyContent: 'space-between',
             }}
           >
-            <CssTextField
+            <InstNameTextField
               error={!!error}
               helperText={error}
               label={oldName}

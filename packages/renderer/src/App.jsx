@@ -8,14 +8,15 @@ import {
   ThemeProvider,
   Typography,
   Button,
-  LinearProgress,
+  Paper,
 } from '@mui/material';
-import {sendFiles, init, sendError} from '#preload';
+import {sendFiles, sendError} from '#preload';
 import CssBaseline from '@mui/material/CssBaseline';
 import theme from './theme';
 import InstrumentList from './components/instrumentList';
 import SongList from './components/SongList';
-import SdCardIcon from '@mui/icons-material/SdCard';
+import {useMapByName} from './hooks/useMappings';
+import {DragBox} from './components/DragBox';
 
 const App = () => {
   const [synths, setSynths] = useState([]);
@@ -23,8 +24,15 @@ const App = () => {
   const [songs, setSongs] = useState([]);
   const [tab, setTab] = useState('tab-synths');
   const [initialised, setInitialised] = useState(false);
-  // const [mapByName, setMapByName] = useState([]);
-  // const [mapById, setMapById] = useState([]);
+  const mapByName = useMapByName(kits, synths);
+
+  // useEffect(() => {
+  //   console.log('name map', mapByName);
+  // }, [mapByName]);
+
+  useEffect(() => {
+    console.log('songs', songs);
+  }, [songs]);
 
   useEffect(() => {
     const initialise = ({initialised, kits, synths, songs}) => {
@@ -49,15 +57,14 @@ const App = () => {
 
   const updateHandler = useCallback(
     (type, id, value) => {
+      const cb = prev => {
+        return prev.map((old, i) => (i == id ? {...old, rewriteName: value} : old));
+      };
       if (type == 'SYNT') {
-        setSynths(prev => {
-          return prev.map((old, i) => (i == id ? {...old, rewriteName: value} : old));
-        });
+        setSynths(cb);
       }
       if (type == 'KIT') {
-        setKits(prev => {
-          return prev.map((old, i) => (i == id ? {...old, rewriteName: value} : old));
-        });
+        setKits(cb);
       }
     },
     [synths, kits],
@@ -65,22 +72,52 @@ const App = () => {
 
   const loadV4Names = () => {
     setSynths(prev => {
-      return prev.map(old => ({...old, rewriteName: old.newName}));
+      return prev.map(old => ({
+        ...old,
+        rewriteName: old.rewriteName ? old.rewriteName : old.newName,
+      }));
     });
     setKits(prev => {
-      return prev.map(old => ({...old, rewriteName: old.newName}));
+      return prev.map(old => ({
+        ...old,
+        rewriteName: old.rewriteName ? old.rewriteName : old.newName,
+      }));
     });
-    console.log(synths, kits);
+    // console.log(synths, kits);
   };
 
   const loadPrettyNames = () => {
     setSynths(prev => {
-      return prev.map(old => ({...old, rewriteName: old.prettyName}));
+      return prev.map(old => ({
+        ...old,
+        rewriteName: old.rewriteName ? old.rewriteName : old.prettyName,
+      }));
     });
     setKits(prev => {
-      return prev.map(old => ({...old, rewriteName: old.prettyName}));
+      return prev.map(old => ({
+        ...old,
+        rewriteName: old.rewriteName ? old.rewriteName : old.prettyName,
+      }));
     });
-    console.log(synths, kits);
+    // console.log(synths, kits);
+  };
+
+  const getInstNewName = ins => {
+    const type = ins.type == 'kit' ? 'kits' : 'synths';
+    const mapping = {name: ins.patchName, path: type.toUpperCase()};
+    switch (ins.formatType) {
+      case 'numsonly':
+        return mapByName[type]?.[ins.patchName]?.[ins.presetFolder] || mapping;
+      case 'new':
+        return mapByName[type]?.[ins.presetName]?.[ins.presetFolder] || mapping;
+      case 'old':
+        return mapByName[type]?.[ins.patchName]?.[type.toUpperCase()] || mapping;
+      case 'nameonly':
+        return mapByName[type]?.[ins.presetName]?.[type.toUpperCase()] || mapping;
+      case 'unknown':
+        return {name: 'unkown', path: 'unknown'};
+      default:
+    }
   };
 
   return (
@@ -150,7 +187,7 @@ const App = () => {
                   },
                 }}
               >
-                <div
+                <Paper
                   style={{
                     display: tab == 'tab-synths' ? 'block' : 'none',
                   }}
@@ -165,8 +202,8 @@ const App = () => {
                       />
                     ))}
                   </List>
-                </div>
-                <div
+                </Paper>
+                <Paper
                   style={{
                     display: tab == 'tab-kits' ? 'block' : 'none',
                   }}
@@ -181,18 +218,23 @@ const App = () => {
                       />
                     ))}
                   </List>
-                </div>
+                </Paper>
                 <div
                   style={{
                     display: tab == 'tab-songs' ? 'block' : 'none',
                   }}
                 >
-                  {songs.map((data, i) => (
-                    <SongList
-                      {...data}
-                      key={i}
-                    />
-                  ))}
+                  {songs.map((data, i) => {
+                    return (
+                      <SongList
+                        {...data}
+                        newInstNames={data.instruments.map(instrument =>
+                          getInstNewName(instrument),
+                        )}
+                        key={i}
+                      />
+                    );
+                  })}
                 </div>
               </Box>
 
@@ -240,79 +282,3 @@ const App = () => {
   );
 };
 export default App;
-
-function DragBox() {
-  const [hover, setHover] = useState(false);
-  const [errorText, setErrorText] = useState('');
-  const [loading, setLoading] = useState(false);
-  useEffect(() => {
-    sendError(err => {
-      setLoading(false);
-      setErrorText(err.message);
-    });
-  }, []);
-
-  return (
-    <Box
-      sx={{
-        width: 'auto',
-        flex: '1 1 auto',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        border: '3px dashed #fff',
-        borderColor: hover ? 'secondary.light' : 'primary.light',
-        borderRadius: '2rem',
-        m: 6,
-      }}
-      onDrop={ev => {
-        ev.preventDefault();
-        setHover(false);
-        setLoading(true);
-        init(ev.dataTransfer.files[0].path);
-      }}
-      onDragOver={ev => {
-        ev.preventDefault();
-        setHover(true);
-      }}
-      onDragLeave={ev => {
-        ev.preventDefault();
-        setHover(false);
-      }}
-    >
-      <Box sx={{textAlign: 'center'}}>
-        <SdCardIcon
-          color="secondary"
-          sx={{fontSize: '6rem'}}
-        />
-        <Typography variant="h4">Drag your Deluge SD card (or directory) here.</Typography>
-        {loading && (
-          <Box sx={{m: 2}}>
-            <LinearProgress />
-          </Box>
-        )}
-        <br />
-        <Button
-          variant="contained"
-          size="large"
-          disabled={loading}
-          onClick={() => {
-            setLoading(true);
-            init('/Users/alexreid/work/deluge-node/DelugeSD');
-          }}
-        >
-          or click here to browse
-        </Button>
-        {errorText && (
-          <Typography
-            variant="h6"
-            color="primary"
-            marginTop={2}
-          >
-            <strong>Error Loading Files:</strong> {errorText}
-          </Typography>
-        )}
-      </Box>
-    </Box>
-  );
-}

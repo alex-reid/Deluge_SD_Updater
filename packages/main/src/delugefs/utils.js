@@ -17,6 +17,10 @@ function getOldTypeAndNumber(fileName) {
   return false;
 }
 
+function getOldNameFromSlot(presetType, presetSlot, presetSubSlot) {
+  return getFileFromXML(presetType) + formatNumber(presetSlot) + getAlphaFromIndex(presetSubSlot);
+}
+
 function prettyName(oldName) {
   const fileData = oldName.match(matchOldName);
   if (fileData) {
@@ -33,7 +37,7 @@ function getNumberFromAlpha(a) {
 }
 
 function getAlphaFromIndex(i) {
-  return indexToLetterMap[i].toUpperCase() || '';
+  return indexToLetterMap[i]?.toUpperCase() || '';
 }
 
 function formatNumber(number) {
@@ -79,4 +83,5 @@ export {
   getFileFromXML,
   getTypeMapping,
   prettyName,
+  getOldNameFromSlot,
 };
