@@ -5,10 +5,10 @@ const {ipcRenderer} = require('electron/renderer');
  */
 
 ipcRenderer.removeAllListeners();
-export {setTitle} from './delugeIPC';
 export {sha256sum} from './nodeCrypto';
 export {versions} from './versions';
 export const init = directory => ipcRenderer.send('init-directory', directory);
+export const openBroswer = () => ipcRenderer.send('open-browser');
 export const sendFiles = callback => ipcRenderer.on('files', (_event, value) => callback(value));
 export const sendError = callback => {
   console.log('sendError handler added');

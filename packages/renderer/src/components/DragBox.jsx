@@ -1,7 +1,6 @@
 import {useEffect, useState} from 'react';
 import {Box, Typography, Button, LinearProgress} from '@mui/material';
-import {init, sendError} from '#preload';
-
+import {init, sendError, openBroswer} from '#preload';
 import SdCardIcon from '@mui/icons-material/SdCard';
 
 export const DragBox = () => {
@@ -72,6 +71,16 @@ export const DragBox = () => {
         >
           Click here to browse instead
         </Button>
+        {/* <Button
+          variant="contained"
+          size="small"
+          disabled={loading}
+          onClick={() => {
+            openBroswer();
+          }}
+        >
+          Click here to browse instead
+        </Button> */}
         {errorText && (
           <Typography
             variant="h6"

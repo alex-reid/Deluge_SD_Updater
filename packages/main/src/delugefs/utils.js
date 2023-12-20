@@ -17,6 +17,11 @@ function getOldTypeAndNumber(fileName) {
   return false;
 }
 
+function getNameRegex(fileName) {
+  if (typeof fileName == 'string') return fileName.match(matchOldName);
+  return false;
+}
+
 function getOldNameFromSlot(presetType, presetSlot, presetSubSlot) {
   return getFileFromXML(presetType) + formatNumber(presetSlot) + getAlphaFromIndex(presetSubSlot);
 }
@@ -84,4 +89,5 @@ export {
   getTypeMapping,
   prettyName,
   getOldNameFromSlot,
+  getNameRegex,
 };

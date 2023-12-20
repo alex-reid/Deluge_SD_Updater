@@ -68,10 +68,6 @@ class fileSystem {
         kits: {},
         synths: {},
       },
-      byID: {
-        kits: [],
-        synths: [],
-      },
     };
   }
 
@@ -100,7 +96,7 @@ class fileSystem {
         return this.loadSongs();
       })
       .then(() => {
-        console.log('ready');
+        return 'ready';
       });
   }
 
@@ -192,22 +188,12 @@ class fileSystem {
     if (sound.isOldName && this.renameToV4) {
       // add mapping for old name => new name
       this.mappings.byName[type][sound.fileName] = sound.newName;
-      // add mapping for slot,subslot => new name
-      if (!this.mappings.byID[type][sound.presetSlot]) {
-        this.mappings.byID[type][sound.presetSlot] = [];
-      }
-      this.mappings.byID[type][sound.presetSlot][sound.presetSubSlot + 1] = sound.newName;
     }
     if (this.prettyNames) {
       const newName = prettyName(sound.fileName);
       if (newName) {
         // add mapping for old name => new name
         this.mappings.byName[type][sound.fileName] = newName;
-        // add mapping for slot,subslot => new name
-        if (!this.mappings.byID[type][sound.presetSlot]) {
-          this.mappings.byID[type][sound.presetSlot] = [];
-        }
-        this.mappings.byID[type][sound.presetSlot][sound.presetSubSlot + 1] = newName;
       }
     }
   }
@@ -236,21 +222,21 @@ class fileSystem {
     }
   }
 
-  async rewriteSongsToV4() {
-    for (const song of this.files.songs) {
-      if (song.validate()) song.rewriteInstrumentXMLAttributes();
-      if (song.validate()) await song.saveXML();
-    }
-  }
+  // async rewriteSongsToV4() {
+  //   for (const song of this.files.songs) {
+  //     if (song.validate()) song.rewriteInstrumentXMLAttributes();
+  //     if (song.validate()) await song.saveXML();
+  //   }
+  // }
 
-  async rewriteInstrumentsToV4() {
-    for (const synth of this.files.synths) {
-      await synth.renameFileToV4();
-    }
-    for (const kit of this.files.kits) {
-      await kit.renameFileToV4();
-    }
-  }
+  // async rewriteInstrumentsToV4() {
+  //   for (const synth of this.files.synths) {
+  //     await synth.renameFileToV4();
+  //   }
+  //   for (const kit of this.files.kits) {
+  //     await kit.renameFileToV4();
+  //   }
+  // }
 }
 
 export default fileSystem;

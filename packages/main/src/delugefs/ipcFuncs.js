@@ -12,7 +12,6 @@ function getMainDelugeInfo(D) {
       prettyName: prettyName(kit.presetName) || '',
       presetType: kit.presetType,
       presetName: kit.presetName,
-      presetFolder: kit.presetFolder,
     })),
     synths: D.files.synths.map(synth => ({
       path: synth.path,
@@ -23,7 +22,6 @@ function getMainDelugeInfo(D) {
       prettyName: prettyName(synth.presetName) || '',
       presetType: synth.presetType,
       presetName: synth.presetName,
-      presetFolder: synth.presetFolder,
     })),
     songs: D.files.songs.map(song => {
       return {
@@ -41,6 +39,8 @@ function getMainDelugeInfo(D) {
               formatType: curr.formatType,
               patchName: curr.patchName,
               usedInClips: song.getInstrumentClipIndexs(curr),
+              rewriteName: '',
+              rewriteFolder: '',
             },
           ],
           [],

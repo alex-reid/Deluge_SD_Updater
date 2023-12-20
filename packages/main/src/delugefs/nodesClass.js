@@ -1,4 +1,4 @@
-import {getTypeMapping, getOldTypeAndNumber, getOldNameFromSlot} from './utils';
+import {getTypeMapping, getOldTypeAndNumber, getOldNameFromSlot, getNameRegex} from './utils';
 
 class Node {
   constructor(xmlData, xml) {
@@ -38,12 +38,16 @@ class Node {
   }
 
   getPresetType() {
+    const parts = getNameRegex(this.presetName);
     if (this.hasPresetSlot && this.hasPresetSubSlot) {
       return 'old';
     }
     if (this.hasPresetName && this.hasPresetFolder) {
       if (this.presetName.match(/^\d{3}\w?$/)) {
         return 'numsonly';
+      }
+      if (parts && (parts[3] || parts[4])) {
+        return 'newsuffix';
       }
       return 'new';
     }

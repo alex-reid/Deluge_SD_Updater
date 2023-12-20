@@ -3,7 +3,8 @@ import React from 'react';
 
 export const InstrumentListSongList = ({instrument, index, newInstNames}) => {
   const [desc, ...types] = showType(instrument);
-  const {name: newName, path: newPath} = newInstNames[index];
+  //const {name: newName, path: newPath} = newInstNames[index];
+  const {rewriteName: newName, rewriteFolder: newPath} = instrument;
   return (
     <>
       <Typography
@@ -57,7 +58,8 @@ const showType = instrument => {
         {name: 'Preset Name', val: instrument.presetName},
       ];
     case 'unknown':
-      return ['Something odd about this one'];
+      return ['Something odd about this one', {name: '!!!!', val: '!!!!'}];
     default:
+      return ['hmmmmm...', {name: '!!!!', val: '!!!!'}];
   }
 };

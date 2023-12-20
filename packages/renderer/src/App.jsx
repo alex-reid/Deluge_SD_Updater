@@ -30,9 +30,68 @@ const App = () => {
   //   console.log('name map', mapByName);
   // }, [mapByName]);
 
+  const getInstNewName = ins => {
+    const type = ins.type == 'kit' ? 'kits' : 'synths';
+    const mapping = {name: ins.patchName, path: type.toUpperCase()};
+    switch (ins.formatType) {
+      case 'numsonly':
+        return mapByName[type]?.[ins.patchName]?.[ins.presetFolder] || mapping;
+      case 'new':
+        return mapByName[type]?.[ins.presetName]?.[ins.presetFolder] || mapping;
+      case 'old':
+        return mapByName[type]?.[ins.patchName]?.[type.toUpperCase()] || mapping;
+      case 'nameonly':
+        return mapByName[type]?.[ins.presetName]?.[type.toUpperCase()] || mapping;
+      case 'unknown':
+        return {name: 'unkown', path: 'unknown'};
+      default:
+        return {name: 'default', path: 'default'};
+    }
+  };
+
   useEffect(() => {
-    console.log('songs', songs);
-  }, [songs]);
+    //console.log('songs', songs);
+    rewriteSongs();
+  }, [synths, kits]);
+
+  const rewriteSongs = () => {
+    console.log('try synth rewrite');
+    setSongs(prev => {
+      if (prev && prev.length > 0) {
+        // check song isn't empty
+        console.log('run synth rewrite');
+        return prev.map(song => ({
+          // map each song
+          ...song,
+          instruments: song.instruments.map(inst => {
+            // remap each instrument
+            const {name, path} = getInstNewName(inst);
+            if (inst.formatType == 'newsuffix') {
+              console.log(
+                inst.rewriteName == name,
+                inst.rewriteFolder == path,
+                name,
+                path,
+                inst.rewriteName,
+                inst.rewriteFolder,
+                song.name,
+                inst,
+              );
+            }
+            if (name && path) {
+              return {
+                ...inst,
+                rewriteName: name,
+                rewriteFolder: path,
+              };
+            }
+            return inst;
+          }),
+        }));
+      }
+      return prev;
+    });
+  };
 
   useEffect(() => {
     const initialise = ({initialised, kits, synths, songs}) => {
@@ -57,14 +116,14 @@ const App = () => {
 
   const updateHandler = useCallback(
     (type, id, value) => {
-      const cb = prev => {
+      const setFuncCallback = prev => {
         return prev.map((old, i) => (i == id ? {...old, rewriteName: value} : old));
       };
       if (type == 'SYNT') {
-        setSynths(cb);
+        setSynths(setFuncCallback);
       }
       if (type == 'KIT') {
-        setKits(cb);
+        setKits(setFuncCallback);
       }
     },
     [synths, kits],
@@ -101,25 +160,6 @@ const App = () => {
     });
     // console.log(synths, kits);
   };
-
-  const getInstNewName = ins => {
-    const type = ins.type == 'kit' ? 'kits' : 'synths';
-    const mapping = {name: ins.patchName, path: type.toUpperCase()};
-    switch (ins.formatType) {
-      case 'numsonly':
-        return mapByName[type]?.[ins.patchName]?.[ins.presetFolder] || mapping;
-      case 'new':
-        return mapByName[type]?.[ins.presetName]?.[ins.presetFolder] || mapping;
-      case 'old':
-        return mapByName[type]?.[ins.patchName]?.[type.toUpperCase()] || mapping;
-      case 'nameonly':
-        return mapByName[type]?.[ins.presetName]?.[type.toUpperCase()] || mapping;
-      case 'unknown':
-        return {name: 'unkown', path: 'unknown'};
-      default:
-    }
-  };
-
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />

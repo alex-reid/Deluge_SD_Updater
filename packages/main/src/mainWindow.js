@@ -2,6 +2,7 @@ import {app, BrowserWindow, ipcMain} from 'electron';
 import {join, resolve} from 'node:path';
 import fileSystem from './delugefs/fileSystemClass';
 import {sendMainDelugeInfo} from './delugefs/ipcFuncs';
+const {dialog} = require('electron');
 
 async function createWindow() {
   const browserWindow = new BrowserWindow({
@@ -18,6 +19,21 @@ async function createWindow() {
   });
 
   const D = new fileSystem(browserWindow);
+
+  ipcMain.on('open-browser', () => {
+    dialog.showOpenDialog({properties: ['openDirectory']}).then(({cancelled, filePaths}) => {
+      if (!cancelled && filePaths[0]) {
+        D.init(filePaths[0], {
+          renameToV4: true,
+          prettyNames: false,
+        })
+          .then(error => {
+            if (!error) sendMainDelugeInfo(D, browserWindow);
+          })
+          .catch(err => D.sendError(err));
+      }
+    });
+  });
 
   ipcMain.on('init-directory', (_event, directory) => {
     if (directory) {
