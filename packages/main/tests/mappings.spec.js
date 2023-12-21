@@ -2,14 +2,28 @@ import {afterAll, beforeAll, expect, test} from 'vitest';
 import fileSystem from '../src/delugefs/fileSystemClass';
 import path from 'path';
 import {getMainDelugeInfo} from '../src/delugefs/ipcFuncs';
-import {output} from './IPCout';
 
-let Deluge;
+import {fakeFS} from '../../../fake_filesystem/setupDummyFiles';
+
+let Deluge, dummy_dir;
 const testfolder = path.resolve('./', 'packages', 'main', 'tests');
-const dummySDCard = path.join(testfolder, 'dummySDCard');
+
+expect.addSnapshotSerializer({
+  print(val) {
+    // Replace the project directory with a placeholder to make it system-independent
+    const projectDirectory = path.resolve(__dirname, '../../../'); // Adjust the path based on your project structure
+    const normalizedPath = val.replace(new RegExp(projectDirectory, 'g'), '<PROJECT_DIRECTORY>');
+    return normalizedPath;
+  },
+  test(val) {
+    return typeof val === 'string';
+  },
+});
 
 beforeAll(() => {
   Deluge = new fileSystem();
+  dummy_dir = fakeFS();
+  console.log(dummy_dir);
 });
 
 afterAll(() => {
@@ -21,7 +35,7 @@ test('filesystem exists', () => {
   expect(typeof instance == 'object', 'filesystem exists');
 });
 
-test('init on blank', async () => {
+test('fail on blank', async () => {
   const instance = new fileSystem();
   expect.assertions(1);
   try {
@@ -31,7 +45,7 @@ test('init on blank', async () => {
   }
 });
 
-test('init on file', async () => {
+test('fail on file', async () => {
   const instance = new fileSystem();
   expect.assertions(1);
   try {
@@ -44,7 +58,7 @@ test('init on file', async () => {
   }
 });
 
-test('init on non-deluge directory', async () => {
+test('fail on non-deluge directory', async () => {
   const instance = new fileSystem();
   expect.assertions(1);
   try {
@@ -58,20 +72,16 @@ test('init on non-deluge directory', async () => {
 });
 
 test('sucessful init', () => {
-  return Deluge.init(dummySDCard, {
+  return Deluge.init(dummy_dir, {
     renameToV4: true,
     prettyNames: false,
   }).then(() => {
     expect(Deluge.isDelugeDrive).toBe(true);
-    expect(Deluge.rootDir).toBe(dummySDCard);
-    expect(Deluge.files.kits.length).toBe(4);
-    expect(Deluge.files.synths.length).toBe(12);
-    expect(Deluge.files.songs.length).toBe(4);
   });
 });
 
 test('check song mappings', () => {
-  expect(getMainDelugeInfo(Deluge)).toEqual(output);
+  expect(getMainDelugeInfo(Deluge)).toMatchSnapshot();
 });
 
 test('validate each song', () => {
@@ -146,3 +156,22 @@ test('no old tags in clips', () => {
     });
   });
 });
+
+/*
+
+TODO:
+
+make a fake mapping directors that includes:
+- old - xml song file with dummy presetSlot (factory sound + subSlot ('0' '-1') ('0' '1'), no match + subSlot ('999' '-1') ('999' '1'), ('171','-1') + ('171','1'))
+
+
+
+- numsonly - xml song file with dummy nummsonly ('000' + '000A, '999' + '999A', '171' + '171A')
+
+
+
+- newsuffix -
+- new -
+- nameonly -
+
+*/

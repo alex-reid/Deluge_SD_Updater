@@ -12,6 +12,7 @@ export const DragBox = () => {
       setLoading(false);
       setErrorText(err.message);
     });
+    import.meta.env.VITE_LOAD_DUMMY_SD_ON_APP_OPEN && init(import.meta.env.VITE_DUMMY_SD_DIR);
   }, []);
 
   return (
@@ -60,18 +61,20 @@ export const DragBox = () => {
           </Box>
         )}
         <br />
+        {import.meta.env.VITE_DUMMY_SD_DIR && (
+          <Button
+            variant="contained"
+            size="small"
+            disabled={loading}
+            onClick={() => {
+              setLoading(true);
+              init(import.meta.env.VITE_DUMMY_SD_DIR);
+            }}
+          >
+            Load Dummy SD card
+          </Button>
+        )}
         <Button
-          variant="contained"
-          size="small"
-          disabled={loading}
-          onClick={() => {
-            setLoading(true);
-            init('/Users/alexreid/work/deluge-node/DelugeSD');
-          }}
-        >
-          Click here to browse instead
-        </Button>
-        {/* <Button
           variant="contained"
           size="small"
           disabled={loading}
@@ -80,7 +83,7 @@ export const DragBox = () => {
           }}
         >
           Click here to browse instead
-        </Button> */}
+        </Button>
         {errorText && (
           <Typography
             variant="h6"

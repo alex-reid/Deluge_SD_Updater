@@ -18,6 +18,7 @@ const config = {
     testTimeout: 30_000,
     hookTimeout: 30_000,
   },
+  snapshotSerializers: ['./tests/mockFsSerializer.js'],
 };
 
 export default config;

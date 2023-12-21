@@ -1,4 +1,4 @@
-import cheerio from 'cheerio';
+import {load} from 'cheerio';
 import fs from 'fs/promises';
 import path from 'path';
 import {getOldTypeAndNumber, getFolderFromFileType} from './utils';
@@ -22,7 +22,7 @@ class File {
         path.join(this.rootPath, this.path, this.fullFileName),
         'utf-8',
       );
-      this.XML = cheerio.load(
+      this.XML = load(
         xmlContent,
         {
           xmlMode: true, // Set xmlMode to true for XML parsing

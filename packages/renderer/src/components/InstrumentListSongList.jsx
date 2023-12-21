@@ -1,9 +1,8 @@
 import {Typography} from '@mui/material';
 import React from 'react';
 
-export const InstrumentListSongList = ({instrument, index, newInstNames}) => {
+export const InstrumentListSongList = ({instrument, index}) => {
   const [desc, ...types] = showType(instrument);
-  //const {name: newName, path: newPath} = newInstNames[index];
   const {rewriteName: newName, rewriteFolder: newPath} = instrument;
   return (
     <>
