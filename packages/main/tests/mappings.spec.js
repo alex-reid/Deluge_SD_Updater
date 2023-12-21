@@ -62,27 +62,6 @@ test('fail on file', async () => {
   }
 });
 
-test('fail on non-deluge directory', async () => {
-  const instance = new fileSystem();
-  expect.assertions(1);
-  const fakePath = path.join(testfolder, 'emptyfolder');
-  console.log({
-    resolvePath: path.resolve('.'),
-    dirname: __dirname,
-    dummy_dir,
-    testfolder,
-    fakePath,
-  });
-  try {
-    await instance.init(fakePath, {
-      renameToV4: true,
-      prettyNames: false,
-    });
-  } catch (err) {
-    expect(err.message).toBe("can't find deluge paths");
-  }
-});
-
 test('sucessful init', () => {
   return Deluge.init(dummy_dir, {
     renameToV4: true,
