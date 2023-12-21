@@ -142,7 +142,6 @@ export const fakeFS = () => {
         let name = attrs.presetName;
         if (typeof attrs.presetSlot === 'number' && typeof attrs.presetSubSlot === 'number') {
           name = getOldNameFromSlot(type, attrs.presetSlot, attrs.presetSubSlot);
-          console.log(name);
         }
         if (name) {
           fs.writeFileSync(

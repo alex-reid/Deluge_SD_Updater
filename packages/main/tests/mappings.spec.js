@@ -16,7 +16,9 @@ expect.addSnapshotSerializer({
       new RegExp(projectDirectory.replace(/\\/g, '\\\\'), 'g'),
       '<PROJECT_DIRECTORY>',
     );
-    return normalizedPath;
+
+    // Replace backslashes with forward slashes for consistency
+    return normalizedPath.replace(/\\/g, '/');
   },
   test(val) {
     return typeof val === 'string';
@@ -26,7 +28,6 @@ expect.addSnapshotSerializer({
 beforeAll(() => {
   Deluge = new fileSystem();
   dummy_dir = fakeFS();
-  console.log(dummy_dir);
 });
 
 afterAll(() => {
@@ -64,8 +65,16 @@ test('fail on file', async () => {
 test('fail on non-deluge directory', async () => {
   const instance = new fileSystem();
   expect.assertions(1);
+  const fakePath = path.join(testfolder, 'emptyfolder');
+  console.log({
+    resolvePath: path.resolve('.'),
+    dirname: __dirname,
+    dummy_dir,
+    testfolder,
+    fakePath,
+  });
   try {
-    await instance.init(path.join(testfolder, 'emptyfolder'), {
+    await instance.init(fakePath, {
       renameToV4: true,
       prettyNames: false,
     });
