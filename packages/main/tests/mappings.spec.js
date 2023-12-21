@@ -6,13 +6,16 @@ import {getMainDelugeInfo} from '../src/delugefs/ipcFuncs';
 import {fakeFS} from '../../../fake_filesystem/setupDummyFiles';
 
 let Deluge, dummy_dir;
-const testfolder = path.resolve('./', 'packages', 'main', 'tests');
+const testfolder = path.resolve(__dirname);
 
 expect.addSnapshotSerializer({
   print(val) {
     // Replace the project directory with a placeholder to make it system-independent
-    const projectDirectory = path.resolve(__dirname, '../../../'); // Adjust the path based on your project structure
-    const normalizedPath = val.replace(new RegExp(projectDirectory, 'g'), '<PROJECT_DIRECTORY>');
+    const projectDirectory = path.resolve(__dirname, '..', '..', '..');
+    const normalizedPath = val.replace(
+      new RegExp(projectDirectory.replace(/\\/g, '\\\\'), 'g'),
+      '<PROJECT_DIRECTORY>',
+    );
     return normalizedPath;
   },
   test(val) {
