@@ -120,9 +120,9 @@ describe.sequential('mappings that should map to the base instrument', async () 
   it('checks song mappings', () => {
     // console.log(Deluge.files.songs[0].instruments);
     Deluge.files.songs[0].instruments.forEach(ins => {
-      if (ins.soundID != 0) {
-        console.log(ins);
-      }
+      // if (ins.soundID != 0) {
+      //   console.log(ins);
+      // }
       expect(ins.soundID).toBe(0);
     });
   });
@@ -224,9 +224,9 @@ describe.sequential("mappings that shouldn't map to a suffixed instrument", asyn
   });
   it('checks song mappings', () => {
     Deluge.files.songs[0].instruments.forEach(ins => {
-      if (ins.soundID != 'new') {
-        ins.printNode();
-      }
+      // if (ins.soundID != 'new') {
+      //   ins.printNode();
+      // }
       if (ins.presetName != 'SYNT000' && ins.presetFolder != 'SYNTHS') {
         expect(ins.soundID).toBe('new');
       }
@@ -273,9 +273,9 @@ describe.sequential('mappings that should map to a number suffixed instrument', 
   });
   it('checks song mappings', () => {
     Deluge.files.songs[0].instruments.forEach(ins => {
-      if (ins.soundID != 0) {
-        ins.printNode();
-      }
+      // if (ins.soundID != 0) {
+      //   ins.printNode();
+      // }
       if (ins.presetName != 'SYNT000' && ins.presetFolder != 'SYNTHS') {
         expect(ins.soundID).toBe(0);
       }
@@ -310,9 +310,9 @@ describe.sequential('mappings that should match by name', async () => {
   });
   it('checks song mappings', () => {
     Deluge.files.songs[0].instruments.forEach(ins => {
-      if (ins.soundID != 0) {
-        ins.printNode();
-      }
+      // if (ins.soundID != 0) {
+      //   ins.printNode();
+      // }
       if (ins.presetName != 'SYNT000' && ins.presetFolder != 'SYNTHS') {
         expect(ins.soundID).toBe(0);
       }
@@ -352,9 +352,9 @@ describe.sequential('mappings that should match by name an suffix', async () => 
   });
   it('checks song mappings', () => {
     Deluge.files.songs[0].instruments.forEach(ins => {
-      if (ins.soundID != 1) {
-        ins.printNode();
-      }
+      // if (ins.soundID != 1) {
+      //   ins.printNode();
+      // }
       if (ins.presetName != 'SYNT000' && ins.presetFolder != 'SYNTHS') {
         expect(ins.soundID).toBe(1);
       }
@@ -388,9 +388,9 @@ describe.sequential('mappings that should match by name and suffix with a folder
   });
   it('checks song mappings', () => {
     Deluge.files.songs[0].instruments.forEach(ins => {
-      if (ins.soundID != 1) {
-        ins.printNode();
-      }
+      // if (ins.soundID != 1) {
+      //   ins.printNode();
+      // }
       if (ins.presetName != 'SYNT000' && ins.presetFolder != 'SYNTHS') {
         expect(ins.soundID).toBe(1);
       }
@@ -424,9 +424,9 @@ describe.sequential('mappings that should match by name and suffix with a folder
   });
   it('checks song mappings', () => {
     Deluge.files.songs[0].instruments.forEach(ins => {
-      if (ins.soundID != 1) {
-        ins.printNode();
-      }
+      // if (ins.soundID != 1) {
+      //   ins.printNode();
+      // }
       if (ins.presetName != 'SYNT000' && ins.presetFolder != 'SYNTHS') {
         expect(ins.soundID).toBe(1);
       }

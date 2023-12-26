@@ -93,8 +93,7 @@ class Song extends File {
     this.addClipIdsToInstruments();
     let instClips = 0;
     this.clips.forEach(clip => {
-      if (clip.hasPresetType || clip.hasPresetName || clip.hasPresetFolder || clip.hasPresetSlot)
-        instClips++;
+      if (clip.presetType != 'notsound') instClips++;
     });
     let clipsFound = 0;
     this.instruments.forEach(i => {
@@ -120,11 +119,9 @@ class Song extends File {
       if (!rewriteName || !rewriteFolder) {
         throw new Error('invalid data in new names array');
       }
-      instrument.rewritePresetToV4(rewriteName);
-      instrument.rewriteFolder(rewriteFolder);
+      instrument.rewritePresetToV4(rewriteName, rewriteFolder);
       instrument.clips.forEach(clip => {
-        this.clips[clip].rewritePresetToV4(rewriteName);
-        this.clips[clip].rewriteFolder(rewriteFolder);
+        this.clips[clip].rewritePresetToV4(rewriteName, rewriteFolder);
       });
     });
   }

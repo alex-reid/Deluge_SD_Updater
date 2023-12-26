@@ -7,7 +7,15 @@ import EditIcon from '@mui/icons-material/Edit';
 import SdCardIcon from '@mui/icons-material/SdCard';
 import {InstNameTextField} from './InstNameTextField';
 
-const InstrumentList = ({oldName, path, presetType, index, updateHandler, rewriteName}) => {
+const InstrumentList = ({
+  oldName,
+  path,
+  presetType,
+  index,
+  updateHandler,
+  rewriteName,
+  songIDs,
+}) => {
   const [name, setName] = useState(rewriteName);
   const [error, setError] = useState('');
 
@@ -58,7 +66,7 @@ const InstrumentList = ({oldName, path, presetType, index, updateHandler, rewrit
               variant="standard"
               onChange={e => setName(e.target.value)}
               value={name}
-              onBlur={e => updateHandler(presetType, index, e.target.value)}
+              onBlur={e => updateHandler(index, e.target.value)}
               onKeyDown={e => {
                 if (e.code === 'Enter') {
                   e.target.blur();
@@ -74,6 +82,7 @@ const InstrumentList = ({oldName, path, presetType, index, updateHandler, rewrit
               color="secondary.text"
               sx={{display: 'flex', alignItems: 'center'}}
             >
+              {songIDs.length}
               <SdCardIcon
                 fontSize="small"
                 color="primary"

@@ -15,17 +15,6 @@ class Node {
     this.presetFolder = null;
     this.presetSlot = null;
     this.presetSubSlot = null;
-    this.hasPresetName = false;
-    this.hasPresetFolder = false;
-    this.hasPresetSlot = false;
-    this.hasPresetSubSlot = false;
-    this.types = null;
-    this.isV4 = false;
-    this.renamed = false;
-    this.formatType = null;
-    this.patchName = '';
-    this.patchSuffix = '';
-    this.patchSuffixClean = '';
   }
   setupXml() {
     const $ = this.xml;
@@ -40,7 +29,37 @@ class Node {
     }
     console.log(output);
   }
+}
 
+class Instrument extends Node {
+  constructor(xmlData, xml) {
+    super(xmlData, xml);
+    this.hasPresetName = false;
+    this.hasPresetFolder = false;
+    this.hasPresetSlot = false;
+    this.hasPresetSubSlot = false;
+    this.types = null;
+    this.isV4 = false;
+    this.renamed = false;
+    this.formatType = null;
+    this.patchName = '';
+    this.patchSuffix = '';
+    this.patchSuffixClean = '';
+    this.getPresetData();
+    this.clips = null;
+    this.soundID = null;
+  }
+  getPresetData() {
+    const {$, node} = this.setupXml();
+    this.presetSlot = $(node).attr('presetSlot') || null;
+    this.presetSubSlot = $(node).attr('presetSubSlot') || null;
+    this.presetName = $(node).attr('presetName') || null;
+    this.presetFolder = $(node).attr('presetFolder') || null;
+    this.presetType = $(node)[0].name;
+    this.rewriteName = '';
+    this.rewriteFolder = '';
+    this.getCommonPresetData();
+  }
   getDataFromFilename() {
     return getOldTypeAndNumber(this.presetName);
   }
@@ -92,39 +111,15 @@ class Node {
       this.patchSuffixClean = suffixClean;
     }
   }
-}
 
-class Instrument extends Node {
-  constructor(xmlData, xml) {
-    super(xmlData, xml);
-    this.getPresetData();
-    this.clips = null;
-    this.soundID = null;
-  }
-  getPresetData() {
-    const {$, node} = this.setupXml();
-    this.presetSlot = $(node).attr('presetSlot') || null;
-    this.presetSubSlot = $(node).attr('presetSubSlot') || null;
-    this.presetName = $(node).attr('presetName') || null;
-    this.presetFolder = $(node).attr('presetFolder') || null;
-    this.presetType = $(node)[0].name;
-    this.getCommonPresetData();
-  }
-
-  rewritePresetToV4(name) {
+  rewritePresetToV4(name, folder) {
     const {$, node} = this.setupXml();
     $(node).attr('presetName', name);
+    $(node).attr('presetFolder', folder || this.types.folder);
 
     $(node).removeAttr('presetSlot');
     $(node).removeAttr('presetSubSlot');
 
-    this.getPresetData();
-    this.renamed = true;
-  }
-
-  rewriteFolder(folder) {
-    const {$, node} = this.setupXml();
-    $(node).attr('presetFolder', folder || this.types.folder);
     this.getPresetData();
     this.renamed = true;
   }
@@ -136,7 +131,7 @@ class Instrument extends Node {
     let id = mappings.byName[this.types.type][name + suffix]?.[folder];
     if (!Number.isInteger(id)) id = mappings.byName[this.types.type][name]?.[folder];
     this.soundID = Number.isInteger(id) ? id : 'new';
-    console.log(this.soundID, this.patchName, this.patchSuffix, this.presetName, id);
+    // console.log(this.soundID, this.patchName, this.patchSuffix, this.presetName, id);
     return {id: this.soundID, type: this.types.type};
   }
 }
@@ -151,8 +146,8 @@ class Clip extends Node {
     this.presetFolder = $(node).attr('instrumentPresetFolder') || null;
     this.presetSlot = $(node).attr('instrumentPresetSlot') || null;
     this.presetSubSlot = $(node).attr('instrumentPresetSubSlot') || null;
-    this.presetType = $(node).find('kitParams, soundParams')?.[0]?.name.replace('Params', '');
-    this.getCommonPresetData();
+    this.presetType =
+      $(node).find('kitParams, soundParams')?.[0]?.name.replace('Params', '') || 'notsound';
   }
 
   rewritePresetToV4(name, folder) {
@@ -163,12 +158,6 @@ class Clip extends Node {
     $(node).removeAttr('instrumentPresetSlot');
     $(node).removeAttr('instrumentPresetSubSlot');
 
-    this.getPresetData();
-  }
-
-  rewriteFolder(folder) {
-    const {$, node} = this.setupXml();
-    $(node).attr('instrumentPresetFolder', folder || this.types.folder);
     this.getPresetData();
   }
 }

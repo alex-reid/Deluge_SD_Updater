@@ -4,9 +4,9 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {Box} from '@mui/system';
 import LibraryMusicIcon from '@mui/icons-material/LibraryMusic';
 import SdCardIcon from '@mui/icons-material/SdCard';
-import {InstrumentListSongList} from './InstrumentListSongList';
+import {InstrumentListSongList} from './SongListInstruments';
 
-const SongList = ({name, path, instruments, clipsLength, firmwareVersion, newInstNames}) => {
+const SongList = ({name, path, instruments, clipsLength, firmwareVersion}) => {
   return (
     <Accordion>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
@@ -91,7 +91,6 @@ const SongList = ({name, path, instruments, clipsLength, firmwareVersion, newIns
             <InstrumentListSongList
               instrument={instrument}
               index={index}
-              newInstNames={newInstNames}
               key={index}
             />
           ))}

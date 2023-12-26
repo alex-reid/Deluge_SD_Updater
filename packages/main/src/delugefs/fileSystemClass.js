@@ -235,12 +235,14 @@ class fileSystem {
 
   mapSongInstrumentsToSounds() {
     // console.log(this.mappings.byName.synths);
-    for (const song of this.files.songs) {
+    for (const [songIndex, song] of this.files.songs.entries()) {
       for (const instrument of song.instruments) {
         //instrument.getSoundIndex(this.mappings);
         const {id, type} = instrument.getSoundIndex(this.mappings);
         if (id != 'new') {
-          this.files[type][id].songIDs.add(id);
+          instrument.rewriteName = this.files[type][id].fileName;
+          instrument.rewriteFolder = this.files[type][id].path;
+          this.files[type][id].songIDs.add(songIndex);
           // console.log(this.files[type][id].songIDs);
         }
       }

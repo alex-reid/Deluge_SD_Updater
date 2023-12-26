@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useState} from 'react';
+import {useEffect, useReducer, useState} from 'react';
 import {
   List,
   Tabs,
@@ -16,11 +16,12 @@ import theme from './theme';
 import InstrumentList from './components/instrumentList';
 import SongList from './components/SongList';
 import {DragBox} from './components/DragBox';
+import {INST, instrumentReducer, SONG, songReducer} from './reducers/reducers';
 
 const App = () => {
-  const [synths, setSynths] = useState([]);
-  const [kits, setKits] = useState([]);
-  const [songs, setSongs] = useState([]);
+  const [synths, dispatchSynths] = useReducer(instrumentReducer, []);
+  const [kits, dispatchKits] = useReducer(instrumentReducer, []);
+  const [songs, dispatchSongs] = useReducer(songReducer, []);
   const [tab, setTab] = useState('tab-synths');
   const [initialised, setInitialised] = useState(false);
 
@@ -34,121 +35,44 @@ const App = () => {
     console.log('kits data', kits);
   }, [kits]);
 
-  const getInstNewName = ins => {
-    const type = ins.type == 'kit' ? 'kits' : 'synths';
-    let mapping = {name: ins.patchName, path: type.toUpperCase()};
-    let sound = null;
-    if (ins.type == 'kit') sound = kits[ins.soundID];
-    if (ins.type == 'sound') sound = synths[ins.soundID];
-    if (sound) {
-      mapping = {name: sound.rewriteName, path: sound.path};
-    }
-    return mapping;
-  };
-
   useEffect(() => {
-    //console.log('songs', songs);
-    rewriteSongs();
+    dispatchSongs({type: SONG.RENAME_FROM_INST, synths, kits});
   }, [synths, kits]);
-
-  const rewriteSongs = () => {
-    console.log('try synth rewrite');
-    setSongs(prev => {
-      if (prev && prev.length > 0) {
-        // check song isn't empty
-        console.log('run synth rewrite');
-        return prev.map(song => {
-          let shouldUpdate = false;
-          return {
-            // map each song
-            ...song,
-            instruments: song.instruments.map(inst => {
-              // remap each instrument
-              const {name, path} = getInstNewName(inst);
-              console.log(name, path, inst.rewriteName, inst.rewriteFolder);
-              if (name != inst.rewriteName && path != inst.rewriteFolder) {
-                shouldUpdate = true;
-                return {
-                  ...inst,
-                  rewriteName: name,
-                  rewriteFolder: path,
-                };
-              }
-              return inst;
-            }),
-            shouldUpdate,
-          };
-        });
-      }
-      return prev;
-    });
-  };
 
   useEffect(() => {
     const initialise = ({initialised, kits, synths, songs}) => {
       console.log('handler attached', initialised);
       setInitialised(true);
-      setSynths(synths);
-      setKits(kits);
-      setSongs(songs);
+      dispatchSynths({type: INST.LOAD_DATA, payload: synths});
+      dispatchKits({type: INST.LOAD_DATA, payload: kits});
+      dispatchSongs({type: SONG.LOAD_DATA, payload: songs});
     };
 
     sendFiles(initialise);
     sendError(e => console.log(e.message, typeof e));
-
-    return () => {
-      // ipcRenderer.removeListener('files', initialise);
-    };
   }, []);
 
-  const handleChange = (_event, newValue) => {
+  const handleTabChange = (_event, newValue) => {
     setTab(newValue);
   };
 
-  const updateHandler = useCallback(
-    (type, id, value) => {
-      const setFuncCallback = prev => {
-        return prev.map((old, i) => (i == id ? {...old, rewriteName: value} : old));
-      };
-      if (type == 'SYNT') {
-        setSynths(setFuncCallback);
-      }
-      if (type == 'KIT') {
-        setKits(setFuncCallback);
-      }
-    },
-    [synths, kits],
-  );
+  const updateSynth = (id, value) => {
+    dispatchSynths({type: INST.RENAME_SINGLE, id, value});
+  };
+
+  const updateKit = (id, value) => {
+    dispatchKits({type: INST.RENAME_SINGLE, id, value});
+  };
 
   const loadV4Names = () => {
-    setSynths(prev => {
-      return prev.map(old => ({
-        ...old,
-        rewriteName: old.rewriteName ? old.rewriteName : old.newName,
-      }));
-    });
-    setKits(prev => {
-      return prev.map(old => ({
-        ...old,
-        rewriteName: old.rewriteName ? old.rewriteName : old.newName,
-      }));
-    });
-    // console.log(synths, kits);
+    dispatchSynths({type: INST.RENAME_ALL_V4});
+    dispatchKits({type: INST.RENAME_ALL_V4});
   };
 
   const loadPrettyNames = () => {
-    setSynths(prev => {
-      return prev.map(old => ({
-        ...old,
-        rewriteName: old.rewriteName ? old.rewriteName : old.prettyName,
-      }));
-    });
-    setKits(prev => {
-      return prev.map(old => ({
-        ...old,
-        rewriteName: old.rewriteName ? old.rewriteName : old.prettyName,
-      }));
-    });
+    dispatchSynths({type: INST.RENAME_ALL_PRETTY});
+    dispatchKits({type: INST.RENAME_ALL_PRETTY});
+    dispatchSongs({type: SONG.RENAME_ALL_PRETTY});
     // console.log(synths, kits);
   };
   return (
@@ -180,7 +104,7 @@ const App = () => {
               <Box sx={{borderBottom: 1, borderColor: 'divider', flex: '0 0 auto'}}>
                 <Tabs
                   value={tab}
-                  onChange={handleChange}
+                  onChange={handleTabChange}
                   variant="fullWidth"
                 >
                   <Tab
@@ -229,7 +153,7 @@ const App = () => {
                         {...data}
                         index={i}
                         key={i}
-                        updateHandler={updateHandler}
+                        updateHandler={updateSynth}
                       />
                     ))}
                   </List>
@@ -245,7 +169,7 @@ const App = () => {
                         {...data}
                         index={i}
                         key={i}
-                        updateHandler={updateHandler}
+                        updateHandler={updateKit}
                       />
                     ))}
                   </List>

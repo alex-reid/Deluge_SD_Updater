@@ -13,6 +13,9 @@ exports[`check song api mappings 1`] = `
       prettyName: 000 Kit,
       rewriteName: ,
       rootPath: <PROJECT_DIRECTORY>/fake_filesystem/FAKE_SD_CARD,
+      songIDs: Set {
+        6,
+      },
     },
     {
       newName: 001 DDD-1,
@@ -23,6 +26,10 @@ exports[`check song api mappings 1`] = `
       prettyName: 001 Kit,
       rewriteName: ,
       rootPath: <PROJECT_DIRECTORY>/fake_filesystem/FAKE_SD_CARD,
+      songIDs: Set {
+        2,
+        5,
+      },
     },
     {
       newName: 001 DDD-1 2,
@@ -33,6 +40,9 @@ exports[`check song api mappings 1`] = `
       prettyName: 001 Kit 2,
       rewriteName: ,
       rootPath: <PROJECT_DIRECTORY>/fake_filesystem/FAKE_SD_CARD,
+      songIDs: Set {
+        4,
+      },
     },
     {
       newName: 008 SCDT,
@@ -43,6 +53,9 @@ exports[`check song api mappings 1`] = `
       prettyName: 008 Kit,
       rewriteName: ,
       rootPath: <PROJECT_DIRECTORY>/fake_filesystem/FAKE_SD_CARD,
+      songIDs: Set {
+        0,
+      },
     },
     {
       newName: KIT171 3,
@@ -53,6 +66,9 @@ exports[`check song api mappings 1`] = `
       prettyName: 171 Kit 3,
       rewriteName: ,
       rootPath: <PROJECT_DIRECTORY>/fake_filesystem/FAKE_SD_CARD,
+      songIDs: Set {
+        6,
+      },
     },
     {
       newName: KIT172,
@@ -63,6 +79,10 @@ exports[`check song api mappings 1`] = `
       prettyName: 172 Kit,
       rewriteName: ,
       rootPath: <PROJECT_DIRECTORY>/fake_filesystem/FAKE_SD_CARD,
+      songIDs: Set {
+        2,
+        5,
+      },
     },
     {
       newName: KIT187 2,
@@ -73,6 +93,9 @@ exports[`check song api mappings 1`] = `
       prettyName: 187 Kit 2,
       rewriteName: ,
       rootPath: <PROJECT_DIRECTORY>/fake_filesystem/FAKE_SD_CARD,
+      songIDs: Set {
+        4,
+      },
     },
     {
       newName: KIT188 3,
@@ -83,6 +106,9 @@ exports[`check song api mappings 1`] = `
       prettyName: 188 Kit 3,
       rewriteName: ,
       rootPath: <PROJECT_DIRECTORY>/fake_filesystem/FAKE_SD_CARD,
+      songIDs: Set {
+        0,
+      },
     },
     {
       newName: KIT272 3,
@@ -93,6 +119,10 @@ exports[`check song api mappings 1`] = `
       prettyName: 272 Kit 3,
       rewriteName: ,
       rootPath: <PROJECT_DIRECTORY>/fake_filesystem/FAKE_SD_CARD,
+      songIDs: Set {
+        2,
+        5,
+      },
     },
     {
       newName: new kit,
@@ -103,6 +133,9 @@ exports[`check song api mappings 1`] = `
       prettyName: ,
       rewriteName: ,
       rootPath: <PROJECT_DIRECTORY>/fake_filesystem/FAKE_SD_CARD,
+      songIDs: Set {
+        1,
+      },
     },
     {
       newName: new kit 2,
@@ -113,6 +146,9 @@ exports[`check song api mappings 1`] = `
       prettyName: ,
       rewriteName: ,
       rootPath: <PROJECT_DIRECTORY>/fake_filesystem/FAKE_SD_CARD,
+      songIDs: Set {
+        1,
+      },
     },
     {
       newName: 000 TR-808,
@@ -123,6 +159,9 @@ exports[`check song api mappings 1`] = `
       prettyName: 000 Kit,
       rewriteName: ,
       rootPath: <PROJECT_DIRECTORY>/fake_filesystem/FAKE_SD_CARD,
+      songIDs: Set {
+        3,
+      },
     },
     {
       newName: KIT182,
@@ -133,6 +172,9 @@ exports[`check song api mappings 1`] = `
       prettyName: 182 Kit,
       rewriteName: ,
       rootPath: <PROJECT_DIRECTORY>/fake_filesystem/FAKE_SD_CARD,
+      songIDs: Set {
+        3,
+      },
     },
     {
       newName: KIT282 3,
@@ -143,6 +185,9 @@ exports[`check song api mappings 1`] = `
       prettyName: 282 Kit 3,
       rewriteName: ,
       rootPath: <PROJECT_DIRECTORY>/fake_filesystem/FAKE_SD_CARD,
+      songIDs: Set {
+        3,
+      },
     },
   ],
   songs: [
@@ -163,8 +208,9 @@ exports[`check song api mappings 1`] = `
           presetName: KIT008,
           presetSlot: null,
           presetSubSlot: null,
-          rewriteFolder: ,
-          rewriteName: ,
+          prettyName: 008 Kit,
+          rewriteFolder: KITS,
+          rewriteName: KIT008,
           soundID: 3,
           type: kit,
           usedInClips: [
@@ -181,8 +227,9 @@ exports[`check song api mappings 1`] = `
           presetName: SYNT008,
           presetSlot: null,
           presetSubSlot: null,
-          rewriteFolder: ,
-          rewriteName: ,
+          prettyName: 008 Synth,
+          rewriteFolder: SYNTHS,
+          rewriteName: SYNT008,
           soundID: 5,
           type: sound,
           usedInClips: [
@@ -199,8 +246,9 @@ exports[`check song api mappings 1`] = `
           presetName: KIT188B,
           presetSlot: null,
           presetSubSlot: null,
-          rewriteFolder: ,
-          rewriteName: ,
+          prettyName: 188 Kit 3,
+          rewriteFolder: KITS,
+          rewriteName: KIT188B,
           soundID: 7,
           type: kit,
           usedInClips: [
@@ -217,8 +265,9 @@ exports[`check song api mappings 1`] = `
           presetName: SYNT188B,
           presetSlot: null,
           presetSubSlot: null,
-          rewriteFolder: ,
-          rewriteName: ,
+          prettyName: 188 Synth 3,
+          rewriteFolder: SYNTHS,
+          rewriteName: SYNT188B,
           soundID: 9,
           type: sound,
           usedInClips: [
@@ -248,8 +297,9 @@ exports[`check song api mappings 1`] = `
           presetName: new kit,
           presetSlot: null,
           presetSubSlot: null,
-          rewriteFolder: ,
-          rewriteName: ,
+          prettyName: ,
+          rewriteFolder: KITS,
+          rewriteName: new kit,
           soundID: 9,
           type: kit,
           usedInClips: [
@@ -266,8 +316,9 @@ exports[`check song api mappings 1`] = `
           presetName: new synth,
           presetSlot: null,
           presetSubSlot: null,
-          rewriteFolder: ,
-          rewriteName: ,
+          prettyName: ,
+          rewriteFolder: SYNTHS,
+          rewriteName: new synth,
           soundID: 0,
           type: sound,
           usedInClips: [
@@ -284,8 +335,9 @@ exports[`check song api mappings 1`] = `
           presetName: new kit 2,
           presetSlot: null,
           presetSubSlot: null,
-          rewriteFolder: ,
-          rewriteName: ,
+          prettyName: ,
+          rewriteFolder: KITS,
+          rewriteName: new kit 2,
           soundID: 10,
           type: kit,
           usedInClips: [
@@ -302,8 +354,9 @@ exports[`check song api mappings 1`] = `
           presetName: new synth 2,
           presetSlot: null,
           presetSubSlot: null,
-          rewriteFolder: ,
-          rewriteName: ,
+          prettyName: ,
+          rewriteFolder: SYNTHS,
+          rewriteName: new synth 2,
           soundID: 1,
           type: sound,
           usedInClips: [
@@ -333,8 +386,9 @@ exports[`check song api mappings 1`] = `
           presetName: KIT001,
           presetSlot: null,
           presetSubSlot: null,
-          rewriteFolder: ,
-          rewriteName: ,
+          prettyName: 001 Kit,
+          rewriteFolder: KITS,
+          rewriteName: KIT001,
           soundID: 1,
           type: kit,
           usedInClips: [
@@ -351,8 +405,9 @@ exports[`check song api mappings 1`] = `
           presetName: SYNT001,
           presetSlot: null,
           presetSubSlot: null,
-          rewriteFolder: ,
-          rewriteName: ,
+          prettyName: 001 Synth,
+          rewriteFolder: SYNTHS,
+          rewriteName: SYNT001,
           soundID: 3,
           type: sound,
           usedInClips: [
@@ -369,8 +424,9 @@ exports[`check song api mappings 1`] = `
           presetName: KIT172,
           presetSlot: null,
           presetSubSlot: null,
-          rewriteFolder: ,
-          rewriteName: ,
+          prettyName: 172 Kit,
+          rewriteFolder: KITS,
+          rewriteName: KIT172,
           soundID: 5,
           type: kit,
           usedInClips: [
@@ -387,8 +443,9 @@ exports[`check song api mappings 1`] = `
           presetName: SYNT172,
           presetSlot: null,
           presetSubSlot: null,
-          rewriteFolder: ,
-          rewriteName: ,
+          prettyName: 172 Synth,
+          rewriteFolder: SYNTHS,
+          rewriteName: SYNT172,
           soundID: 7,
           type: sound,
           usedInClips: [
@@ -405,6 +462,7 @@ exports[`check song api mappings 1`] = `
           presetName: KIT173,
           presetSlot: null,
           presetSubSlot: null,
+          prettyName: ,
           rewriteFolder: ,
           rewriteName: ,
           soundID: new,
@@ -423,6 +481,7 @@ exports[`check song api mappings 1`] = `
           presetName: SYNT173,
           presetSlot: null,
           presetSubSlot: null,
+          prettyName: ,
           rewriteFolder: ,
           rewriteName: ,
           soundID: new,
@@ -441,8 +500,9 @@ exports[`check song api mappings 1`] = `
           presetName: KIT272B,
           presetSlot: null,
           presetSubSlot: null,
-          rewriteFolder: ,
-          rewriteName: ,
+          prettyName: 272 Kit 3,
+          rewriteFolder: KITS,
+          rewriteName: KIT272B,
           soundID: 8,
           type: kit,
           usedInClips: [
@@ -459,8 +519,9 @@ exports[`check song api mappings 1`] = `
           presetName: SYNT272B,
           presetSlot: null,
           presetSubSlot: null,
-          rewriteFolder: ,
-          rewriteName: ,
+          prettyName: 272 Synth 3,
+          rewriteFolder: SYNTHS,
+          rewriteName: SYNT272B,
           soundID: 10,
           type: sound,
           usedInClips: [
@@ -490,8 +551,9 @@ exports[`check song api mappings 1`] = `
           presetName: KIT000,
           presetSlot: null,
           presetSubSlot: null,
-          rewriteFolder: ,
-          rewriteName: ,
+          prettyName: 000 Kit,
+          rewriteFolder: KITS/sub folder,
+          rewriteName: KIT000,
           soundID: 11,
           type: kit,
           usedInClips: [
@@ -508,8 +570,9 @@ exports[`check song api mappings 1`] = `
           presetName: SYNT000,
           presetSlot: null,
           presetSubSlot: null,
-          rewriteFolder: ,
-          rewriteName: ,
+          prettyName: 000 Synth,
+          rewriteFolder: SYNTHS/sub folder,
+          rewriteName: SYNT000,
           soundID: 11,
           type: sound,
           usedInClips: [
@@ -526,8 +589,9 @@ exports[`check song api mappings 1`] = `
           presetName: KIT182,
           presetSlot: null,
           presetSubSlot: null,
-          rewriteFolder: ,
-          rewriteName: ,
+          prettyName: 182 Kit,
+          rewriteFolder: KITS/sub folder,
+          rewriteName: KIT182,
           soundID: 12,
           type: kit,
           usedInClips: [
@@ -544,8 +608,9 @@ exports[`check song api mappings 1`] = `
           presetName: SYNT182,
           presetSlot: null,
           presetSubSlot: null,
-          rewriteFolder: ,
-          rewriteName: ,
+          prettyName: 182 Synth,
+          rewriteFolder: SYNTHS/sub folder,
+          rewriteName: SYNT182,
           soundID: 12,
           type: sound,
           usedInClips: [
@@ -562,6 +627,7 @@ exports[`check song api mappings 1`] = `
           presetName: KIT183,
           presetSlot: null,
           presetSubSlot: null,
+          prettyName: ,
           rewriteFolder: ,
           rewriteName: ,
           soundID: new,
@@ -580,6 +646,7 @@ exports[`check song api mappings 1`] = `
           presetName: SYNT183,
           presetSlot: null,
           presetSubSlot: null,
+          prettyName: ,
           rewriteFolder: ,
           rewriteName: ,
           soundID: new,
@@ -598,8 +665,9 @@ exports[`check song api mappings 1`] = `
           presetName: KIT282B,
           presetSlot: null,
           presetSubSlot: null,
-          rewriteFolder: ,
-          rewriteName: ,
+          prettyName: 282 Kit 3,
+          rewriteFolder: KITS/sub folder,
+          rewriteName: KIT282B,
           soundID: 13,
           type: kit,
           usedInClips: [
@@ -616,8 +684,9 @@ exports[`check song api mappings 1`] = `
           presetName: SYNT282B,
           presetSlot: null,
           presetSubSlot: null,
-          rewriteFolder: ,
-          rewriteName: ,
+          prettyName: 282 Synth 3,
+          rewriteFolder: SYNTHS/sub folder,
+          rewriteName: SYNT282B,
           soundID: 13,
           type: sound,
           usedInClips: [
@@ -647,8 +716,9 @@ exports[`check song api mappings 1`] = `
           presetName: KIT001 2,
           presetSlot: null,
           presetSubSlot: null,
-          rewriteFolder: ,
-          rewriteName: ,
+          prettyName: 001 Kit 2,
+          rewriteFolder: KITS,
+          rewriteName: KIT001 2,
           soundID: 2,
           type: kit,
           usedInClips: [
@@ -665,8 +735,9 @@ exports[`check song api mappings 1`] = `
           presetName: SYNT001 2,
           presetSlot: null,
           presetSubSlot: null,
-          rewriteFolder: ,
-          rewriteName: ,
+          prettyName: 001 Synth 2,
+          rewriteFolder: SYNTHS,
+          rewriteName: SYNT001 2,
           soundID: 4,
           type: sound,
           usedInClips: [
@@ -683,6 +754,7 @@ exports[`check song api mappings 1`] = `
           presetName: KIT181 10,
           presetSlot: null,
           presetSubSlot: null,
+          prettyName: ,
           rewriteFolder: ,
           rewriteName: ,
           soundID: new,
@@ -701,6 +773,7 @@ exports[`check song api mappings 1`] = `
           presetName: SYNT181 10,
           presetSlot: null,
           presetSubSlot: null,
+          prettyName: ,
           rewriteFolder: ,
           rewriteName: ,
           soundID: new,
@@ -719,8 +792,9 @@ exports[`check song api mappings 1`] = `
           presetName: KIT187A,
           presetSlot: null,
           presetSubSlot: null,
-          rewriteFolder: ,
-          rewriteName: ,
+          prettyName: 187 Kit 2,
+          rewriteFolder: KITS,
+          rewriteName: KIT187A,
           soundID: 6,
           type: kit,
           usedInClips: [
@@ -737,8 +811,9 @@ exports[`check song api mappings 1`] = `
           presetName: SYNT187A,
           presetSlot: null,
           presetSubSlot: null,
-          rewriteFolder: ,
-          rewriteName: ,
+          prettyName: 187 Synth 2,
+          rewriteFolder: SYNTHS,
+          rewriteName: SYNT187A,
           soundID: 8,
           type: sound,
           usedInClips: [
@@ -755,6 +830,7 @@ exports[`check song api mappings 1`] = `
           presetName: KIT197B,
           presetSlot: null,
           presetSubSlot: null,
+          prettyName: ,
           rewriteFolder: ,
           rewriteName: ,
           soundID: new,
@@ -773,6 +849,7 @@ exports[`check song api mappings 1`] = `
           presetName: SYNT197B,
           presetSlot: null,
           presetSubSlot: null,
+          prettyName: ,
           rewriteFolder: ,
           rewriteName: ,
           soundID: new,
@@ -804,8 +881,9 @@ exports[`check song api mappings 1`] = `
           presetName: 001,
           presetSlot: null,
           presetSubSlot: null,
-          rewriteFolder: ,
-          rewriteName: ,
+          prettyName: 001 Kit,
+          rewriteFolder: KITS,
+          rewriteName: KIT001,
           soundID: 1,
           type: kit,
           usedInClips: [
@@ -822,8 +900,9 @@ exports[`check song api mappings 1`] = `
           presetName: 001,
           presetSlot: null,
           presetSubSlot: null,
-          rewriteFolder: ,
-          rewriteName: ,
+          prettyName: 001 Synth,
+          rewriteFolder: SYNTHS,
+          rewriteName: SYNT001,
           soundID: 3,
           type: sound,
           usedInClips: [
@@ -840,8 +919,9 @@ exports[`check song api mappings 1`] = `
           presetName: 172,
           presetSlot: null,
           presetSubSlot: null,
-          rewriteFolder: ,
-          rewriteName: ,
+          prettyName: 172 Kit,
+          rewriteFolder: KITS,
+          rewriteName: KIT172,
           soundID: 5,
           type: kit,
           usedInClips: [
@@ -858,8 +938,9 @@ exports[`check song api mappings 1`] = `
           presetName: 172,
           presetSlot: null,
           presetSubSlot: null,
-          rewriteFolder: ,
-          rewriteName: ,
+          prettyName: 172 Synth,
+          rewriteFolder: SYNTHS,
+          rewriteName: SYNT172,
           soundID: 7,
           type: sound,
           usedInClips: [
@@ -876,6 +957,7 @@ exports[`check song api mappings 1`] = `
           presetName: 173,
           presetSlot: null,
           presetSubSlot: null,
+          prettyName: ,
           rewriteFolder: ,
           rewriteName: ,
           soundID: new,
@@ -894,6 +976,7 @@ exports[`check song api mappings 1`] = `
           presetName: 173,
           presetSlot: null,
           presetSubSlot: null,
+          prettyName: ,
           rewriteFolder: ,
           rewriteName: ,
           soundID: new,
@@ -912,8 +995,9 @@ exports[`check song api mappings 1`] = `
           presetName: 272B,
           presetSlot: null,
           presetSubSlot: null,
-          rewriteFolder: ,
-          rewriteName: ,
+          prettyName: 272 Kit 3,
+          rewriteFolder: KITS,
+          rewriteName: KIT272B,
           soundID: 8,
           type: kit,
           usedInClips: [
@@ -930,8 +1014,9 @@ exports[`check song api mappings 1`] = `
           presetName: 272B,
           presetSlot: null,
           presetSubSlot: null,
-          rewriteFolder: ,
-          rewriteName: ,
+          prettyName: 272 Synth 3,
+          rewriteFolder: SYNTHS,
+          rewriteName: SYNT272B,
           soundID: 10,
           type: sound,
           usedInClips: [
@@ -961,8 +1046,9 @@ exports[`check song api mappings 1`] = `
           presetName: null,
           presetSlot: 0,
           presetSubSlot: -1,
-          rewriteFolder: ,
-          rewriteName: ,
+          prettyName: 000 Kit,
+          rewriteFolder: KITS,
+          rewriteName: KIT000,
           soundID: 0,
           type: kit,
           usedInClips: [
@@ -979,8 +1065,9 @@ exports[`check song api mappings 1`] = `
           presetName: null,
           presetSlot: 0,
           presetSubSlot: -1,
-          rewriteFolder: ,
-          rewriteName: ,
+          prettyName: 000 Synth,
+          rewriteFolder: SYNTHS,
+          rewriteName: SYNT000,
           soundID: 2,
           type: sound,
           usedInClips: [
@@ -997,8 +1084,9 @@ exports[`check song api mappings 1`] = `
           presetName: null,
           presetSlot: 171,
           presetSubSlot: 1,
-          rewriteFolder: ,
-          rewriteName: ,
+          prettyName: 171 Kit 3,
+          rewriteFolder: KITS,
+          rewriteName: KIT171B,
           soundID: 4,
           type: kit,
           usedInClips: [
@@ -1015,8 +1103,9 @@ exports[`check song api mappings 1`] = `
           presetName: null,
           presetSlot: 171,
           presetSubSlot: 1,
-          rewriteFolder: ,
-          rewriteName: ,
+          prettyName: 171 Synth 3,
+          rewriteFolder: SYNTHS,
+          rewriteName: SYNT171B,
           soundID: 6,
           type: sound,
           usedInClips: [
@@ -1033,6 +1122,7 @@ exports[`check song api mappings 1`] = `
           presetName: null,
           presetSlot: 271,
           presetSubSlot: -1,
+          prettyName: ,
           rewriteFolder: ,
           rewriteName: ,
           soundID: new,
@@ -1051,6 +1141,7 @@ exports[`check song api mappings 1`] = `
           presetName: null,
           presetSlot: 271,
           presetSubSlot: -1,
+          prettyName: ,
           rewriteFolder: ,
           rewriteName: ,
           soundID: new,
@@ -1076,6 +1167,9 @@ exports[`check song api mappings 1`] = `
       prettyName: ,
       rewriteName: ,
       rootPath: <PROJECT_DIRECTORY>/fake_filesystem/FAKE_SD_CARD,
+      songIDs: Set {
+        1,
+      },
     },
     {
       newName: new synth 2,
@@ -1086,6 +1180,9 @@ exports[`check song api mappings 1`] = `
       prettyName: ,
       rewriteName: ,
       rootPath: <PROJECT_DIRECTORY>/fake_filesystem/FAKE_SD_CARD,
+      songIDs: Set {
+        1,
+      },
     },
     {
       newName: 000 Rich Saw Bass,
@@ -1096,6 +1193,9 @@ exports[`check song api mappings 1`] = `
       prettyName: 000 Synth,
       rewriteName: ,
       rootPath: <PROJECT_DIRECTORY>/fake_filesystem/FAKE_SD_CARD,
+      songIDs: Set {
+        6,
+      },
     },
     {
       newName: 001 Sync Bass,
@@ -1106,6 +1206,10 @@ exports[`check song api mappings 1`] = `
       prettyName: 001 Synth,
       rewriteName: ,
       rootPath: <PROJECT_DIRECTORY>/fake_filesystem/FAKE_SD_CARD,
+      songIDs: Set {
+        2,
+        5,
+      },
     },
     {
       newName: 001 Sync Bass 2,
@@ -1116,6 +1220,9 @@ exports[`check song api mappings 1`] = `
       prettyName: 001 Synth 2,
       rewriteName: ,
       rootPath: <PROJECT_DIRECTORY>/fake_filesystem/FAKE_SD_CARD,
+      songIDs: Set {
+        4,
+      },
     },
     {
       newName: 008 FM Rich Distorted Bass,
@@ -1126,6 +1233,9 @@ exports[`check song api mappings 1`] = `
       prettyName: 008 Synth,
       rewriteName: ,
       rootPath: <PROJECT_DIRECTORY>/fake_filesystem/FAKE_SD_CARD,
+      songIDs: Set {
+        0,
+      },
     },
     {
       newName: SYNT171 3,
@@ -1136,6 +1246,9 @@ exports[`check song api mappings 1`] = `
       prettyName: 171 Synth 3,
       rewriteName: ,
       rootPath: <PROJECT_DIRECTORY>/fake_filesystem/FAKE_SD_CARD,
+      songIDs: Set {
+        6,
+      },
     },
     {
       newName: SYNT172,
@@ -1146,6 +1259,10 @@ exports[`check song api mappings 1`] = `
       prettyName: 172 Synth,
       rewriteName: ,
       rootPath: <PROJECT_DIRECTORY>/fake_filesystem/FAKE_SD_CARD,
+      songIDs: Set {
+        2,
+        5,
+      },
     },
     {
       newName: SYNT187 2,
@@ -1156,6 +1273,9 @@ exports[`check song api mappings 1`] = `
       prettyName: 187 Synth 2,
       rewriteName: ,
       rootPath: <PROJECT_DIRECTORY>/fake_filesystem/FAKE_SD_CARD,
+      songIDs: Set {
+        4,
+      },
     },
     {
       newName: SYNT188 3,
@@ -1166,6 +1286,9 @@ exports[`check song api mappings 1`] = `
       prettyName: 188 Synth 3,
       rewriteName: ,
       rootPath: <PROJECT_DIRECTORY>/fake_filesystem/FAKE_SD_CARD,
+      songIDs: Set {
+        0,
+      },
     },
     {
       newName: SYNT272 3,
@@ -1176,6 +1299,10 @@ exports[`check song api mappings 1`] = `
       prettyName: 272 Synth 3,
       rewriteName: ,
       rootPath: <PROJECT_DIRECTORY>/fake_filesystem/FAKE_SD_CARD,
+      songIDs: Set {
+        2,
+        5,
+      },
     },
     {
       newName: 000 Rich Saw Bass,
@@ -1186,6 +1313,9 @@ exports[`check song api mappings 1`] = `
       prettyName: 000 Synth,
       rewriteName: ,
       rootPath: <PROJECT_DIRECTORY>/fake_filesystem/FAKE_SD_CARD,
+      songIDs: Set {
+        3,
+      },
     },
     {
       newName: SYNT182,
@@ -1196,6 +1326,9 @@ exports[`check song api mappings 1`] = `
       prettyName: 182 Synth,
       rewriteName: ,
       rootPath: <PROJECT_DIRECTORY>/fake_filesystem/FAKE_SD_CARD,
+      songIDs: Set {
+        3,
+      },
     },
     {
       newName: SYNT282 3,
@@ -1206,6 +1339,9 @@ exports[`check song api mappings 1`] = `
       prettyName: 282 Synth 3,
       rewriteName: ,
       rootPath: <PROJECT_DIRECTORY>/fake_filesystem/FAKE_SD_CARD,
+      songIDs: Set {
+        3,
+      },
     },
   ],
 }

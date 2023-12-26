@@ -3,7 +3,6 @@ import React from 'react';
 
 export const InstrumentListSongList = ({instrument, index}) => {
   const [desc, ...types] = showType(instrument);
-  const {rewriteName: newName, rewriteFolder: newPath} = instrument;
   return (
     <>
       <Typography
@@ -23,9 +22,9 @@ export const InstrumentListSongList = ({instrument, index}) => {
         ))}
         <br />
         &darr; <br />
-        <strong>Name:</strong> {newName}
+        <strong>Name:</strong> {instrument.rewriteName}
         <br />
-        <strong>Path:</strong> {newPath}
+        <strong>Path:</strong> {instrument.rewriteFolder}
       </pre>
     </>
   );
