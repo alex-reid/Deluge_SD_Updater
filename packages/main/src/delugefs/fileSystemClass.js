@@ -244,26 +244,13 @@ class fileSystem {
           instrument.rewriteFolder = this.files[type][id].path;
           this.files[type][id].songIDs.add(songIndex);
           // console.log(this.files[type][id].songIDs);
+        } else {
+          instrument.rewriteName = instrument.patchName + instrument.patchSuffix;
+          instrument.rewriteFolder = instrument.presetFolder || instrument.types.folder;
         }
       }
     }
   }
-
-  // async rewriteSongsToV4() {
-  //   for (const song of this.files.songs) {
-  //     if (song.validate()) song.rewriteInstrumentXMLAttributes();
-  //     if (song.validate()) await song.saveXML();
-  //   }
-  // }
-
-  // async rewriteInstrumentsToV4() {
-  //   for (const synth of this.files.synths) {
-  //     await synth.renameFileToV4();
-  //   }
-  //   for (const kit of this.files.kits) {
-  //     await kit.renameFileToV4();
-  //   }
-  // }
 }
 
 export default fileSystem;

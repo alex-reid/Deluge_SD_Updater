@@ -17,10 +17,18 @@ export const instrumentReducer = (state, action) => {
         return old;
       });
     case INST.RENAME_ALL_V4:
-      return state.map(old => ({
-        ...old,
-        rewriteName: old.rewriteName ? old.rewriteName : old.newName,
-      }));
+      return state.map(old => {
+        let newName = '';
+        if (old.rewriteName) {
+          newName = old.rewriteName;
+        } else if (old.newName != old.oldName) {
+          newName = old.newName;
+        }
+        return {
+          ...old,
+          rewriteName: newName,
+        };
+      });
     case INST.RENAME_ALL_PRETTY:
       return state.map(old => ({
         ...old,

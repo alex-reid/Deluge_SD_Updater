@@ -47,7 +47,7 @@ function getMainDelugeInfo(D) {
               usedInClips: song.getInstrumentClipIndexs(curr),
               rewriteName: curr.rewriteName,
               rewriteFolder: curr.rewriteFolder,
-              prettyName: prettyName(curr.rewriteName) || '',
+              prettyName: prettyName(curr.patchName) + curr.patchSuffixClean || '',
               soundID: curr.soundID,
               isNewSound: curr.soundID == 'new',
             },

@@ -25,15 +25,15 @@ const App = () => {
   const [tab, setTab] = useState('tab-synths');
   const [initialised, setInitialised] = useState(false);
 
-  useEffect(() => {
-    console.log('songs data', songs);
-  }, [songs]);
-  useEffect(() => {
-    console.log('synths data', synths);
-  }, [synths]);
-  useEffect(() => {
-    console.log('kits data', kits);
-  }, [kits]);
+  // useEffect(() => {
+  //   console.log('songs data', songs);
+  // }, [songs]);
+  // useEffect(() => {
+  //   console.log('synths data', synths);
+  // }, [synths]);
+  // useEffect(() => {
+  //   console.log('kits data', kits);
+  // }, [kits]);
 
   useEffect(() => {
     dispatchSongs({type: SONG.RENAME_FROM_INST, synths, kits});

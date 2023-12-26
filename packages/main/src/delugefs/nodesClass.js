@@ -16,6 +16,10 @@ class Node {
     this.presetSlot = null;
     this.presetSubSlot = null;
   }
+  /**
+   * Sets up a nicer interface for Cheerio
+   * @returns {object}
+   */
   setupXml() {
     const $ = this.xml;
     const node = this.xmlData;
@@ -39,16 +43,18 @@ class Instrument extends Node {
     this.hasPresetSlot = false;
     this.hasPresetSubSlot = false;
     this.types = null;
-    this.isV4 = false;
     this.renamed = false;
     this.formatType = null;
     this.patchName = '';
     this.patchSuffix = '';
     this.patchSuffixClean = '';
-    this.getPresetData();
     this.clips = null;
     this.soundID = null;
+    this.rewriteName = '';
+    this.rewriteFolder = '';
+    this.getPresetData();
   }
+
   getPresetData() {
     const {$, node} = this.setupXml();
     this.presetSlot = $(node).attr('presetSlot') || null;
@@ -56,10 +62,17 @@ class Instrument extends Node {
     this.presetName = $(node).attr('presetName') || null;
     this.presetFolder = $(node).attr('presetFolder') || null;
     this.presetType = $(node)[0].name;
-    this.rewriteName = '';
-    this.rewriteFolder = '';
-    this.getCommonPresetData();
+    this.hasPresetName = !!this.presetName;
+    this.hasPresetFolder = !!this.presetFolder;
+    this.hasPresetSlot = !!this.presetSlot;
+    this.hasPresetSubSlot = !!this.presetSubSlot;
+    this.presetSlot = this.presetSlot && parseInt(this.presetSlot);
+    this.presetSubSlot = this.presetSubSlot && parseInt(this.presetSubSlot);
+    this.types = getTypeMapping(this.presetType, 'xml');
+    this.formatType = this.getPresetType();
+    this.patchNameAndSuffix();
   }
+
   getDataFromFilename() {
     return getOldTypeAndNumber(this.presetName);
   }
@@ -82,19 +95,6 @@ class Instrument extends Node {
       return 'nameonly';
     }
     return 'unknown';
-  }
-
-  getCommonPresetData() {
-    this.hasPresetName = !!this.presetName;
-    this.hasPresetFolder = !!this.presetFolder;
-    this.hasPresetSlot = !!this.presetSlot;
-    this.hasPresetSubSlot = !!this.presetSubSlot;
-    this.presetSlot = this.presetSlot && parseInt(this.presetSlot);
-    this.presetSubSlot = this.presetSubSlot && parseInt(this.presetSubSlot);
-    this.types = getTypeMapping(this.presetType, 'xml');
-    this.isV4 = !!(!this.presetSlot && !this.presetSubSlot && this.presetFolder && this.presetName);
-    this.formatType = this.getPresetType();
-    this.patchNameAndSuffix();
   }
 
   patchNameAndSuffix() {
