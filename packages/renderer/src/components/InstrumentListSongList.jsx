@@ -51,14 +51,42 @@ const showType = instrument => {
         {name: 'Preset Name', val: instrument.presetName},
         {name: 'Preset Folder', val: instrument.presetFolder},
       ];
+    case 'newsuffix':
+      return [
+        'This one has a suffix added. Still all set for v4+',
+        {name: 'Preset Name', val: instrument.presetName},
+        {name: 'Preset Folder', val: instrument.presetFolder},
+      ];
     case 'nameonly':
       return [
         'Needs to have a folder added to it for this to be v4+',
         {name: 'Preset Name', val: instrument.presetName},
       ];
     case 'unknown':
-      return ['Something odd about this one', {name: '!!!!', val: '!!!!'}];
+      return [
+        <Typography
+          key={0}
+          color="primary"
+        >
+          Logged as an unknown type
+        </Typography>,
+        {name: 'Preset Slot', val: instrument.presetSlot},
+        {name: 'Preset Sub Slot', val: instrument.presetSubSlot},
+        {name: 'Preset Name', val: instrument.presetName},
+        {name: 'Preset Folder', val: instrument.presetFolder},
+      ];
     default:
-      return ['hmmmmm...', {name: '!!!!', val: '!!!!'}];
+      return [
+        <Typography
+          key={0}
+          color="primary"
+        >
+          Through to the keeper on this one
+        </Typography>,
+        {name: 'Preset Slot', val: instrument.presetSlot},
+        {name: 'Preset Sub Slot', val: instrument.presetSubSlot},
+        {name: 'Preset Name', val: instrument.presetName},
+        {name: 'Preset Folder', val: instrument.presetFolder},
+      ];
   }
 };

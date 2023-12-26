@@ -15,7 +15,6 @@ import CssBaseline from '@mui/material/CssBaseline';
 import theme from './theme';
 import InstrumentList from './components/instrumentList';
 import SongList from './components/SongList';
-import {useMapByName} from './hooks/useMappings';
 import {DragBox} from './components/DragBox';
 
 const App = () => {
@@ -24,29 +23,27 @@ const App = () => {
   const [songs, setSongs] = useState([]);
   const [tab, setTab] = useState('tab-synths');
   const [initialised, setInitialised] = useState(false);
-  const mapByName = useMapByName(kits, synths);
 
-  // useEffect(() => {
-  //   console.log('name map', mapByName);
-  // }, [mapByName]);
+  useEffect(() => {
+    console.log('songs data', songs);
+  }, [songs]);
+  useEffect(() => {
+    console.log('synths data', synths);
+  }, [synths]);
+  useEffect(() => {
+    console.log('kits data', kits);
+  }, [kits]);
 
   const getInstNewName = ins => {
     const type = ins.type == 'kit' ? 'kits' : 'synths';
-    const mapping = {name: ins.patchName, path: type.toUpperCase()};
-    switch (ins.formatType) {
-      case 'numsonly':
-        return mapByName[type]?.[ins.patchName]?.[ins.presetFolder] || mapping;
-      case 'new':
-        return mapByName[type]?.[ins.presetName]?.[ins.presetFolder] || mapping;
-      case 'old':
-        return mapByName[type]?.[ins.patchName]?.[type.toUpperCase()] || mapping;
-      case 'nameonly':
-        return mapByName[type]?.[ins.presetName]?.[type.toUpperCase()] || mapping;
-      case 'unknown':
-        return {name: 'unkown', path: 'unknown'};
-      default:
-        return {name: 'default', path: 'default'};
+    let mapping = {name: ins.patchName, path: type.toUpperCase()};
+    let sound = null;
+    if (ins.type == 'kit') sound = kits[ins.soundID];
+    if (ins.type == 'sound') sound = synths[ins.soundID];
+    if (sound) {
+      mapping = {name: sound.rewriteName, path: sound.path};
     }
+    return mapping;
   };
 
   useEffect(() => {
@@ -60,34 +57,28 @@ const App = () => {
       if (prev && prev.length > 0) {
         // check song isn't empty
         console.log('run synth rewrite');
-        return prev.map(song => ({
-          // map each song
-          ...song,
-          instruments: song.instruments.map(inst => {
-            // remap each instrument
-            const {name, path} = getInstNewName(inst);
-            if (inst.formatType == 'newsuffix') {
-              console.log(
-                inst.rewriteName == name,
-                inst.rewriteFolder == path,
-                name,
-                path,
-                inst.rewriteName,
-                inst.rewriteFolder,
-                song.name,
-                inst,
-              );
-            }
-            if (name && path) {
-              return {
-                ...inst,
-                rewriteName: name,
-                rewriteFolder: path,
-              };
-            }
-            return inst;
-          }),
-        }));
+        return prev.map(song => {
+          let shouldUpdate = false;
+          return {
+            // map each song
+            ...song,
+            instruments: song.instruments.map(inst => {
+              // remap each instrument
+              const {name, path} = getInstNewName(inst);
+              console.log(name, path, inst.rewriteName, inst.rewriteFolder);
+              if (name != inst.rewriteName && path != inst.rewriteFolder) {
+                shouldUpdate = true;
+                return {
+                  ...inst,
+                  rewriteName: name,
+                  rewriteFolder: path,
+                };
+              }
+              return inst;
+            }),
+            shouldUpdate,
+          };
+        });
       }
       return prev;
     });
@@ -268,9 +259,6 @@ const App = () => {
                     return (
                       <SongList
                         {...data}
-                        newInstNames={data.instruments.map(instrument =>
-                          getInstNewName(instrument),
-                        )}
                         key={i}
                       />
                     );

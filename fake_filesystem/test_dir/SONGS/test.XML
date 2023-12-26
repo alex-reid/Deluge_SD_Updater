@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<song firmwareVersion="4.0.0">
+    <instruments>
+        <sound presetName="new synth 2" presetFolder="SYNTHS"/>
+        <sound presetName="new synth" presetFolder="SYNTHS/subfolder"/>
+        <sound presetName="new synth 2" presetFolder="SYNTHS/subfolder"/>
+    </instruments>
+    <sessionClips>
+        <instrumentClip instrumentPresetName="new synth 2" instrumentPresetFolder="SYNTHS">
+            <soundParams/>
+        </instrumentClip>
+        <instrumentClip instrumentPresetName="new synth 2" instrumentPresetFolder="SYNTHS">
+            <soundParams/>
+        </instrumentClip>
+        <instrumentClip instrumentPresetName="new synth" instrumentPresetFolder="SYNTHS/subfolder">
+            <soundParams/>
+        </instrumentClip>
+        <instrumentClip instrumentPresetName="new synth" instrumentPresetFolder="SYNTHS/subfolder">
+            <soundParams/>
+        </instrumentClip>
+        <instrumentClip instrumentPresetName="new synth 2" instrumentPresetFolder="SYNTHS/subfolder">
+            <soundParams/>
+        </instrumentClip>
+        <instrumentClip instrumentPresetName="new synth 2" instrumentPresetFolder="SYNTHS/subfolder">
+            <soundParams/>
+        </instrumentClip>
+    </sessionClips>
+</song>

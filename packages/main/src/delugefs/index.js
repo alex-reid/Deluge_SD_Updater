@@ -1,16 +1,17 @@
-// const fileSystem = require('./fileSystemClass');
+import fileSystem from './fileSystemClass';
 
-// const D = new fileSystem(
-//   // "/Volumes/DELUGE"
-//   //"./Deluge_v2",
-//   //"./Deluge_v4",
-//   './DelugeSD',
-//   // "/Users/alexreid/work/deluge-node/Deluge+OLED+V4p1p0+factory+card+contents",
-//   {
-//     renameToV4: true,
-//     prettyNames: false,
-//   },
-// );
+const D = new fileSystem();
+D.init(
+  // "/Volumes/DELUGE"
+  //"./Deluge_v2",
+  //"./Deluge_v4",
+  './DelugeSD',
+  // "/Users/alexreid/work/deluge-node/Deluge+OLED+V4p1p0+factory+card+contents",
+  {
+    renameToV4: true,
+    prettyNames: false,
+  },
+);
 
 // D.init()
 //   .then(() => {

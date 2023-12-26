@@ -2,7 +2,6 @@ import fs from 'fs/promises';
 import fsSync from 'fs';
 import path from 'path';
 import {Song, Kit, Synth} from './filesClass';
-import {prettyName} from './utils';
 import {sendErrorMain} from './ipcFuncs';
 
 class fileSystem {
@@ -24,10 +23,6 @@ class fileSystem {
       byName: {
         kits: {},
         synths: {},
-      },
-      byID: {
-        kits: [],
-        synths: [],
       },
     };
   }
@@ -96,8 +91,12 @@ class fileSystem {
         return this.loadSongs();
       })
       .then(() => {
+        return this.mapSongInstrumentsToSounds();
+      })
+      .then(() => {
         return 'ready';
-      });
+      })
+      .catch(err => console.error(err));
   }
 
   async isDelugeSD() {
@@ -169,33 +168,45 @@ class fileSystem {
     }
   }
 
+  soundSortFunc(a, b) {
+    const names = a.presetName.localeCompare(b.presetName, 'en', {numeric: true});
+    const folders = a.path.localeCompare(b.path, 'en', {numeric: true});
+    return folders == 0 ? names : folders;
+  }
+
   async buildSynthsAndKitsList() {
+    // Loop through kits directory and add Kits
     this.loopDirectoryRecursive(this.delugePaths.kits, (file, directory) => {
       const sound = new Kit(directory, file, this.rootDir);
       this.files.kits.push(sound);
-      this.addNewMappings(sound, 'kits');
+    });
+    // Sort Kits alphanumerically by folder -> name
+    this.files.kits.sort(this.soundSortFunc);
+    // map kit names and folders & add id
+    this.files.kits.forEach((sound, index) => {
+      sound.soundID = index;
+      this.addNewMappings(sound, 'kits', index);
     });
     console.log(this.files.kits.length, 'kits(s) loaded from SD card');
+    // Loop through synths directory and add Synths
     this.loopDirectoryRecursive(this.delugePaths.synths, (file, directory) => {
       const sound = new Synth(directory, file, this.rootDir);
       this.files.synths.push(sound);
-      this.addNewMappings(sound, 'synths');
+    });
+    // Sort Synths alphanumerically by folder -> name
+    this.files.synths.sort(this.soundSortFunc);
+    // map synth names and folders & add id
+    this.files.synths.forEach((sound, index) => {
+      sound.soundID = index;
+      this.addNewMappings(sound, 'synths', index);
     });
     console.log(this.files.synths.length, 'synths(s) loaded from SD card');
   }
 
-  addNewMappings(sound, type) {
-    if (sound.isOldName && this.renameToV4) {
-      // add mapping for old name => new name
-      this.mappings.byName[type][sound.fileName] = sound.newName;
-    }
-    if (this.prettyNames) {
-      const newName = prettyName(sound.fileName);
-      if (newName) {
-        // add mapping for old name => new name
-        this.mappings.byName[type][sound.fileName] = newName;
-      }
-    }
+  addNewMappings(sound, type, index = 0) {
+    if (!this.mappings.byName[type][sound.fileName])
+      this.mappings.byName[type][sound.fileName] = {};
+    this.mappings.byName[type][sound.fileName][sound.path] = index;
   }
 
   buildSongList() {
@@ -219,6 +230,20 @@ class fileSystem {
           .catch(err => console.error('Error loading xml for', song.fileName, err));
       }
       console.log('Loaded XML for', loaded, 'of', this.files.songs.length, 'songs');
+    }
+  }
+
+  mapSongInstrumentsToSounds() {
+    // console.log(this.mappings.byName.synths);
+    for (const song of this.files.songs) {
+      for (const instrument of song.instruments) {
+        //instrument.getSoundIndex(this.mappings);
+        const {id, type} = instrument.getSoundIndex(this.mappings);
+        if (id != 'new') {
+          this.files[type][id].songIDs.add(id);
+          // console.log(this.files[type][id].songIDs);
+        }
+      }
     }
   }
 

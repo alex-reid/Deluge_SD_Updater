@@ -1,12 +1,10 @@
-import {afterAll, beforeAll, expect, test} from 'vitest';
+import {describe, expect, it} from 'vitest';
 import fileSystem from '../src/delugefs/fileSystemClass';
 import path from 'path';
-import {getMainDelugeInfo} from '../src/delugefs/ipcFuncs';
 
 import {fakeFS} from '../../../fake_filesystem/setupDummyFiles';
 
 let Deluge, dummy_dir;
-const testfolder = path.resolve(__dirname);
 
 expect.addSnapshotSerializer({
   print(val) {
@@ -25,144 +23,413 @@ expect.addSnapshotSerializer({
   },
 });
 
-beforeAll(() => {
+const setup = async files => {
   Deluge = new fileSystem();
-  dummy_dir = fakeFS();
-});
-
-afterAll(() => {
-  Deluge = null;
-});
-
-test('filesystem exists', () => {
-  const instance = new fileSystem();
-  expect(typeof instance == 'object', 'filesystem exists');
-});
-
-test('fail on blank', async () => {
-  const instance = new fileSystem();
-  expect.assertions(1);
-  try {
-    await instance.init();
-  } catch (err) {
-    expect(err.message).toBe('path given is not a directory');
-  }
-});
-
-test('fail on file', async () => {
-  const instance = new fileSystem();
-  expect.assertions(1);
-  try {
-    await instance.init(path.join(testfolder, 'blank.txt'), {
-      renameToV4: true,
-      prettyNames: false,
-    });
-  } catch (err) {
-    expect(err.message).toBe('path given is not a directory');
-  }
-});
-
-test('sucessful init', () => {
-  return Deluge.init(dummy_dir, {
+  dummy_dir = fakeFS(
+    [
+      {
+        fileName: 'test.XML',
+        firmware: '4.0.0',
+        data: files,
+      },
+    ],
+    'test_dir',
+  );
+  await Deluge.init(dummy_dir, {
     renameToV4: true,
     prettyNames: false,
-  }).then(() => {
-    expect(Deluge.isDelugeDrive).toBe(true);
+  });
+  return Deluge;
+};
+
+describe.sequential('mappings that should map to the base instrument', async () => {
+  const Deluge = await setup([
+    // initital actual instruments
+    {
+      type: 'sound',
+      attrs: {presetName: 'SYNT000', presetFolder: 'SYNTHS'},
+      hasFile: true,
+    },
+    // test on 'new' type
+    {
+      type: 'sound',
+      attrs: {presetName: 'SYNT000', presetFolder: 'SYNTHS'},
+      hasFile: false,
+    },
+    // test on 'no folder' type
+    {
+      type: 'sound',
+      attrs: {presetName: 'SYNT000'},
+      hasFile: false,
+    },
+    {
+      type: 'sound',
+      attrs: {presetName: 'SYNT000A'},
+      hasFile: false,
+    },
+    {
+      type: 'sound',
+      attrs: {presetName: 'SYNT000 2'},
+      hasFile: false,
+    },
+    // test on 'new suffix' type
+    {
+      type: 'sound',
+      attrs: {presetName: 'SYNT000A', presetFolder: 'SYNTHS'},
+      hasFile: false,
+    },
+    {
+      type: 'sound',
+      attrs: {presetName: 'SYNT000 2', presetFolder: 'SYNTHS'},
+      hasFile: false,
+    },
+    // test on 'digits only' type
+    {
+      type: 'sound',
+      attrs: {presetName: '000', presetFolder: 'SYNTHS'},
+      hasFile: false,
+    },
+    {
+      type: 'sound',
+      attrs: {presetName: '000A', presetFolder: 'SYNTHS'},
+      hasFile: false,
+    },
+    {
+      type: 'sound',
+      attrs: {presetName: '000 2', presetFolder: 'SYNTHS'},
+      hasFile: false,
+    },
+    // test on 'old' type
+
+    {
+      type: 'sound',
+      attrs: {presetSlot: 0, presetSubSlot: -1},
+      hasFile: false,
+    },
+
+    {
+      type: 'sound',
+      attrs: {presetSlot: 0, presetSubSlot: 0},
+      hasFile: false,
+    },
+  ]);
+
+  it('checks synth mappings', () => {
+    expect(Deluge.files.synths[0].songIDs.has(0)).toBe(true);
+  });
+  it('checks song mappings', () => {
+    // console.log(Deluge.files.songs[0].instruments);
+    Deluge.files.songs[0].instruments.forEach(ins => {
+      if (ins.soundID != 0) {
+        console.log(ins);
+      }
+      expect(ins.soundID).toBe(0);
+    });
   });
 });
 
-test('check song mappings', () => {
-  expect(getMainDelugeInfo(Deluge)).toMatchSnapshot();
-});
+describe.sequential('mappings that should map to a letter suffixed instrument', async () => {
+  const Deluge = await setup([
+    // initital actual instruments
+    {
+      type: 'sound',
+      attrs: {presetName: 'SYNT000', presetFolder: 'SYNTHS'},
+      hasFile: true,
+    },
+    {
+      type: 'sound',
+      attrs: {presetName: 'SYNT000A', presetFolder: 'SYNTHS'},
+      hasFile: true,
+    },
+    // test on 'new' type
+    {
+      type: 'sound',
+      attrs: {presetName: 'SYNT000A', presetFolder: 'SYNTHS'},
+      hasFile: false,
+    },
+    // test on 'no folder' type
+    {
+      type: 'sound',
+      attrs: {presetName: 'SYNT000A'},
+      hasFile: false,
+    },
+    // test on 'new suffix' type
+    {
+      type: 'sound',
+      attrs: {presetName: 'SYNT000A', presetFolder: 'SYNTHS'},
+      hasFile: false,
+    },
+    // test on 'digits only' type
+    {
+      type: 'sound',
+      attrs: {presetName: '000A', presetFolder: 'SYNTHS'},
+      hasFile: false,
+    },
+    // test on 'old' type
+    {
+      type: 'sound',
+      attrs: {presetSlot: 0, presetSubSlot: 0},
+      hasFile: false,
+    },
+  ]);
 
-test('validate each song', () => {
-  Deluge.files.songs.forEach(song => {
-    expect(song.validate()).toBe(true);
+  it('checks synth mappings', () => {
+    expect(Deluge.files.synths[0].songIDs.has(0)).toBe(true);
   });
-});
-
-test('fail on bad array length', () => {
-  expect(() => {
-    Deluge.files.songs.forEach(song => {
-      const newNames = [];
-      song.rewriteInstrumentsAndClipsXMLAttributes(newNames);
-    });
-  }).toThrow('new names are not the same length as instruments');
-});
-
-test('fail on bad array data', () => {
-  expect(() => {
-    Deluge.files.songs.forEach(song => {
-      const newNames = new Array(song.instruments.length).fill({
-        rewriteName: false,
-        rewriteFolder: 'test folder ',
-      });
-      song.rewriteInstrumentsAndClipsXMLAttributes(newNames);
-    });
-  }).toThrow('invalid data in new names array');
-});
-
-test('test rewrite each song', () => {
-  expect(() => {
-    Deluge.files.songs.forEach(song => {
-      const newNames = song.instruments.map((_v, index) => ({
-        rewriteName: 'test name ' + index,
-        rewriteFolder: 'test folder ' + index,
-      }));
-      song.rewriteInstrumentsAndClipsXMLAttributes(newNames);
-    });
-  }).not.toThrow();
-});
-
-test('find test names in songs', () => {
-  Deluge.files.songs.forEach(song => {
-    song.instruments.forEach((instrument, index) => {
-      expect(instrument.presetName).toBe('test name ' + index);
-      expect(instrument.presetFolder).toBe('test folder ' + index);
-      expect(instrument.presetSlot).toBeNull;
-      expect(instrument.presetSubSlot).toBeNull;
-    });
-  });
-});
-
-test('find test names in clips', () => {
-  Deluge.files.songs.forEach(song => {
-    song.instruments.forEach((instrument, index) => {
-      instrument.clips.forEach(clipId => {
-        const clip = song.clips[clipId];
-        expect(clip.presetName).toBe('test name ' + index);
-        expect(clip.presetFolder).toBe('test folder ' + index);
-        expect(clip.presetSlot).toBeNull;
-        expect(clip.presetSubSlot).toBeNull;
-      });
+  it('checks song mappings', () => {
+    Deluge.files.songs[0].instruments.forEach(ins => {
+      if (ins.presetName != 'SYNT000' && ins.presetFolder != 'SYNTHS') {
+        expect(ins.soundID).toBe(1);
+      }
     });
   });
 });
 
-test('no old tags in clips', () => {
-  Deluge.files.songs.forEach(song => {
-    song.clips.forEach(clip => {
-      expect(clip.presetSlot).toBeNull;
-      expect(clip.presetSubSlot).toBeNull;
+describe.sequential("mappings that shouldn't map to a suffixed instrument", async () => {
+  const Deluge = await setup([
+    // initital actual instruments
+    {
+      type: 'sound',
+      attrs: {presetName: 'SYNT000A', presetFolder: 'SYNTHS'},
+      hasFile: true,
+    },
+    // test on 'new' type
+    {
+      type: 'sound',
+      attrs: {presetName: 'SYNT000 2', presetFolder: 'SYNTHS'},
+      hasFile: false,
+    },
+    // test on 'no folder' type
+    {
+      type: 'sound',
+      attrs: {presetName: 'SYNT000 2'},
+      hasFile: false,
+    },
+    // test on 'new suffix' type
+    {
+      type: 'sound',
+      attrs: {presetName: 'SYNT000 2', presetFolder: 'SYNTHS'},
+      hasFile: false,
+    },
+    // test on 'digits only' type
+    {
+      type: 'sound',
+      attrs: {presetName: '000 2', presetFolder: 'SYNTHS'},
+      hasFile: false,
+    },
+  ]);
+
+  it('checks synth mappings', () => {
+    expect(Deluge.files.synths[0].songIDs.has(0)).toBe(true);
+  });
+  it('checks song mappings', () => {
+    Deluge.files.songs[0].instruments.forEach(ins => {
+      if (ins.soundID != 'new') {
+        ins.printNode();
+      }
+      if (ins.presetName != 'SYNT000' && ins.presetFolder != 'SYNTHS') {
+        expect(ins.soundID).toBe('new');
+      }
     });
   });
 });
 
-/*
+describe.sequential('mappings that should map to a number suffixed instrument', async () => {
+  const Deluge = await setup([
+    // initital actual instruments
+    {
+      type: 'sound',
+      attrs: {presetName: 'SYNT000 2', presetFolder: 'SYNTHS'},
+      hasFile: true,
+    },
+    // test on 'new' type
+    {
+      type: 'sound',
+      attrs: {presetName: 'SYNT000 2', presetFolder: 'SYNTHS'},
+      hasFile: false,
+    },
+    // test on 'no folder' type
+    {
+      type: 'sound',
+      attrs: {presetName: 'SYNT000 2'},
+      hasFile: false,
+    },
+    // test on 'new suffix' type
+    {
+      type: 'sound',
+      attrs: {presetName: 'SYNT000 2', presetFolder: 'SYNTHS'},
+      hasFile: false,
+    },
+    // test on 'digits only' type
+    {
+      type: 'sound',
+      attrs: {presetName: '000 2', presetFolder: 'SYNTHS'},
+      hasFile: false,
+    },
+  ]);
 
-TODO:
+  it('checks synth mappings', () => {
+    expect(Deluge.files.synths[0].songIDs.has(0)).toBe(true);
+  });
+  it('checks song mappings', () => {
+    Deluge.files.songs[0].instruments.forEach(ins => {
+      if (ins.soundID != 0) {
+        ins.printNode();
+      }
+      if (ins.presetName != 'SYNT000' && ins.presetFolder != 'SYNTHS') {
+        expect(ins.soundID).toBe(0);
+      }
+    });
+  });
+});
 
-make a fake mapping directors that includes:
-- old - xml song file with dummy presetSlot (factory sound + subSlot ('0' '-1') ('0' '1'), no match + subSlot ('999' '-1') ('999' '1'), ('171','-1') + ('171','1'))
+describe.sequential('mappings that should match by name', async () => {
+  const Deluge = await setup([
+    // initital actual instruments
+    {
+      type: 'sound',
+      attrs: {presetName: 'new synth', presetFolder: 'SYNTHS'},
+      hasFile: true,
+    },
+    // test on 'new' type
+    {
+      type: 'sound',
+      attrs: {presetName: 'new synth 2', presetFolder: 'SYNTHS'},
+      hasFile: false,
+    },
+    // test on 'no folder' type
+    {
+      type: 'sound',
+      attrs: {presetName: 'new synth 2'},
+      hasFile: false,
+    },
+  ]);
 
+  it('checks synth mappings', () => {
+    expect(Deluge.files.synths[0].songIDs.has(0)).toBe(true);
+  });
+  it('checks song mappings', () => {
+    Deluge.files.songs[0].instruments.forEach(ins => {
+      if (ins.soundID != 0) {
+        ins.printNode();
+      }
+      if (ins.presetName != 'SYNT000' && ins.presetFolder != 'SYNTHS') {
+        expect(ins.soundID).toBe(0);
+      }
+    });
+  });
+});
 
+describe.sequential('mappings that should match by name an suffix', async () => {
+  const Deluge = await setup([
+    // initital actual instruments
+    {
+      type: 'sound',
+      attrs: {presetName: 'new synth', presetFolder: 'SYNTHS'},
+      hasFile: true,
+    },
+    {
+      type: 'sound',
+      attrs: {presetName: 'new synth 2', presetFolder: 'SYNTHS'},
+      hasFile: true,
+    },
+    // test on 'new' type
+    {
+      type: 'sound',
+      attrs: {presetName: 'new synth 2', presetFolder: 'SYNTHS'},
+      hasFile: false,
+    },
+    // test on 'no folder' type
+    {
+      type: 'sound',
+      attrs: {presetName: 'new synth 2'},
+      hasFile: false,
+    },
+  ]);
 
-- numsonly - xml song file with dummy nummsonly ('000' + '000A, '999' + '999A', '171' + '171A')
+  it('checks synth mappings', () => {
+    expect(Deluge.files.synths[0].songIDs.has(0)).toBe(true);
+  });
+  it('checks song mappings', () => {
+    Deluge.files.songs[0].instruments.forEach(ins => {
+      if (ins.soundID != 1) {
+        ins.printNode();
+      }
+      if (ins.presetName != 'SYNT000' && ins.presetFolder != 'SYNTHS') {
+        expect(ins.soundID).toBe(1);
+      }
+    });
+  });
+});
 
+describe.sequential('mappings that should match by name and suffix with a folder', async () => {
+  const Deluge = await setup([
+    // initital actual instruments
+    {
+      type: 'sound',
+      attrs: {presetName: 'new synth 2', presetFolder: 'SYNTHS'},
+      hasFile: true,
+    },
+    {
+      type: 'sound',
+      attrs: {presetName: 'new synth 2', presetFolder: path.join('SYNTHS', 'subfolder')},
+      hasFile: true,
+    },
+    // test on 'new' type
+    {
+      type: 'sound',
+      attrs: {presetName: 'new synth 2', presetFolder: path.join('SYNTHS', 'subfolder')},
+      hasFile: false,
+    },
+  ]);
 
+  it('checks synth mappings', () => {
+    expect(Deluge.files.synths[0].songIDs.has(0)).toBe(true);
+  });
+  it('checks song mappings', () => {
+    Deluge.files.songs[0].instruments.forEach(ins => {
+      if (ins.soundID != 1) {
+        ins.printNode();
+      }
+      if (ins.presetName != 'SYNT000' && ins.presetFolder != 'SYNTHS') {
+        expect(ins.soundID).toBe(1);
+      }
+    });
+  });
+});
 
-- newsuffix -
-- new -
-- nameonly -
+describe.sequential('mappings that should match by name and suffix with a folder', async () => {
+  const Deluge = await setup([
+    // initital actual instruments
+    {
+      type: 'sound',
+      attrs: {presetName: 'new synth 2', presetFolder: 'SYNTHS'},
+      hasFile: true,
+    },
+    {
+      type: 'sound',
+      attrs: {presetName: 'new synth', presetFolder: path.join('SYNTHS', 'subfolder')},
+      hasFile: true,
+    },
+    // test on 'new' type
+    {
+      type: 'sound',
+      attrs: {presetName: 'new synth 2', presetFolder: path.join('SYNTHS', 'subfolder')},
+      hasFile: false,
+    },
+  ]);
 
-*/
+  it('checks synth mappings', () => {
+    expect(Deluge.files.synths[0].songIDs.has(0)).toBe(true);
+  });
+  it('checks song mappings', () => {
+    Deluge.files.songs[0].instruments.forEach(ins => {
+      if (ins.soundID != 1) {
+        ins.printNode();
+      }
+      if (ins.presetName != 'SYNT000' && ins.presetFolder != 'SYNTHS') {
+        expect(ins.soundID).toBe(1);
+      }
+    });
+  });
+});

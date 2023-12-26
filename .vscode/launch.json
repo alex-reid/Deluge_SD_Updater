@@ -8,6 +8,14 @@
       "skipFiles": ["<node_internals>/**"],
       "program": "${workspaceFolder}/scripts/watch.mjs",
       "autoAttachChildProcesses": true
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug File System",
+      "skipFiles": ["<node_internals>/**"],
+      "program": "${workspaceFolder}/packages/main/src/delugefs/index.mjs",
+      "autoAttachChildProcesses": true
     }
   ]
 }

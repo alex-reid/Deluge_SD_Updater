@@ -1,4 +1,10 @@
-import {getTypeMapping, getOldTypeAndNumber, getOldNameFromSlot, getNameRegex} from './utils';
+import {
+  getTypeMapping,
+  getOldTypeAndNumber,
+  getOldNameFromSlot,
+  getNameRegex,
+  getNameAndSuffix,
+} from './utils';
 
 class Node {
   constructor(xmlData, xml) {
@@ -18,6 +24,8 @@ class Node {
     this.renamed = false;
     this.formatType = null;
     this.patchName = '';
+    this.patchSuffix = '';
+    this.patchSuffixClean = '';
   }
   setupXml() {
     const $ = this.xml;
@@ -43,7 +51,7 @@ class Node {
       return 'old';
     }
     if (this.hasPresetName && this.hasPresetFolder) {
-      if (this.presetName.match(/^\d{3}\w?$/)) {
+      if (this.presetName.match(/^\d{3}([a-z])?( \d)?$/i)) {
         return 'numsonly';
       }
       if (parts && (parts[3] || parts[4])) {
@@ -67,10 +75,21 @@ class Node {
     this.types = getTypeMapping(this.presetType, 'xml');
     this.isV4 = !!(!this.presetSlot && !this.presetSubSlot && this.presetFolder && this.presetName);
     this.formatType = this.getPresetType();
+    this.patchNameAndSuffix();
+  }
+
+  patchNameAndSuffix() {
+    let rename = this.presetName;
     if (this.formatType == 'old') {
-      this.patchName = getOldNameFromSlot(this.presetType, this.presetSlot, this.presetSubSlot);
+      rename = getOldNameFromSlot(this.presetType, this.presetSlot, this.presetSubSlot);
     } else if (this.formatType == 'numsonly') {
-      this.patchName = this.types.file + this.presetName;
+      rename = this.types.file + this.presetName;
+    }
+    if (rename) {
+      const [name, suffix, suffixClean] = getNameAndSuffix(rename);
+      this.patchName = name;
+      this.patchSuffix = suffix;
+      this.patchSuffixClean = suffixClean;
     }
   }
 }
@@ -80,6 +99,7 @@ class Instrument extends Node {
     super(xmlData, xml);
     this.getPresetData();
     this.clips = null;
+    this.soundID = null;
   }
   getPresetData() {
     const {$, node} = this.setupXml();
@@ -107,6 +127,17 @@ class Instrument extends Node {
     $(node).attr('presetFolder', folder || this.types.folder);
     this.getPresetData();
     this.renamed = true;
+  }
+
+  getSoundIndex(mappings) {
+    const name = this.patchName;
+    const suffix = this.patchSuffix;
+    const folder = this.presetFolder || this.types.folder;
+    let id = mappings.byName[this.types.type][name + suffix]?.[folder];
+    if (!Number.isInteger(id)) id = mappings.byName[this.types.type][name]?.[folder];
+    this.soundID = Number.isInteger(id) ? id : 'new';
+    console.log(this.soundID, this.patchName, this.patchSuffix, this.presetName, id);
+    return {id: this.soundID, type: this.types.type};
   }
 }
 class Clip extends Node {

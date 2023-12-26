@@ -27,6 +27,9 @@ function getMainDelugeInfo(D) {
       return {
         name: song.fileName,
         path: song.path,
+        clipsLength: song.clips.length,
+        firmwareVersion: song.firmwareVersion,
+        shouldUpdate: true,
         instruments: song.instruments.reduce(
           (acc, curr) => [
             ...acc,
@@ -38,15 +41,16 @@ function getMainDelugeInfo(D) {
               presetSubSlot: curr.presetSubSlot,
               formatType: curr.formatType,
               patchName: curr.patchName,
+              patchSuffix: curr.patchSuffixClean,
               usedInClips: song.getInstrumentClipIndexs(curr),
               rewriteName: '',
               rewriteFolder: '',
+              soundID: curr.soundID,
+              isNewSound: curr.soundID == 'new',
             },
           ],
           [],
         ),
-        clipsLength: song.clips.length,
-        firmwareVersion: song.firmwareVersion,
       };
     }),
   };

@@ -1,7 +1,7 @@
 import {load} from 'cheerio';
 import fs from 'fs/promises';
 import path from 'path';
-import {getOldTypeAndNumber, getFolderFromFileType} from './utils';
+import {getOldTypeAndNumber, getFolderFromFileType, getNameAndSuffix} from './utils';
 
 import {Instrument, Clip} from './nodesClass';
 import {newNames} from './definitions';
@@ -163,19 +163,22 @@ class Song extends File {
 class Sound extends File {
   constructor(path, fileName, rootPath) {
     super(path, fileName, rootPath);
+    this.soundID = null;
     this.presetName = fileName.replace(/\.xml$/i, '');
     this.newName = this.getNewName();
+    this.songIDs = new Set();
   }
 
   getNewName() {
-    const fileData = getOldTypeAndNumber(this.fileName);
-    let name;
-    if (fileData.isOldName) {
-      name = newNames[getFolderFromFileType(fileData.presetType)][fileData.presetSlot];
-      if (fileData.presetSubSlot > -1) name += ' ' + (fileData.presetSubSlot + 2);
-      if (fileData.v4versionNum) name += fileData.v4versionNum;
+    const [name, , suffix] = getNameAndSuffix(this.fileName);
+    if (name) {
+      let newName = name;
+      const fileData = getOldTypeAndNumber(name);
+      if (fileData)
+        newName = newNames[getFolderFromFileType(fileData.presetType)][fileData.presetSlot] || name;
+      return newName + suffix;
     }
-    return name || '';
+    return '';
   }
 
   renameFileToV4() {

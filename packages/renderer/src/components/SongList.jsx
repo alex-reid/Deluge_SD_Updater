@@ -101,4 +101,4 @@ const SongList = ({name, path, instruments, clipsLength, firmwareVersion, newIns
   );
 };
 
-export default memo(SongList);
+export default memo(SongList, (_prev, next) => !next.shouldUpdate);
