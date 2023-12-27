@@ -6,26 +6,44 @@ import {
   getNameAndSuffix,
 } from './utils';
 
+/** @typedef {import('cheerio').CheerioAPI} CheerioAPI */
+/** @enum {("old" | "numsonly" | "newsuffix" | "new" | "nameonly" | "unknown")} FormatType */
+
+/** Class represents a single XML node in the deluge */
 class Node {
+  /**
+   *
+   * @param {Element} xmlData
+   * @param {CheerioAPI} xml
+   */
   constructor(xmlData, xml) {
+    /** The cheerio object from the parent XML file */
     this.xml = xml;
+    /** The node that was parsed from the parent file */
     this.xmlData = xmlData;
+    /** @type {('SYNT'|'KIT')|null} the type of the preset */
     this.presetType = null;
+    /** @type {string|null} - the preset name */
     this.presetName = null;
+    /** @type {string|null} - the preset folder */
     this.presetFolder = null;
+    /** @type {number|null} - the preset slot */
     this.presetSlot = null;
+    /** @type {number|null} - the preset sub slot */
     this.presetSubSlot = null;
   }
   /**
    * Sets up a nicer interface for Cheerio
-   * @returns {object}
+   * @returns {{$:CheerioAPI,node:Element}}
    */
   setupXml() {
     const $ = this.xml;
     const node = this.xmlData;
     return {$, node};
   }
-
+  /**
+   * Prints out the node info minus the cheerio XML tags
+   */
   printNode() {
     const output = {};
     for (const key in this) {
@@ -35,12 +53,20 @@ class Node {
   }
 }
 
+/**
+ * Class representing an Instrument XML node
+ * @extends Node
+ */
 class Instrument extends Node {
   constructor(xmlData, xml) {
     super(xmlData, xml);
+    /** @type {boolean} */
     this.hasPresetName = false;
+    /** @type {boolean} */
     this.hasPresetFolder = false;
+    /** @type {boolean} */
     this.hasPresetSlot = false;
+    /** @type {boolean} */
     this.hasPresetSubSlot = false;
     this.types = null;
     this.renamed = false;
@@ -55,6 +81,9 @@ class Instrument extends Node {
     this.getPresetData();
   }
 
+  /**
+   * Fetches instrument specific preset data from the provided XML
+   */
   getPresetData() {
     const {$, node} = this.setupXml();
     this.presetSlot = $(node).attr('presetSlot') || null;
@@ -72,11 +101,17 @@ class Instrument extends Node {
     this.formatType = this.getPresetType();
     this.patchNameAndSuffix();
   }
-
+  /**
+   *
+   * @returns Old style type, slot and subslot info from the preset name
+   */
   getDataFromFilename() {
     return getOldTypeAndNumber(this.presetName);
   }
-
+  /**
+   *
+   * @returns The type of the deluge preset in this node
+   */
   getPresetType() {
     const parts = getNameRegex(this.presetName);
     if (this.hasPresetSlot && this.hasPresetSubSlot) {

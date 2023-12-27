@@ -14,8 +14,11 @@ class fileSystem {
     this.renameToV4 = true;
     this.prettyNames = false;
     this.files = {
+      /** @type {Kit[]} */
       kits: [],
+      /** @type {Synth[]} */
       synths: [],
+      /** @type {Song[]} */
       songs: [],
       samples: [],
     };
@@ -168,6 +171,12 @@ class fileSystem {
     }
   }
 
+  /**
+   *
+   * @param {Synth|Kit} a
+   * @param {Synth|Kit} b
+   * @returns {number}
+   */
   soundSortFunc(a, b) {
     const names = a.presetName.localeCompare(b.presetName, 'en', {numeric: true});
     const folders = a.path.localeCompare(b.path, 'en', {numeric: true});
@@ -203,6 +212,12 @@ class fileSystem {
     console.log(this.files.synths.length, 'synths(s) loaded from SD card');
   }
 
+  /**
+   *
+   * @param {Kit|Synth} sound
+   * @param {('kits'|'synths')} type
+   * @param {number} index
+   */
   addNewMappings(sound, type, index = 0) {
     if (!this.mappings.byName[type][sound.fileName])
       this.mappings.byName[type][sound.fileName] = {};
