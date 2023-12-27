@@ -6,6 +6,9 @@ import {getOldTypeAndNumber, getFolderFromFileType, getNameAndSuffix} from './ut
 import {Instrument, Clip} from './nodesClass';
 import {newNames} from './definitions';
 
+/**
+ * Class representing an XML file on the deluge
+ */
 class File {
   constructor(filePath, fileName, rootPath) {
     this.path = filePath.replace(rootPath + path.sep, '');
@@ -53,13 +56,19 @@ class File {
   }
 }
 
+/**
+ * Class representing a song XML file on the deluge
+ * @extends File
+ */
 class Song extends File {
   constructor(path, fileName, mappings, rootPath) {
     super(path, fileName, rootPath);
     this.mappings = mappings;
     this.elementsWithAttributes = null;
     this.elementsWithNames = null;
+    /** @type {Instrument[]} */
     this.instruments = [];
+    /** @type {Clip[]} */
     this.clips = [];
     this.firmwareVersion = null;
   }
@@ -157,13 +166,20 @@ class Song extends File {
   }
 }
 
+/**
+ * Class representing an Instrument XML file on the deluge
+ * @extends File
+ */
 class Sound extends File {
   constructor(path, fileName, rootPath) {
     super(path, fileName, rootPath);
+    /** @type {number|null} */
     this.soundID = null;
     this.presetName = fileName.replace(/\.xml$/i, '');
     this.newName = this.getNewName();
     this.songIDs = new Set();
+    /** @type {('KIT'|'SYNT')} */
+    this.presetType = '';
   }
 
   getNewName() {
@@ -190,14 +206,20 @@ class Sound extends File {
     }
   }
 }
-
+/**
+ * Class representing an Kit XML file on the deluge
+ * @extends Sound
+ */
 class Kit extends Sound {
   constructor(path, fileName, rootPath) {
     super(path, fileName, rootPath);
     this.presetType = 'KIT';
   }
 }
-
+/**
+ * Class representing an Synth XML file on the deluge
+ * @extends Sound
+ */
 class Synth extends Sound {
   constructor(path, fileName, rootPath) {
     super(path, fileName, rootPath);

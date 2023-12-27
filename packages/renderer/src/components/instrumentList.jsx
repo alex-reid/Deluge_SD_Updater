@@ -1,11 +1,11 @@
-import {ListItem, ListItemIcon, ListItemText, Typography} from '@mui/material';
+import {Chip, ListItem, ListItemIcon, ListItemText, Typography} from '@mui/material';
 import React, {memo, useEffect, useState} from 'react';
 import PianoIcon from '@mui/icons-material/Piano';
 import AppsIcon from '@mui/icons-material/Apps';
 import {Box} from '@mui/system';
 import EditIcon from '@mui/icons-material/Edit';
-import SdCardIcon from '@mui/icons-material/SdCard';
 import {InstNameTextField} from './InstNameTextField';
+import Path from './Path';
 
 const InstrumentList = ({
   oldName,
@@ -76,20 +76,16 @@ const InstrumentList = ({
                 endAdornment: <EditIcon sx={{pointerEvents: 'none'}} />,
               }}
             />
-            <Typography
-              fontWeight={300}
-              fontSize="1rem"
-              color="secondary.text"
-              sx={{display: 'flex', alignItems: 'center'}}
-            >
-              {songIDs.length}
-              <SdCardIcon
-                fontSize="small"
-                color="primary"
-                sx={{mr: 0.5}}
+            <Box sx={{display: 'flex', alignItems: 'center', fontSize: '1rem'}}>
+              <Typography>Songs:&ensp;</Typography>
+              <Chip
+                size="small"
+                label={songIDs.length}
+                color="secondary"
               />
-              {path}
-            </Typography>
+              &emsp;
+              <Path path={path} />
+            </Box>
           </Box>
         }
       />

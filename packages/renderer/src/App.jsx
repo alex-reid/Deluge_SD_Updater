@@ -17,6 +17,7 @@ import InstrumentList from './components/instrumentList';
 import SongList from './components/SongList';
 import {DragBox} from './components/DragBox';
 import {INST, instrumentReducer, SONG, songReducer} from './reducers/reducers';
+import ExportPopup from './components/ExportPopup';
 
 const App = () => {
   const [synths, dispatchSynths] = useReducer(instrumentReducer, []);
@@ -24,6 +25,10 @@ const App = () => {
   const [songs, dispatchSongs] = useReducer(songReducer, []);
   const [tab, setTab] = useState('tab-synths');
   const [initialised, setInitialised] = useState(false);
+  const [fileExport, setFileExport] = useState({});
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   // useEffect(() => {
   //   console.log('songs data', songs);
@@ -34,6 +39,13 @@ const App = () => {
   // useEffect(() => {
   //   console.log('kits data', kits);
   // }, [kits]);
+
+  useEffect(() => {
+    if (Object.keys(fileExport).length != 0) {
+      console.log(fileExport);
+      handleOpen();
+    }
+  }, [fileExport]);
 
   useEffect(() => {
     dispatchSongs({type: SONG.RENAME_FROM_INST, synths, kits});
@@ -51,6 +63,10 @@ const App = () => {
     sendFiles(initialise);
     sendError(e => console.log(e.message, typeof e));
   }, []);
+
+  const doExport = () => {
+    setFileExport(getFileExportInfo(synths, kits, songs));
+  };
 
   const handleTabChange = (_event, newValue) => {
     setTab(newValue);
@@ -205,9 +221,23 @@ const App = () => {
                   onClick={loadPrettyNames}
                   size="small"
                   color="secondary"
+                  sx={{mr: 4}}
                 >
                   Prettify Old Names
                 </Button>
+                <Button
+                  variant="contained"
+                  onClick={doExport}
+                  size="small"
+                  color="primary"
+                >
+                  Update Files
+                </Button>
+                <ExportPopup
+                  open={open}
+                  handleClose={handleClose}
+                  fileExport={fileExport}
+                />
               </Box>
             </>
           ) : (
@@ -234,3 +264,48 @@ const App = () => {
   );
 };
 export default App;
+
+function getFileExportInfo(synths, kits, songs) {
+  const synthNames = synths.reduce(
+    (acc, synth) => [
+      ...acc,
+      {
+        oldName: synth.oldName,
+        oldPath: synth.path,
+        rewriteName: synth.rewriteName || synth.oldName,
+        rewriteFolder: synth.rewriteFolder || synth.path,
+      },
+    ],
+    [],
+  );
+  const kitNames = kits.reduce(
+    (acc, kit) => [
+      ...acc,
+      {
+        oldName: kit.oldName,
+        oldPath: kit.path,
+        rewriteName: kit.rewriteName || kit.oldName,
+        rewriteFolder: kit.rewriteFolder || kit.path,
+      },
+    ],
+    [],
+  );
+  const songInsts = songs.reduce(
+    (acc, song) => [
+      ...acc,
+      {
+        name: song.name,
+        path: song.path,
+        instruments: song.instruments.reduce(
+          (acc, inst) => [
+            ...acc,
+            {rewriteName: inst.rewriteName, rewriteFolder: inst.rewriteFolder},
+          ],
+          [],
+        ),
+      },
+    ],
+    [],
+  );
+  return {synthNames, kitNames, songInsts};
+}

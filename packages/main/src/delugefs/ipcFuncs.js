@@ -44,6 +44,7 @@ function getMainDelugeInfo(D) {
               formatType: curr.formatType,
               patchName: curr.patchName,
               patchSuffix: curr.patchSuffixClean,
+              patchSuffixOld: curr.patchSuffix,
               usedInClips: song.getInstrumentClipIndexs(curr),
               rewriteName: curr.rewriteName,
               rewriteFolder: curr.rewriteFolder,

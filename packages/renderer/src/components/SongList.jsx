@@ -1,10 +1,18 @@
-import {Accordion, AccordionDetails, AccordionSummary, Chip, Icon, Typography} from '@mui/material';
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Chip,
+  Divider,
+  Icon,
+  Typography,
+} from '@mui/material';
 import React, {memo} from 'react';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {Box} from '@mui/system';
 import LibraryMusicIcon from '@mui/icons-material/LibraryMusic';
-import SdCardIcon from '@mui/icons-material/SdCard';
 import {InstrumentListSongList} from './SongListInstruments';
+import Path from './Path';
 
 const SongList = ({name, path, instruments, clipsLength, firmwareVersion}) => {
   return (
@@ -69,19 +77,8 @@ const SongList = ({name, path, instruments, clipsLength, firmwareVersion}) => {
         </Box>
       </AccordionSummary>
       <AccordionDetails>
-        <Typography
-          fontWeight={300}
-          color="secondary.text"
-          sx={{display: 'flex', alignItems: 'center'}}
-        >
-          Path:
-          <SdCardIcon
-            fontSize="small"
-            color="primary"
-            sx={{mx: 0.5}}
-          />
-          {path}
-        </Typography>
+        <Path path={path} />
+        <Divider sx={{borderWidth: '1px'}} />
         <Box
           sx={{
             fontSize: '1rem',

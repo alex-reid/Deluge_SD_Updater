@@ -1,11 +1,69 @@
-import {Typography} from '@mui/material';
+import {Box, Divider, Tooltip, Typography} from '@mui/material';
 import React from 'react';
+import InfoIcon from '@mui/icons-material/Info';
+import FiberNewIcon from '@mui/icons-material/FiberNew';
+import PianoIcon from '@mui/icons-material/Piano';
+import AppsIcon from '@mui/icons-material/Apps';
 
 export const InstrumentListSongList = ({instrument, index}) => {
   const [desc, ...types] = showType(instrument);
+  let icon;
+  if (instrument.isNewSound) {
+    icon = <FiberNewIcon color="primary" />;
+  } else if (instrument.type == 'sound') {
+    icon = <PianoIcon color="primary" />;
+  } else {
+    icon = <AppsIcon color="primary" />;
+  }
   return (
     <>
-      <Typography
+      <Box sx={{py: 1, display: 'flex', justifyContent: 'space-between'}}>
+        <Typography
+          display="flex"
+          alignItems="center"
+        >
+          <strong style={{display: 'inline-block', width: '2rem'}}>{index + 1}.</strong>
+          {icon}
+          &emsp;{instrument.patchName + instrument.patchSuffixOld}
+          {instrument.rewriteName && (
+            <>
+              &ensp;&rarr;&ensp;<strong>{instrument.rewriteName}</strong>
+            </>
+          )}
+        </Typography>
+        <Tooltip
+          placement="left"
+          title={
+            <>
+              <Typography
+                variant="caption"
+                sx={{mb: 1}}
+              >
+                Used in clips: {instrument.usedInClips.map(v => v + 1).join(', ')}
+              </Typography>
+              <Divider />
+              <Typography
+                variant="caption"
+                sx={{mb: 1}}
+              >
+                {desc}
+              </Typography>
+              <Divider />
+              <strong>Old Data:</strong>
+              {types.map(({name, val}, i) => (
+                <span key={i}>
+                  <br />
+                  {name}: {val}
+                </span>
+              ))}
+            </>
+          }
+        >
+          <InfoIcon />
+        </Tooltip>
+      </Box>
+      <Divider sx={{borderWidth: '1px'}} />
+      {/* <Typography
         variant="h5"
         color="secondary"
       >
@@ -25,7 +83,7 @@ export const InstrumentListSongList = ({instrument, index}) => {
         <strong>Name:</strong> {instrument.rewriteName}
         <br />
         <strong>Path:</strong> {instrument.rewriteFolder}
-      </pre>
+      </pre>*/}
     </>
   );
 };
