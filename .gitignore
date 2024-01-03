@@ -59,3 +59,4 @@ thumbs.db
 
 # dummy file system
 fake_filesystem/FAKE_SD_CARD
+fake_filesystem/test_dir
