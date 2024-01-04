@@ -15,6 +15,7 @@ class File {
     this.rootPath = rootPath;
     this.fullFileName = fileName;
     this.fileName = fileName.replace(/\.xml$/i, '');
+    this.systemPath = filePath;
     this.XML = null;
     this.isLoaded = false;
     console.log(getPath(rootPath, filePath));
@@ -22,10 +23,7 @@ class File {
 
   async loadXML() {
     try {
-      const xmlContent = await fs.readFile(
-        path.join(this.rootPath, this.path, this.fullFileName),
-        'utf-8',
-      );
+      const xmlContent = await fs.readFile(path.join(this.systemPath, this.fullFileName), 'utf-8');
       this.XML = load(
         xmlContent,
         {
@@ -52,7 +50,7 @@ class File {
   async saveXML() {
     // Save the modified XML to a new file
     const modifiedXml = this.XML.xml();
-    const newXmlFilePath = path.join(this.rootPath, this.path, this.fileName + '_v4.XML');
+    const newXmlFilePath = path.join(this.systemPath, this.fileName + '_v4.XML');
     fs.writeFile(newXmlFilePath, modifiedXml, 'utf-8');
   }
 }
@@ -199,8 +197,8 @@ class Sound extends File {
     const newName = this.getNewName();
     if (this.isOldName) {
       fs.rename(
-        path.join(this.rootPath, this.path, this.fileName + '.XML'),
-        path.join(this.rootPath, this.path, newName + '.XML'),
+        path.join(this.systemPath, this.fullFileName),
+        path.join(this.systemPath, newName + '.XML'),
       )
         .then(() => console.log('Renamed', this.fileName + '.XML', 'to', newName + '.XML'))
         .catch(err => console.error(err));
