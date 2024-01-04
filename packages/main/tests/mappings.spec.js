@@ -533,27 +533,25 @@ describe.sequential('mappings that should match by name an suffix', async () => 
 });
 
 describe.sequential('mappings that should match by name and suffix with a folder', async () => {
-  const Deluge = await setup(
-    [
-      // initital actual instruments
-      {
-        type: 'sound',
-        attrs: {presetName: 'new synth 2', presetFolder: 'SYNTHS'},
-        hasFile: true,
-      },
-      {
-        type: 'sound',
-        attrs: {presetName: 'new synth 2', presetFolder: path.posix.join('SYNTHS', 'subfolder')},
-        hasFile: true,
-      },
-      // test on 'new' type
-      {
-        type: 'sound',
-        attrs: {presetName: 'new synth 2', presetFolder: path.posix.join('SYNTHS', 'subfolder')},
-        hasFile: false,
-      },
-    ],
-  );
+  const Deluge = await setup([
+    // initital actual instruments
+    {
+      type: 'sound',
+      attrs: {presetName: 'new synth 2', presetFolder: 'SYNTHS'},
+      hasFile: true,
+    },
+    {
+      type: 'sound',
+      attrs: {presetName: 'new synth 2', presetFolder: path.posix.join('SYNTHS', 'subfolder')},
+      hasFile: true,
+    },
+    // test on 'new' type
+    {
+      type: 'sound',
+      attrs: {presetName: 'new synth 2', presetFolder: path.posix.join('SYNTHS', 'subfolder')},
+      hasFile: false,
+    },
+  ]);
 
   it('checks synth mappings', () => {
     expect(Deluge.files.synths[0].songIDs.has(0)).toBe(true);
