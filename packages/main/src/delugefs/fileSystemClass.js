@@ -232,6 +232,8 @@ class fileSystem {
           '\n',
         );
       });
+
+      console.log(this.mappings.byName.synths);
     }
   }
 
@@ -293,7 +295,7 @@ class fileSystem {
     for (const [songIndex, song] of this.files.songs.entries()) {
       for (const instrument of song.instruments) {
         //instrument.getSoundIndex(this.mappings);
-        const {id, type} = instrument.getSoundIndex(this.mappings);
+        const {id, type} = instrument.getSoundIndex(this.mappings, this.debug);
         if (id != 'new') {
           instrument.rewriteName = this.files[type][id].fileName;
           instrument.rewriteFolder = this.files[type][id].path;
