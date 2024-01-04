@@ -182,9 +182,11 @@ function getFolderFromType(type) {
  * @param {string} filePath
  */
 function getPath(rootPath, filePath) {
-  const splitFile = filePath.split(path.sep);
-  const splitRoot = rootPath.split(path.sep);
+  const reducer =(a,c)=>c? [...a,c]:a;
+  const splitFile = filePath.split(path.sep).reduce(reducer,[]);
+  const splitRoot = rootPath.split(path.sep).reduce(reducer,[]);
   const relPath = splitFile.slice(splitRoot.length);
+  console.log(splitFile,splitRoot,relPath);
   return path.join(...relPath);
 }
 
