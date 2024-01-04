@@ -1,6 +1,7 @@
-const fileSystem = require('./fileSystemClass');
+import fileSystem from './fileSystemClass';
 
-const D = new fileSystem(
+const D = new fileSystem();
+D.init(
   // "/Volumes/DELUGE"
   //"./Deluge_v2",
   //"./Deluge_v4",
@@ -12,13 +13,13 @@ const D = new fileSystem(
   },
 );
 
-D.init()
-  .then(() => {
-    D.rewriteInstrumentsToV4()
-      .then(() => console.log('Sucessfully renamed Synths and Kits'))
-      .catch(err => console.log('Failed remaning Synths and Kits', err));
-    D.rewriteSongsToV4()
-      .then(() => console.log('Sucessfully rewrote Songs'))
-      .catch(err => console.log('Failed Rewriting songs', err));
-  })
-  .catch(err => console.error(err));
+// D.init()
+//   .then(() => {
+//     D.rewriteInstrumentsToV4()
+//       .then(() => console.log('Sucessfully renamed Synths and Kits'))
+//       .catch(err => console.log('Failed remaning Synths and Kits', err));
+//     D.rewriteSongsToV4()
+//       .then(() => console.log('Sucessfully rewrote Songs'))
+//       .catch(err => console.log('Failed Rewriting songs', err));
+//   })
+//   .catch(err => console.error(err));

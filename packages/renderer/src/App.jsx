@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useState} from 'react';
+import {useEffect, useReducer, useState} from 'react';
 import {
   List,
   Tabs,
@@ -8,81 +8,89 @@ import {
   ThemeProvider,
   Typography,
   Button,
-  LinearProgress,
+  Paper,
 } from '@mui/material';
-import {sendFiles, init, sendError} from '#preload';
+import {sendFiles, sendError} from '#preload';
 import CssBaseline from '@mui/material/CssBaseline';
 import theme from './theme';
 import InstrumentList from './components/instrumentList';
 import SongList from './components/SongList';
-import SdCardIcon from '@mui/icons-material/SdCard';
+import {DragBox} from './components/DragBox';
+import {INST, instrumentReducer, SONG, songReducer} from './reducers/reducers';
+import ExportPopup from './components/ExportPopup';
 
 const App = () => {
-  const [synths, setSynths] = useState([]);
-  const [kits, setKits] = useState([]);
-  const [songs, setSongs] = useState([]);
+  const [synths, dispatchSynths] = useReducer(instrumentReducer, []);
+  const [kits, dispatchKits] = useReducer(instrumentReducer, []);
+  const [songs, dispatchSongs] = useReducer(songReducer, []);
   const [tab, setTab] = useState('tab-synths');
   const [initialised, setInitialised] = useState(false);
-  // const [mapByName, setMapByName] = useState([]);
-  // const [mapById, setMapById] = useState([]);
+  const [fileExport, setFileExport] = useState({});
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  // useEffect(() => {
+  //   console.log('songs data', songs);
+  // }, [songs]);
+  // useEffect(() => {
+  //   console.log('synths data', synths);
+  // }, [synths]);
+  // useEffect(() => {
+  //   console.log('kits data', kits);
+  // }, [kits]);
+
+  useEffect(() => {
+    if (Object.keys(fileExport).length != 0) {
+      console.log(fileExport);
+      handleOpen();
+    }
+  }, [fileExport]);
+
+  useEffect(() => {
+    dispatchSongs({type: SONG.RENAME_FROM_INST, synths, kits});
+  }, [synths, kits]);
 
   useEffect(() => {
     const initialise = ({initialised, kits, synths, songs}) => {
       console.log('handler attached', initialised);
       setInitialised(true);
-      setSynths(synths);
-      setKits(kits);
-      setSongs(songs);
+      dispatchSynths({type: INST.LOAD_DATA, payload: synths});
+      dispatchKits({type: INST.LOAD_DATA, payload: kits});
+      dispatchSongs({type: SONG.LOAD_DATA, payload: songs});
     };
 
     sendFiles(initialise);
     sendError(e => console.log(e.message, typeof e));
-
-    return () => {
-      // ipcRenderer.removeListener('files', initialise);
-    };
   }, []);
 
-  const handleChange = (_event, newValue) => {
+  const doExport = () => {
+    setFileExport(getFileExportInfo(synths, kits, songs));
+  };
+
+  const handleTabChange = (_event, newValue) => {
     setTab(newValue);
   };
 
-  const updateHandler = useCallback(
-    (type, id, value) => {
-      if (type == 'SYNT') {
-        setSynths(prev => {
-          return prev.map((old, i) => (i == id ? {...old, rewriteName: value} : old));
-        });
-      }
-      if (type == 'KIT') {
-        setKits(prev => {
-          return prev.map((old, i) => (i == id ? {...old, rewriteName: value} : old));
-        });
-      }
-    },
-    [synths, kits],
-  );
+  const updateSynth = (id, value) => {
+    dispatchSynths({type: INST.RENAME_SINGLE, id, value});
+  };
+
+  const updateKit = (id, value) => {
+    dispatchKits({type: INST.RENAME_SINGLE, id, value});
+  };
 
   const loadV4Names = () => {
-    setSynths(prev => {
-      return prev.map(old => ({...old, rewriteName: old.newName}));
-    });
-    setKits(prev => {
-      return prev.map(old => ({...old, rewriteName: old.newName}));
-    });
-    console.log(synths, kits);
+    dispatchSynths({type: INST.RENAME_ALL_V4});
+    dispatchKits({type: INST.RENAME_ALL_V4});
   };
 
   const loadPrettyNames = () => {
-    setSynths(prev => {
-      return prev.map(old => ({...old, rewriteName: old.prettyName}));
-    });
-    setKits(prev => {
-      return prev.map(old => ({...old, rewriteName: old.prettyName}));
-    });
-    console.log(synths, kits);
+    dispatchSynths({type: INST.RENAME_ALL_PRETTY});
+    dispatchKits({type: INST.RENAME_ALL_PRETTY});
+    dispatchSongs({type: SONG.RENAME_ALL_PRETTY});
+    // console.log(synths, kits);
   };
-
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -112,7 +120,7 @@ const App = () => {
               <Box sx={{borderBottom: 1, borderColor: 'divider', flex: '0 0 auto'}}>
                 <Tabs
                   value={tab}
-                  onChange={handleChange}
+                  onChange={handleTabChange}
                   variant="fullWidth"
                 >
                   <Tab
@@ -150,7 +158,7 @@ const App = () => {
                   },
                 }}
               >
-                <div
+                <Paper
                   style={{
                     display: tab == 'tab-synths' ? 'block' : 'none',
                   }}
@@ -161,12 +169,12 @@ const App = () => {
                         {...data}
                         index={i}
                         key={i}
-                        updateHandler={updateHandler}
+                        updateHandler={updateSynth}
                       />
                     ))}
                   </List>
-                </div>
-                <div
+                </Paper>
+                <Paper
                   style={{
                     display: tab == 'tab-kits' ? 'block' : 'none',
                   }}
@@ -177,22 +185,24 @@ const App = () => {
                         {...data}
                         index={i}
                         key={i}
-                        updateHandler={updateHandler}
+                        updateHandler={updateKit}
                       />
                     ))}
                   </List>
-                </div>
+                </Paper>
                 <div
                   style={{
                     display: tab == 'tab-songs' ? 'block' : 'none',
                   }}
                 >
-                  {songs.map((data, i) => (
-                    <SongList
-                      {...data}
-                      key={i}
-                    />
-                  ))}
+                  {songs.map((data, i) => {
+                    return (
+                      <SongList
+                        {...data}
+                        key={i}
+                      />
+                    );
+                  })}
                 </div>
               </Box>
 
@@ -211,9 +221,23 @@ const App = () => {
                   onClick={loadPrettyNames}
                   size="small"
                   color="secondary"
+                  sx={{mr: 4}}
                 >
                   Prettify Old Names
                 </Button>
+                <Button
+                  variant="contained"
+                  onClick={doExport}
+                  size="small"
+                  color="primary"
+                >
+                  Update Files
+                </Button>
+                <ExportPopup
+                  open={open}
+                  handleClose={handleClose}
+                  fileExport={fileExport}
+                />
               </Box>
             </>
           ) : (
@@ -241,78 +265,47 @@ const App = () => {
 };
 export default App;
 
-function DragBox() {
-  const [hover, setHover] = useState(false);
-  const [errorText, setErrorText] = useState('');
-  const [loading, setLoading] = useState(false);
-  useEffect(() => {
-    sendError(err => {
-      setLoading(false);
-      setErrorText(err.message);
-    });
-  }, []);
-
-  return (
-    <Box
-      sx={{
-        width: 'auto',
-        flex: '1 1 auto',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        border: '3px dashed #fff',
-        borderColor: hover ? 'secondary.light' : 'primary.light',
-        borderRadius: '2rem',
-        m: 6,
-      }}
-      onDrop={ev => {
-        ev.preventDefault();
-        setHover(false);
-        setLoading(true);
-        init(ev.dataTransfer.files[0].path);
-      }}
-      onDragOver={ev => {
-        ev.preventDefault();
-        setHover(true);
-      }}
-      onDragLeave={ev => {
-        ev.preventDefault();
-        setHover(false);
-      }}
-    >
-      <Box sx={{textAlign: 'center'}}>
-        <SdCardIcon
-          color="secondary"
-          sx={{fontSize: '6rem'}}
-        />
-        <Typography variant="h4">Drag your Deluge SD card (or directory) here.</Typography>
-        {loading && (
-          <Box sx={{m: 2}}>
-            <LinearProgress />
-          </Box>
-        )}
-        <br />
-        <Button
-          variant="contained"
-          size="large"
-          disabled={loading}
-          onClick={() => {
-            setLoading(true);
-            init('/Users/alexreid/work/deluge-node/DelugeSD');
-          }}
-        >
-          or click here to browse
-        </Button>
-        {errorText && (
-          <Typography
-            variant="h6"
-            color="primary"
-            marginTop={2}
-          >
-            <strong>Error Loading Files:</strong> {errorText}
-          </Typography>
-        )}
-      </Box>
-    </Box>
+function getFileExportInfo(synths, kits, songs) {
+  const synthNames = synths.reduce(
+    (acc, synth) => [
+      ...acc,
+      {
+        oldName: synth.oldName,
+        oldPath: synth.path,
+        rewriteName: synth.rewriteName || synth.oldName,
+        rewriteFolder: synth.rewriteFolder || synth.path,
+      },
+    ],
+    [],
   );
+  const kitNames = kits.reduce(
+    (acc, kit) => [
+      ...acc,
+      {
+        oldName: kit.oldName,
+        oldPath: kit.path,
+        rewriteName: kit.rewriteName || kit.oldName,
+        rewriteFolder: kit.rewriteFolder || kit.path,
+      },
+    ],
+    [],
+  );
+  const songInsts = songs.reduce(
+    (acc, song) => [
+      ...acc,
+      {
+        name: song.name,
+        path: song.path,
+        instruments: song.instruments.reduce(
+          (acc, inst) => [
+            ...acc,
+            {rewriteName: inst.rewriteName, rewriteFolder: inst.rewriteFolder},
+          ],
+          [],
+        ),
+      },
+    ],
+    [],
+  );
+  return {synthNames, kitNames, songInsts};
 }

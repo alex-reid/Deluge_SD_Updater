@@ -1,10 +1,20 @@
-import {Accordion, AccordionDetails, AccordionSummary, Chip, Icon, Typography} from '@mui/material';
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Chip,
+  Divider,
+  Icon,
+  Typography,
+} from '@mui/material';
 import React, {memo} from 'react';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {Box} from '@mui/system';
-import QueueMusicIcon from '@mui/icons-material/QueueMusic';
+import LibraryMusicIcon from '@mui/icons-material/LibraryMusic';
+import {InstrumentListSongList} from './SongListInstruments';
+import Path from './Path';
 
-const SongList = ({name, path, instruments, clips, firmwareVersion}) => {
+const SongList = ({name, path, instruments, clipsLength, firmwareVersion}) => {
   return (
     <Accordion>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
@@ -17,91 +27,74 @@ const SongList = ({name, path, instruments, clips, firmwareVersion}) => {
             mr: 2,
           }}
         >
-          <Typography
-            sx={{
-              fontWeight: 700,
-              fontSize: '1.6rem',
-              display: 'inline-block',
-              lineHeight: 2,
-            }}
-            component="span"
-          >
+          <Box sx={{display: 'flex', alignItems: 'center'}}>
             <Icon
               color="primary"
               sx={{mr: 3}}
             >
-              <QueueMusicIcon />
+              <LibraryMusicIcon />
             </Icon>
-            {name}
-          </Typography>
+            <Typography
+              sx={{
+                fontWeight: 700,
+                fontSize: '1.4rem',
+                display: 'inline-block',
+                lineHeight: 2,
+                wordBreak: 'break-all',
+              }}
+              component="span"
+            >
+              {name}
+            </Typography>
+          </Box>
           <Typography
             sx={{
               fontSize: '1rem',
+              display: 'flex',
+              alignItems: 'center',
             }}
-            component="span"
+            component="div"
           >
-            Firmware:&ensp;
+            <div>Firmware:</div>&ensp;
             <Chip
               color="secondary"
               label={firmwareVersion.join('.')}
               size="small"
             />
-            &emsp; Instruments:&ensp;
+            <div>&emsp;Instruments:&ensp;</div>
             <Chip
               color="primary"
               label={instruments.length}
               size="small"
             />
-            &emsp; Clips:&ensp;
+            <div>&emsp;Clips:&ensp;</div>
             <Chip
               color="primary"
-              label={clips.length}
+              label={clipsLength}
               size="small"
             />
           </Typography>
         </Box>
       </AccordionSummary>
       <AccordionDetails>
-        <Typography>{path}</Typography>
-        <Typography
-          variant="h6"
-          color="secondary"
-        >
-          instruments
-        </Typography>
-        <Typography
-          component="pre"
+        <Path path={path} />
+        <Divider sx={{borderWidth: '1px'}} />
+        <Box
           sx={{
-            fontSize: '0.8rem',
+            fontSize: '1rem',
           }}
         >
           {instruments.map((instrument, index) => (
-            <pre key={index}>
-              {index}. {JSON.stringify(instrument, null, 2)}
-            </pre>
+            <InstrumentListSongList
+              instrument={instrument}
+              index={index}
+              key={index}
+            />
           ))}
-        </Typography>
-        <Typography
-          variant="h6"
-          color="secondary"
-        >
-          clips
-        </Typography>
-        <Typography
-          component="pre"
-          sx={{
-            fontSize: '0.8rem',
-          }}
-        >
-          {clips.map((clip, index) => (
-            <pre key={index}>
-              {index}. {JSON.stringify(clip, null, 2)}
-            </pre>
-          ))}
-        </Typography>
+        </Box>
       </AccordionDetails>
     </Accordion>
   );
 };
 
-export default memo(SongList);
+export default memo(SongList, (_prev, next) => !next.shouldUpdate);
