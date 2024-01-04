@@ -159,14 +159,16 @@ class Instrument extends Node {
     this.renamed = true;
   }
 
-  getSoundIndex(mappings) {
+  getSoundIndex(mappings, debug) {
     const name = this.patchName;
     const suffix = this.patchSuffix;
     const folder = this.presetFolder || this.types.folder;
     let id = mappings.byName[this.types.type][name + suffix]?.[folder];
+    if (debug) console.log(id);
     if (!Number.isInteger(id)) id = mappings.byName[this.types.type][name]?.[folder];
+    if (debug) console.log(id);
     this.soundID = Number.isInteger(id) ? id : 'new';
-    // console.log(this.soundID, this.patchName, this.patchSuffix, this.presetName, id);
+    if (debug) console.log(this.soundID, name, suffix, folder, this.presetName, id);
     return {id: this.soundID, type: this.types.type};
   }
 }

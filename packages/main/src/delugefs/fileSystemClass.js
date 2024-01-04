@@ -13,6 +13,7 @@ class fileSystem {
     this.delugePaths = null;
     this.renameToV4 = true;
     this.prettyNames = false;
+    this.debug = false;
     this.files = {
       /** @type {Kit[]} */
       kits: [],
@@ -82,6 +83,9 @@ class fileSystem {
     this.rootDir = delugeSdPath;
     this.renameToV4 = !!options.renameToV4;
     this.prettyNames = !!options.prettyNames;
+    this.debug = !!options.debug;
+
+    if (this.debug) console.log('-------DEBUG ON-------');
 
     await this.isDelugeSD()
       .then(() => {
@@ -178,8 +182,11 @@ class fileSystem {
    * @returns {number}
    */
   soundSortFunc(a, b) {
-    const names = a.presetName.localeCompare(b.presetName, 'en', {numeric: true});
-    const folders = a.path.localeCompare(b.path, 'en', {numeric: true});
+    const names = a.presetName.localeCompare(b.presetName, 'en', {
+      numeric: true,
+      ignorePunctuation: true,
+    });
+    const folders = a.path.localeCompare(b.path, 'en', {numeric: true, ignorePunctuation: true});
     return folders == 0 ? names : folders;
   }
 
@@ -210,6 +217,24 @@ class fileSystem {
       this.addNewMappings(sound, 'synths', index);
     });
     console.log(this.files.synths.length, 'synths(s) loaded from SD card');
+    if (this.debug) {
+      this.files.synths.forEach(synth => {
+        console.log(
+          synth.path,
+          '\n',
+          synth.rootPath,
+          '\n',
+          synth.fullFileName,
+          '\n',
+          synth.fileName,
+          '\n',
+          synth.systemPath,
+          '\n',
+        );
+      });
+
+      console.log(this.mappings.byName.synths);
+    }
   }
 
   /**
@@ -224,11 +249,28 @@ class fileSystem {
     this.mappings.byName[type][sound.fileName][sound.path] = index;
   }
 
+  /**
+   *
+   * @param {Synth|Kit} a
+   * @param {Synth|Kit} b
+   * @returns {number}
+   */
+  songSortFunc(a, b) {
+    const names = a.fileName.localeCompare(b.fileName, 'en', {
+      numeric: true,
+      ignorePunctuation: true,
+    });
+    const folders = a.path.localeCompare(b.path, 'en', {numeric: true, ignorePunctuation: true});
+    return folders == 0 ? names : folders;
+  }
+
   buildSongList() {
     try {
       this.loopDirectoryRecursive(this.delugePaths.songs, (file, directory) => {
         this.files.songs.push(new Song(directory, file, this.mappings, this.rootDir));
       });
+      // Sort Songs alphanumerically by folder -> name
+      this.files.songs.sort(this.songSortFunc);
       console.log(this.files.songs.length, 'song(s) loaded from SD card');
     } catch {
       // we can load up fine without a songs directory
@@ -253,7 +295,7 @@ class fileSystem {
     for (const [songIndex, song] of this.files.songs.entries()) {
       for (const instrument of song.instruments) {
         //instrument.getSoundIndex(this.mappings);
-        const {id, type} = instrument.getSoundIndex(this.mappings);
+        const {id, type} = instrument.getSoundIndex(this.mappings, this.debug);
         if (id != 'new') {
           instrument.rewriteName = this.files[type][id].fileName;
           instrument.rewriteFolder = this.files[type][id].path;
