@@ -1,7 +1,7 @@
 import {load} from 'cheerio';
 import fs from 'fs/promises';
 import path from 'path';
-import {getOldTypeAndNumber, getFolderFromFileType, getNameAndSuffix} from './utils';
+import {getOldTypeAndNumber, getFolderFromFileType, getNameAndSuffix, getPath} from './utils';
 
 import {Instrument, Clip} from './nodesClass';
 import {newNames} from './definitions';
@@ -11,12 +11,13 @@ import {newNames} from './definitions';
  */
 class File {
   constructor(filePath, fileName, rootPath) {
-    this.path = filePath.replace(rootPath + path.sep, '');
+    this.path = getPath(rootPath, filePath); //filePath.replace(rootPath + path.sep, '');
     this.rootPath = rootPath;
     this.fullFileName = fileName;
     this.fileName = fileName.replace(/\.xml$/i, '');
     this.XML = null;
     this.isLoaded = false;
+    console.log(getPath(rootPath, filePath));
   }
 
   async loadXML() {

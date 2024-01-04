@@ -1,4 +1,5 @@
 import {letterToIndexMap, indexToLetterMap, typeMappings} from './definitions';
+import path from 'path';
 
 const matchOldNameStrict = /^(SYNT|SONG|KIT|SAMP)(\d*)([a-zA-Z]?)( \d+)?$/i;
 const matchOldName = /^(SYNT|SONG|KIT|SAMP)(\d*)([a-zA-Z]?)( \d+)?(.+)?/i;
@@ -175,6 +176,18 @@ function getFolderFromType(type) {
   return getMapping(type, 'type', 'folder');
 }
 
+/**
+ *
+ * @param {string} rootPath
+ * @param {string} filePath
+ */
+function getPath(rootPath, filePath) {
+  const splitFile = filePath.split(path.sep);
+  const splitRoot = rootPath.split(path.sep);
+  const relPath = splitFile.slice(splitRoot.length);
+  return path.join(...relPath);
+}
+
 export {
   getOldTypeAndNumber,
   getNumberFromAlpha,
@@ -190,4 +203,5 @@ export {
   getOldNameFromSlot,
   getNameRegex,
   getNameAndSuffix,
+  getPath,
 };
