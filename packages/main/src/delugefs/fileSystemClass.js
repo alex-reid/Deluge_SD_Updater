@@ -178,8 +178,11 @@ class fileSystem {
    * @returns {number}
    */
   soundSortFunc(a, b) {
-    const names = a.presetName.localeCompare(b.presetName, 'en', {numeric: true});
-    const folders = a.path.localeCompare(b.path, 'en', {numeric: true});
+    const names = a.presetName.localeCompare(b.presetName, 'en', {
+      numeric: true,
+      ignorePunctuation: true,
+    });
+    const folders = a.path.localeCompare(b.path, 'en', {numeric: true, ignorePunctuation: true});
     return folders == 0 ? names : folders;
   }
 
@@ -224,11 +227,28 @@ class fileSystem {
     this.mappings.byName[type][sound.fileName][sound.path] = index;
   }
 
+  /**
+   *
+   * @param {Synth|Kit} a
+   * @param {Synth|Kit} b
+   * @returns {number}
+   */
+  songSortFunc(a, b) {
+    const names = a.fileName.localeCompare(b.fileName, 'en', {
+      numeric: true,
+      ignorePunctuation: true,
+    });
+    const folders = a.path.localeCompare(b.path, 'en', {numeric: true, ignorePunctuation: true});
+    return folders == 0 ? names : folders;
+  }
+
   buildSongList() {
     try {
       this.loopDirectoryRecursive(this.delugePaths.songs, (file, directory) => {
         this.files.songs.push(new Song(directory, file, this.mappings, this.rootDir));
       });
+      // Sort Songs alphanumerically by folder -> name
+      this.files.songs.sort(this.songSortFunc);
       console.log(this.files.songs.length, 'song(s) loaded from SD card');
     } catch {
       // we can load up fine without a songs directory
