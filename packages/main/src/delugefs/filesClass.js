@@ -18,7 +18,6 @@ class File {
     this.systemPath = filePath;
     this.XML = null;
     this.isLoaded = false;
-    console.log(getPath(rootPath, filePath));
   }
 
   async loadXML() {
