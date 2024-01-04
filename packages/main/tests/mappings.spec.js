@@ -23,7 +23,7 @@ expect.addSnapshotSerializer({
   },
 });
 
-const setup = async files => {
+const setup = async (files, debug = false) => {
   Deluge = new fileSystem();
   dummy_dir = fakeFS(
     [
@@ -38,6 +38,7 @@ const setup = async files => {
   await Deluge.init(dummy_dir, {
     renameToV4: true,
     prettyNames: false,
+    debug,
   });
   return Deluge;
 };
@@ -532,25 +533,28 @@ describe.sequential('mappings that should match by name an suffix', async () => 
 });
 
 describe.sequential('mappings that should match by name and suffix with a folder', async () => {
-  const Deluge = await setup([
-    // initital actual instruments
-    {
-      type: 'sound',
-      attrs: {presetName: 'new synth 2', presetFolder: 'SYNTHS'},
-      hasFile: true,
-    },
-    {
-      type: 'sound',
-      attrs: {presetName: 'new synth 2', presetFolder: path.join('SYNTHS', 'subfolder')},
-      hasFile: true,
-    },
-    // test on 'new' type
-    {
-      type: 'sound',
-      attrs: {presetName: 'new synth 2', presetFolder: path.join('SYNTHS', 'subfolder')},
-      hasFile: false,
-    },
-  ]);
+  const Deluge = await setup(
+    [
+      // initital actual instruments
+      {
+        type: 'sound',
+        attrs: {presetName: 'new synth 2', presetFolder: 'SYNTHS'},
+        hasFile: true,
+      },
+      {
+        type: 'sound',
+        attrs: {presetName: 'new synth 2', presetFolder: path.join('SYNTHS', 'subfolder')},
+        hasFile: true,
+      },
+      // test on 'new' type
+      {
+        type: 'sound',
+        attrs: {presetName: 'new synth 2', presetFolder: path.join('SYNTHS', 'subfolder')},
+        hasFile: false,
+      },
+    ],
+    true,
+  );
 
   it('checks synth mappings', () => {
     expect(Deluge.files.synths[0].songIDs.has(0)).toBe(true);

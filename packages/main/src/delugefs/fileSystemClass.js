@@ -13,6 +13,7 @@ class fileSystem {
     this.delugePaths = null;
     this.renameToV4 = true;
     this.prettyNames = false;
+    this.debug = false;
     this.files = {
       /** @type {Kit[]} */
       kits: [],
@@ -82,6 +83,9 @@ class fileSystem {
     this.rootDir = delugeSdPath;
     this.renameToV4 = !!options.renameToV4;
     this.prettyNames = !!options.prettyNames;
+    this.debug = !!options.debug;
+
+    if (this.debug) console.log('-------DEBUG ON-------');
 
     await this.isDelugeSD()
       .then(() => {
@@ -213,6 +217,22 @@ class fileSystem {
       this.addNewMappings(sound, 'synths', index);
     });
     console.log(this.files.synths.length, 'synths(s) loaded from SD card');
+    if (this.debug) {
+      this.files.synths.forEach(synth => {
+        console.log(
+          synth.path,
+          '\n',
+          synth.rootPath,
+          '\n',
+          synth.fullFileName,
+          '\n',
+          synth.fileName,
+          '\n',
+          synth.systemPath,
+          '\n',
+        );
+      });
+    }
   }
 
   /**
