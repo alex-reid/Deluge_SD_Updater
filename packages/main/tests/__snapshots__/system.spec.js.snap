@@ -282,6 +282,7 @@ exports[`check song api mappings 1`] = `
       ],
       name: nameonly,
       path: SONGS,
+      previewData: undefined,
       shouldUpdate: true,
     },
     {
@@ -375,6 +376,7 @@ exports[`check song api mappings 1`] = `
       ],
       name: nameonly_newnames,
       path: SONGS,
+      previewData: undefined,
       shouldUpdate: true,
     },
     {
@@ -548,6 +550,7 @@ exports[`check song api mappings 1`] = `
       ],
       name: new,
       path: SONGS,
+      previewData: undefined,
       shouldUpdate: true,
     },
     {
@@ -721,6 +724,7 @@ exports[`check song api mappings 1`] = `
       ],
       name: new_directories,
       path: SONGS,
+      previewData: undefined,
       shouldUpdate: true,
     },
     {
@@ -894,6 +898,7 @@ exports[`check song api mappings 1`] = `
       ],
       name: newsuffix,
       path: SONGS,
+      previewData: undefined,
       shouldUpdate: true,
     },
     {
@@ -1067,6 +1072,7 @@ exports[`check song api mappings 1`] = `
       ],
       name: numsonly,
       path: SONGS,
+      previewData: undefined,
       shouldUpdate: true,
     },
     {
@@ -1200,6 +1206,7 @@ exports[`check song api mappings 1`] = `
       ],
       name: old,
       path: SONGS,
+      previewData: undefined,
       shouldUpdate: true,
     },
   ],

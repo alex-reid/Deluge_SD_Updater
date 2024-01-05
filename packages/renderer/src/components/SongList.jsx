@@ -13,8 +13,9 @@ import {Box} from '@mui/system';
 import LibraryMusicIcon from '@mui/icons-material/LibraryMusic';
 import {InstrumentListSongList} from './SongListInstruments';
 import Path from './Path';
+import SongPreview from './SongPreview';
 
-const SongList = ({name, path, instruments, clipsLength, firmwareVersion}) => {
+const SongList = ({name, path, instruments, clipsLength, firmwareVersion, previewData}) => {
   return (
     <Accordion>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
@@ -34,6 +35,12 @@ const SongList = ({name, path, instruments, clipsLength, firmwareVersion}) => {
             >
               <LibraryMusicIcon />
             </Icon>
+            {previewData && (
+              <SongPreview
+                data={previewData}
+                scale={5}
+              />
+            )}
             <Typography
               sx={{
                 fontWeight: 700,
@@ -41,6 +48,7 @@ const SongList = ({name, path, instruments, clipsLength, firmwareVersion}) => {
                 display: 'inline-block',
                 lineHeight: 2,
                 wordBreak: 'break-all',
+                ml: 2,
               }}
               component="span"
             >

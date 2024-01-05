@@ -32,6 +32,7 @@ function getMainDelugeInfo(D) {
         clipsLength: song.clips.length,
         firmwareVersion: song.firmwareVersion,
         shouldUpdate: true,
+        previewData: song.previewData,
         instruments: song.instruments.reduce(
           (acc, curr) => [
             ...acc,

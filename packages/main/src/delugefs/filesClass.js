@@ -69,12 +69,18 @@ class Song extends File {
     /** @type {Clip[]} */
     this.clips = [];
     this.firmwareVersion = null;
+    this.previewData = null;
   }
 
   onXMLLoaded() {
     this.getFirmwareVersion();
     this.getInstruments();
     this.getClips();
+    this.getSongPreview();
+  }
+
+  getSongPreview() {
+    this.previewData = this.XML('[preview]').attr('preview');
   }
 
   getFirmwareVersion() {
