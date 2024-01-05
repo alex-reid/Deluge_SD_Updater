@@ -4,6 +4,7 @@ function getMainDelugeInfo(D) {
   return {
     initialised: true,
     kits: D.files.kits.map(kit => ({
+      id: kit.soundID,
       path: kit.path,
       rootPath: kit.rootPath,
       rewriteName: '',
@@ -15,6 +16,7 @@ function getMainDelugeInfo(D) {
       songIDs: Array.from(kit.songIDs),
     })),
     synths: D.files.synths.map(synth => ({
+      id: synth.soundID,
       path: synth.path,
       rootPath: synth.rootPath,
       rewriteName: '',
@@ -27,6 +29,7 @@ function getMainDelugeInfo(D) {
     })),
     songs: D.files.songs.map(song => {
       return {
+        id: song.songID,
         name: song.fileName,
         path: song.path,
         clipsLength: song.clips.length,

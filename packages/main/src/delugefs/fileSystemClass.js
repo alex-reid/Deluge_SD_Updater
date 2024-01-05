@@ -280,7 +280,8 @@ class fileSystem {
   async loadSongs() {
     if (this.files.songs.length > 0) {
       let loaded = 0;
-      for (const song of this.files.songs) {
+      for (const [songID, song] of this.files.songs.entries()) {
+        song.songID = songID;
         await song
           .loadXML()
           .then(() => loaded++)

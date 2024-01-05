@@ -69,6 +69,7 @@ class Song extends File {
     /** @type {Clip[]} */
     this.clips = [];
     this.firmwareVersion = null;
+    this.songID = null;
   }
 
   onXMLLoaded() {
