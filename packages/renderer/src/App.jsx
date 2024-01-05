@@ -266,6 +266,7 @@ const App = () => {
 export default App;
 
 function getFileExportInfo(synths, kits, songs) {
+  console.log('run export');
   const synthNames = synths.reduce(
     (acc, synth) => [
       ...acc,
@@ -274,6 +275,7 @@ function getFileExportInfo(synths, kits, songs) {
         oldPath: synth.path,
         rewriteName: synth.rewriteName || synth.oldName,
         rewriteFolder: synth.rewriteFolder || synth.path,
+        willUpdate: !!synth.rewriteName,
       },
     ],
     [],
@@ -286,6 +288,7 @@ function getFileExportInfo(synths, kits, songs) {
         oldPath: kit.path,
         rewriteName: kit.rewriteName || kit.oldName,
         rewriteFolder: kit.rewriteFolder || kit.path,
+        willUpdate: !!kit.rewriteName,
       },
     ],
     [],
@@ -307,5 +310,11 @@ function getFileExportInfo(synths, kits, songs) {
     ],
     [],
   );
-  return {synthNames, kitNames, songInsts};
+  const info = {
+    synthsToUpdate: synthNames.reduce((a, c) => (a += c.willUpdate ? 1 : 0), 0),
+    synthsTotal: synthNames.length,
+    kitsToUpdate: kitNames.reduce((a, c) => (a += c.willUpdate ? 1 : 0), 0),
+    kitsTotal: kitNames.length,
+  };
+  return {synthNames, kitNames, songInsts, info};
 }

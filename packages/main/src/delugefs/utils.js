@@ -177,11 +177,16 @@ function getFolderFromType(type) {
 }
 
 /**
+ * Windows was doing funny things when trying to do a simple string replace
+ * to get a relative path for files. This splits the paths into arrays and
+ * then genreates a posix compatible path from that.
  *
- * @param {string} rootPath
- * @param {string} filePath
+ * @param {string} rootPath - The path that you want to subtract from the full path
+ * @param {string} filePath - The full path
+ * @returns {string}
  */
 function getPath(rootPath, filePath) {
+  // remove blank entries from path arrays
   const reducer = (a, c) => (c ? [...a, c] : a);
   const splitFile = filePath.split(path.sep).reduce(reducer, []);
   const splitRoot = rootPath.split(path.sep).reduce(reducer, []);

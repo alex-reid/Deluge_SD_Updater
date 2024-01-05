@@ -32,8 +32,10 @@ export const DragBox = () => {
       onDrop={ev => {
         ev.preventDefault();
         setHover(false);
-        setLoading(true);
-        init(ev.dataTransfer.files[0].path);
+        if (ev?.dataTransfer?.files[0]?.path) {
+          setLoading(true);
+          init(ev.dataTransfer.files[0].path);
+        }
       }}
       onDragOver={ev => {
         ev.preventDefault();
