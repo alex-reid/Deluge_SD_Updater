@@ -12,7 +12,7 @@ export const DragBox = () => {
       setLoading(false);
       setErrorText(err.message);
     });
-    import.meta.env.VITE_LOAD_DUMMY_SD_ON_APP_OPEN === true &&
+    import.meta.env.VITE_LOAD_DUMMY_SD_ON_APP_OPEN == 'true' &&
       init(import.meta.env.VITE_DUMMY_SD_DIR);
   }, []);
 

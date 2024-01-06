@@ -5,7 +5,11 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
+  Button,
+  Checkbox,
   Divider,
+  FormControlLabel,
+  FormGroup,
   IconButton,
   List,
   ListItem,
@@ -14,6 +18,9 @@ import {
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import {useState} from 'react';
+import {exportFiles} from '#preload';
+import theme from '../theme';
 
 const style = {
   position: 'absolute',
@@ -32,6 +39,8 @@ const style = {
 };
 
 export default function ExportPopup({open, handleClose, fileExport}) {
+  const [confirm, setConfirm] = useState(false);
+
   return (
     <div>
       <Modal
@@ -57,7 +66,24 @@ export default function ExportPopup({open, handleClose, fileExport}) {
             </IconButton>
           </Box>
           {fileExport.synthNames && fileExport.kitNames && fileExport.songInsts && (
-            <Box sx={{width: '100%', height: '100%', overflow: 'auto'}}>
+            <Box
+              sx={{
+                width: '100%',
+                height: '100%',
+                overflow: 'auto',
+                '&::-webkit-scrollbar': {
+                  width: '0.8rem',
+                },
+                '&::-webkit-scrollbar-track': {
+                  backgroundColor: 'rgba(255,255,255,.1)',
+                  borderRadius: '0.4rem',
+                },
+                '&::-webkit-scrollbar-thumb': {
+                  backgroundColor: theme.palette.primary.main,
+                  borderRadius: '0.4rem',
+                },
+              }}
+            >
               <Accordion TransitionProps={{timeout: 300}}>
                 <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                   <Typography
@@ -85,12 +111,12 @@ export default function ExportPopup({open, handleClose, fileExport}) {
                             <ListItemText
                               primary={
                                 <Typography color={synth.willUpdate ? 'secondary' : ''}>
-                                  {synth.oldName} &gt; <strong>{synth.rewriteName}</strong>
+                                  {synth.oldName} &rarr; <strong>{synth.rewriteName}</strong>
                                 </Typography>
                               }
                               secondary={
                                 <Typography variant="caption">
-                                  {synth.oldPath} &gt; <strong>{synth.rewriteFolder}</strong>
+                                  {synth.oldPath} &rarr; <strong>{synth.rewriteFolder}</strong>
                                 </Typography>
                               }
                             />
@@ -127,12 +153,12 @@ export default function ExportPopup({open, handleClose, fileExport}) {
                             <ListItemText
                               primary={
                                 <Typography color={kit.willUpdate ? 'secondary' : ''}>
-                                  {kit.oldName} &gt; <strong>{kit.rewriteName}</strong>
+                                  {kit.oldName} &rarr; <strong>{kit.rewriteName}</strong>
                                 </Typography>
                               }
                               secondary={
                                 <Typography variant="caption">
-                                  {kit.oldPath} &gt; <strong>{kit.rewriteFolder}</strong>
+                                  {kit.oldPath} &rarr; <strong>{kit.rewriteFolder}</strong>
                                 </Typography>
                               }
                             />
@@ -148,16 +174,78 @@ export default function ExportPopup({open, handleClose, fileExport}) {
                   <Typography
                     variant="h6"
                     component="h3"
+                    sx={{
+                      width: '33%',
+                      minWidth: '200px',
+                    }}
                   >
+                    Songs
+                  </Typography>
+                  <Typography component="h3">
+                    Updating {fileExport.info.songsToUpdate} out of {fileExport.info.songsTotal}{' '}
                     Songs
                   </Typography>
                 </AccordionSummary>
                 <AccordionDetails>
-                  <pre>{JSON.stringify(fileExport.songInsts, null, 2)}</pre>
+                  {fileExport.songInsts.map((song, index) => (
+                    <Box key={index}>
+                      <Typography variant="h5">{song.name}</Typography>
+                      <Typography variant="h6">{song.path}</Typography>
+                      <List dense>
+                        {song.instruments.map((inst, index) => (
+                          <Box key={index}>
+                            <ListItem>
+                              <ListItemText
+                                primary={
+                                  <Typography
+                                    sx={{m: 0, p: 0}}
+                                    color={inst.updateName ? 'secondary' : ''}
+                                  >
+                                    {inst.rewriteName}
+                                  </Typography>
+                                }
+                                secondary={
+                                  <Typography
+                                    sx={{m: 0, p: 0}}
+                                    color={inst.updateFolder ? 'secondary' : ''}
+                                    variant="caption"
+                                  >
+                                    {inst.rewriteFolder}
+                                  </Typography>
+                                }
+                              />
+                            </ListItem>
+                            <Divider />
+                          </Box>
+                        ))}
+                      </List>
+                    </Box>
+                  ))}
                 </AccordionDetails>
               </Accordion>
             </Box>
           )}
+          <Box sx={{display: 'flex', justifyContent: 'space-between', pt: 2}}>
+            <FormGroup>
+              <FormControlLabel
+                required
+                control={
+                  <Checkbox
+                    checked={confirm}
+                    onChange={() => setConfirm(!confirm)}
+                  />
+                }
+                label="I have backed up my SD card"
+              />
+            </FormGroup>
+            <Button
+              variant="contained"
+              disabled={!confirm}
+              onClick={() => exportFiles(fileExport)}
+            >
+              Update Files
+            </Button>
+          </Box>
         </Paper>
       </Modal>
     </div>

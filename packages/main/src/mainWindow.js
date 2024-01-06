@@ -48,6 +48,12 @@ async function createWindow() {
     }
   });
 
+  ipcMain.on('export-files', (_event, files) => {
+    if (files) {
+      console.log(files);
+    }
+  });
+
   /**
    * If the 'show' property of the BrowserWindow's constructor is omitted from the initialization options,
    * it then defaults to 'true'. This can cause flickering as the window loads the html content,

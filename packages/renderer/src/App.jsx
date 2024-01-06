@@ -271,6 +271,7 @@ function getFileExportInfo(synths, kits, songs) {
     (acc, synth) => [
       ...acc,
       {
+        id: synth.id,
         oldName: synth.oldName,
         oldPath: synth.path,
         rewriteName: synth.rewriteName || synth.oldName,
@@ -284,6 +285,7 @@ function getFileExportInfo(synths, kits, songs) {
     (acc, kit) => [
       ...acc,
       {
+        id: kit.id,
         oldName: kit.oldName,
         oldPath: kit.path,
         rewriteName: kit.rewriteName || kit.oldName,
@@ -297,12 +299,19 @@ function getFileExportInfo(synths, kits, songs) {
     (acc, song) => [
       ...acc,
       {
+        id: song.id,
         name: song.name,
         path: song.path,
         instruments: song.instruments.reduce(
           (acc, inst) => [
             ...acc,
-            {rewriteName: inst.rewriteName, rewriteFolder: inst.rewriteFolder},
+            {
+              updateName: inst.presetName != inst.rewriteName,
+              updateFolder: inst.presetFolder != inst.rewriteFolder,
+              rewriteName: inst.rewriteName,
+              rewriteFolder: inst.rewriteFolder,
+              formatType: inst.formatType,
+            },
           ],
           [],
         ),
@@ -310,11 +319,19 @@ function getFileExportInfo(synths, kits, songs) {
     ],
     [],
   );
+  const getSongUpdates = song => {
+    return song.instruments.reduce((a, c) => {
+      if (!a) return c.updateFolder || c.updateName;
+      return a;
+    }, false);
+  };
   const info = {
     synthsToUpdate: synthNames.reduce((a, c) => (a += c.willUpdate ? 1 : 0), 0),
     synthsTotal: synthNames.length,
     kitsToUpdate: kitNames.reduce((a, c) => (a += c.willUpdate ? 1 : 0), 0),
     kitsTotal: kitNames.length,
+    songsToUpdate: songInsts.reduce((a, c) => (a += getSongUpdates(c) ? 1 : 0), 0),
+    songsTotal: songInsts.length,
   };
   return {synthNames, kitNames, songInsts, info};
 }
