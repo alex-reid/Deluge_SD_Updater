@@ -71,8 +71,13 @@ function getNameAndSuffix(oldName) {
   let patchSuffix = '';
   const name = getNameRegex(oldName);
   const v4suffix = oldName.match(/(.+)(\s\d+)$/);
+  // console.log(v4suffix, name);
   if (name) {
     patchName = name[1] + name[2];
+    if (name[5]) {
+      patchSuffixClean = name[5];
+      patchSuffix = name[5];
+    }
     if (name[3] || name[4]) {
       const num = getNumberFromAlpha(name[3]);
       patchSuffixClean = `${Number.isInteger(num) ? ' ' + (num + 2) : ''}${name[4] ? name[4] : ''}`;
@@ -194,6 +199,24 @@ function getPath(rootPath, filePath) {
   return path.posix.join(...relPath);
 }
 
+function newlineXMLAttrs(xml) {
+  // match all nodes
+  const nodes = xml.match(/(\t*)(<[\s\S]*?>)/g);
+
+  const out = nodes.map(xmlNode => {
+    // get indents
+    const tabs = xmlNode.match(/^\t*/g);
+    // get attrs
+    const attrs = xmlNode.match(/(\w+="[^"]*")/g);
+    if (attrs && attrs.length > 2) {
+      // replace all attrs with newline + tabs + an extra tab
+      return xmlNode.replaceAll(/(\w+="[^"]*")/g, '\n' + tabs[0] + '\t$&');
+    }
+    return xmlNode;
+  });
+  return out.join('\n');
+}
+
 export {
   getOldTypeAndNumber,
   getNumberFromAlpha,
@@ -210,4 +233,5 @@ export {
   getNameRegex,
   getNameAndSuffix,
   getPath,
+  newlineXMLAttrs,
 };

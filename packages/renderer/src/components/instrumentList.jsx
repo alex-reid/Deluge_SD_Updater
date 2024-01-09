@@ -66,7 +66,9 @@ const InstrumentList = ({
               variant="standard"
               onChange={e => setName(e.target.value)}
               value={name}
-              onBlur={e => updateHandler(index, e.target.value)}
+              onBlur={e => {
+                if (!error) updateHandler(index, e.target.value);
+              }}
               onKeyDown={e => {
                 if (e.code === 'Enter') {
                   e.target.blur();

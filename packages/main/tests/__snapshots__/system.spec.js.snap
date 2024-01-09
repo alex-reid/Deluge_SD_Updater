@@ -20,6 +20,21 @@ exports[`check song api mappings 1`] = `
     },
     {
       id: 1,
+      newName: 000 TR-808 'copy',
+      oldName: KIT000 'copy',
+      path: KITS,
+      presetName: KIT000 'copy',
+      presetType: KIT,
+      prettyName: 000 Kit 'copy',
+      rewriteName: ,
+      rootPath: <PROJECT_DIRECTORY>/fake_filesystem/FAKE_SD_CARD,
+      songIDs: [
+        0,
+        4,
+      ],
+    },
+    {
+      id: 2,
       newName: 001 DDD-1,
       oldName: KIT001,
       path: KITS,
@@ -34,7 +49,7 @@ exports[`check song api mappings 1`] = `
       ],
     },
     {
-      id: 2,
+      id: 3,
       newName: 001 DDD-1 2,
       oldName: KIT001 2,
       path: KITS,
@@ -48,7 +63,7 @@ exports[`check song api mappings 1`] = `
       ],
     },
     {
-      id: 3,
+      id: 4,
       newName: 008 SCDT,
       oldName: KIT008,
       path: KITS,
@@ -62,7 +77,7 @@ exports[`check song api mappings 1`] = `
       ],
     },
     {
-      id: 4,
+      id: 5,
       newName: KIT171 3,
       oldName: KIT171B,
       path: KITS,
@@ -76,7 +91,7 @@ exports[`check song api mappings 1`] = `
       ],
     },
     {
-      id: 5,
+      id: 6,
       newName: KIT172,
       oldName: KIT172,
       path: KITS,
@@ -91,7 +106,7 @@ exports[`check song api mappings 1`] = `
       ],
     },
     {
-      id: 6,
+      id: 7,
       newName: KIT187 2,
       oldName: KIT187A,
       path: KITS,
@@ -105,7 +120,7 @@ exports[`check song api mappings 1`] = `
       ],
     },
     {
-      id: 7,
+      id: 8,
       newName: KIT188 3,
       oldName: KIT188B,
       path: KITS,
@@ -119,7 +134,7 @@ exports[`check song api mappings 1`] = `
       ],
     },
     {
-      id: 8,
+      id: 9,
       newName: KIT272 3,
       oldName: KIT272B,
       path: KITS,
@@ -134,7 +149,7 @@ exports[`check song api mappings 1`] = `
       ],
     },
     {
-      id: 9,
+      id: 10,
       newName: new kit,
       oldName: new kit,
       path: KITS,
@@ -148,7 +163,7 @@ exports[`check song api mappings 1`] = `
       ],
     },
     {
-      id: 10,
+      id: 11,
       newName: new kit 2,
       oldName: new kit 2,
       path: KITS,
@@ -162,7 +177,7 @@ exports[`check song api mappings 1`] = `
       ],
     },
     {
-      id: 11,
+      id: 12,
       newName: 000 TR-808,
       oldName: KIT000,
       path: KITS/sub folder,
@@ -176,7 +191,7 @@ exports[`check song api mappings 1`] = `
       ],
     },
     {
-      id: 12,
+      id: 13,
       newName: KIT182,
       oldName: KIT182,
       path: KITS/sub folder,
@@ -190,7 +205,7 @@ exports[`check song api mappings 1`] = `
       ],
     },
     {
-      id: 13,
+      id: 14,
       newName: KIT282 3,
       oldName: KIT282B,
       path: KITS/sub folder,
@@ -206,7 +221,7 @@ exports[`check song api mappings 1`] = `
   ],
   songs: [
     {
-      clipsLength: 8,
+      clipsLength: 12,
       firmwareVersion: [
         4,
         0,
@@ -227,7 +242,7 @@ exports[`check song api mappings 1`] = `
           prettyName: 008 Kit,
           rewriteFolder: KITS,
           rewriteName: KIT008,
-          soundID: 3,
+          soundID: 4,
           type: kit,
           usedInClips: [
             0,
@@ -247,7 +262,7 @@ exports[`check song api mappings 1`] = `
           prettyName: 008 Synth,
           rewriteFolder: SYNTHS,
           rewriteName: SYNT008,
-          soundID: 5,
+          soundID: 6,
           type: sound,
           usedInClips: [
             2,
@@ -267,7 +282,7 @@ exports[`check song api mappings 1`] = `
           prettyName: 188 Kit 3,
           rewriteFolder: KITS,
           rewriteName: KIT188B,
-          soundID: 7,
+          soundID: 8,
           type: kit,
           usedInClips: [
             4,
@@ -287,11 +302,51 @@ exports[`check song api mappings 1`] = `
           prettyName: 188 Synth 3,
           rewriteFolder: SYNTHS,
           rewriteName: SYNT188B,
-          soundID: 9,
+          soundID: 10,
           type: sound,
           usedInClips: [
             6,
             7,
+          ],
+        },
+        {
+          formatType: nameonly,
+          isNewSound: false,
+          patchName: KIT000,
+          patchSuffix:  'copy',
+          patchSuffixOld:  'copy',
+          presetFolder: null,
+          presetName: KIT000 'copy',
+          presetSlot: null,
+          presetSubSlot: null,
+          prettyName: 000 Kit 'copy',
+          rewriteFolder: KITS,
+          rewriteName: KIT000 'copy',
+          soundID: 1,
+          type: kit,
+          usedInClips: [
+            8,
+            9,
+          ],
+        },
+        {
+          formatType: nameonly,
+          isNewSound: false,
+          patchName: SYNT000,
+          patchSuffix:  'copy',
+          patchSuffixOld:  'copy',
+          presetFolder: null,
+          presetName: SYNT000 'copy',
+          presetSlot: null,
+          presetSubSlot: null,
+          prettyName: 000 Synth 'copy',
+          rewriteFolder: SYNTHS,
+          rewriteName: SYNT000 'copy',
+          soundID: 3,
+          type: sound,
+          usedInClips: [
+            10,
+            11,
           ],
         },
       ],
@@ -321,7 +376,7 @@ exports[`check song api mappings 1`] = `
           prettyName: false,
           rewriteFolder: KITS,
           rewriteName: new kit,
-          soundID: 9,
+          soundID: 10,
           type: kit,
           usedInClips: [
             0,
@@ -361,7 +416,7 @@ exports[`check song api mappings 1`] = `
           prettyName: false 2,
           rewriteFolder: KITS,
           rewriteName: new kit 2,
-          soundID: 10,
+          soundID: 11,
           type: kit,
           usedInClips: [
             4,
@@ -415,7 +470,7 @@ exports[`check song api mappings 1`] = `
           prettyName: 001 Kit,
           rewriteFolder: KITS,
           rewriteName: KIT001,
-          soundID: 1,
+          soundID: 2,
           type: kit,
           usedInClips: [
             0,
@@ -435,7 +490,7 @@ exports[`check song api mappings 1`] = `
           prettyName: 001 Synth,
           rewriteFolder: SYNTHS,
           rewriteName: SYNT001,
-          soundID: 3,
+          soundID: 4,
           type: sound,
           usedInClips: [
             2,
@@ -455,7 +510,7 @@ exports[`check song api mappings 1`] = `
           prettyName: 172 Kit,
           rewriteFolder: KITS,
           rewriteName: KIT172,
-          soundID: 5,
+          soundID: 6,
           type: kit,
           usedInClips: [
             4,
@@ -475,7 +530,7 @@ exports[`check song api mappings 1`] = `
           prettyName: 172 Synth,
           rewriteFolder: SYNTHS,
           rewriteName: SYNT172,
-          soundID: 7,
+          soundID: 8,
           type: sound,
           usedInClips: [
             6,
@@ -535,7 +590,7 @@ exports[`check song api mappings 1`] = `
           prettyName: 272 Kit 3,
           rewriteFolder: KITS,
           rewriteName: KIT272B,
-          soundID: 8,
+          soundID: 9,
           type: kit,
           usedInClips: [
             12,
@@ -555,7 +610,7 @@ exports[`check song api mappings 1`] = `
           prettyName: 272 Synth 3,
           rewriteFolder: SYNTHS,
           rewriteName: SYNT272B,
-          soundID: 10,
+          soundID: 11,
           type: sound,
           usedInClips: [
             14,
@@ -589,7 +644,7 @@ exports[`check song api mappings 1`] = `
           prettyName: 000 Kit,
           rewriteFolder: KITS/sub folder,
           rewriteName: KIT000,
-          soundID: 11,
+          soundID: 12,
           type: kit,
           usedInClips: [
             0,
@@ -609,7 +664,7 @@ exports[`check song api mappings 1`] = `
           prettyName: 000 Synth,
           rewriteFolder: SYNTHS/sub folder,
           rewriteName: SYNT000,
-          soundID: 11,
+          soundID: 12,
           type: sound,
           usedInClips: [
             2,
@@ -629,7 +684,7 @@ exports[`check song api mappings 1`] = `
           prettyName: 182 Kit,
           rewriteFolder: KITS/sub folder,
           rewriteName: KIT182,
-          soundID: 12,
+          soundID: 13,
           type: kit,
           usedInClips: [
             4,
@@ -649,7 +704,7 @@ exports[`check song api mappings 1`] = `
           prettyName: 182 Synth,
           rewriteFolder: SYNTHS/sub folder,
           rewriteName: SYNT182,
-          soundID: 12,
+          soundID: 13,
           type: sound,
           usedInClips: [
             6,
@@ -709,7 +764,7 @@ exports[`check song api mappings 1`] = `
           prettyName: 282 Kit 3,
           rewriteFolder: KITS/sub folder,
           rewriteName: KIT282B,
-          soundID: 13,
+          soundID: 14,
           type: kit,
           usedInClips: [
             12,
@@ -729,7 +784,7 @@ exports[`check song api mappings 1`] = `
           prettyName: 282 Synth 3,
           rewriteFolder: SYNTHS/sub folder,
           rewriteName: SYNT282B,
-          soundID: 13,
+          soundID: 14,
           type: sound,
           usedInClips: [
             14,
@@ -742,7 +797,7 @@ exports[`check song api mappings 1`] = `
       shouldUpdate: true,
     },
     {
-      clipsLength: 16,
+      clipsLength: 20,
       firmwareVersion: [
         4,
         0,
@@ -763,7 +818,7 @@ exports[`check song api mappings 1`] = `
           prettyName: 001 Kit 2,
           rewriteFolder: KITS,
           rewriteName: KIT001 2,
-          soundID: 2,
+          soundID: 3,
           type: kit,
           usedInClips: [
             0,
@@ -783,7 +838,7 @@ exports[`check song api mappings 1`] = `
           prettyName: 001 Synth 2,
           rewriteFolder: SYNTHS,
           rewriteName: SYNT001 2,
-          soundID: 4,
+          soundID: 5,
           type: sound,
           usedInClips: [
             2,
@@ -843,7 +898,7 @@ exports[`check song api mappings 1`] = `
           prettyName: 187 Kit 2,
           rewriteFolder: KITS,
           rewriteName: KIT187A,
-          soundID: 6,
+          soundID: 7,
           type: kit,
           usedInClips: [
             8,
@@ -863,7 +918,7 @@ exports[`check song api mappings 1`] = `
           prettyName: 187 Synth 2,
           rewriteFolder: SYNTHS,
           rewriteName: SYNT187A,
-          soundID: 8,
+          soundID: 9,
           type: sound,
           usedInClips: [
             10,
@@ -910,6 +965,46 @@ exports[`check song api mappings 1`] = `
             15,
           ],
         },
+        {
+          formatType: new,
+          isNewSound: false,
+          patchName: KIT000,
+          patchSuffix:  'copy',
+          patchSuffixOld:  'copy',
+          presetFolder: KITS,
+          presetName: KIT000 'copy',
+          presetSlot: null,
+          presetSubSlot: null,
+          prettyName: 000 Kit 'copy',
+          rewriteFolder: KITS,
+          rewriteName: KIT000 'copy',
+          soundID: 1,
+          type: kit,
+          usedInClips: [
+            16,
+            17,
+          ],
+        },
+        {
+          formatType: new,
+          isNewSound: false,
+          patchName: SYNT000,
+          patchSuffix:  'copy',
+          patchSuffixOld:  'copy',
+          presetFolder: SYNTHS,
+          presetName: SYNT000 'copy',
+          presetSlot: null,
+          presetSubSlot: null,
+          prettyName: 000 Synth 'copy',
+          rewriteFolder: SYNTHS,
+          rewriteName: SYNT000 'copy',
+          soundID: 3,
+          type: sound,
+          usedInClips: [
+            18,
+            19,
+          ],
+        },
       ],
       name: newsuffix,
       path: SONGS,
@@ -937,7 +1032,7 @@ exports[`check song api mappings 1`] = `
           prettyName: 001 Kit,
           rewriteFolder: KITS,
           rewriteName: KIT001,
-          soundID: 1,
+          soundID: 2,
           type: kit,
           usedInClips: [
             0,
@@ -957,7 +1052,7 @@ exports[`check song api mappings 1`] = `
           prettyName: 001 Synth,
           rewriteFolder: SYNTHS,
           rewriteName: SYNT001,
-          soundID: 3,
+          soundID: 4,
           type: sound,
           usedInClips: [
             2,
@@ -977,7 +1072,7 @@ exports[`check song api mappings 1`] = `
           prettyName: 172 Kit,
           rewriteFolder: KITS,
           rewriteName: KIT172,
-          soundID: 5,
+          soundID: 6,
           type: kit,
           usedInClips: [
             4,
@@ -997,7 +1092,7 @@ exports[`check song api mappings 1`] = `
           prettyName: 172 Synth,
           rewriteFolder: SYNTHS,
           rewriteName: SYNT172,
-          soundID: 7,
+          soundID: 8,
           type: sound,
           usedInClips: [
             6,
@@ -1057,7 +1152,7 @@ exports[`check song api mappings 1`] = `
           prettyName: 272 Kit 3,
           rewriteFolder: KITS,
           rewriteName: KIT272B,
-          soundID: 8,
+          soundID: 9,
           type: kit,
           usedInClips: [
             12,
@@ -1077,7 +1172,7 @@ exports[`check song api mappings 1`] = `
           prettyName: 272 Synth 3,
           rewriteFolder: SYNTHS,
           rewriteName: SYNT272B,
-          soundID: 10,
+          soundID: 11,
           type: sound,
           usedInClips: [
             14,
@@ -1151,7 +1246,7 @@ exports[`check song api mappings 1`] = `
           prettyName: 171 Kit 3,
           rewriteFolder: KITS,
           rewriteName: KIT171B,
-          soundID: 4,
+          soundID: 5,
           type: kit,
           usedInClips: [
             4,
@@ -1171,7 +1266,7 @@ exports[`check song api mappings 1`] = `
           prettyName: 171 Synth 3,
           rewriteFolder: SYNTHS,
           rewriteName: SYNT171B,
-          soundID: 6,
+          soundID: 7,
           type: sound,
           usedInClips: [
             6,
@@ -1269,6 +1364,21 @@ exports[`check song api mappings 1`] = `
     },
     {
       id: 3,
+      newName: 000 Rich Saw Bass 'copy',
+      oldName: SYNT000 'copy',
+      path: SYNTHS,
+      presetName: SYNT000 'copy',
+      presetType: SYNT,
+      prettyName: 000 Synth 'copy',
+      rewriteName: ,
+      rootPath: <PROJECT_DIRECTORY>/fake_filesystem/FAKE_SD_CARD,
+      songIDs: [
+        0,
+        4,
+      ],
+    },
+    {
+      id: 4,
       newName: 001 Sync Bass,
       oldName: SYNT001,
       path: SYNTHS,
@@ -1283,7 +1393,7 @@ exports[`check song api mappings 1`] = `
       ],
     },
     {
-      id: 4,
+      id: 5,
       newName: 001 Sync Bass 2,
       oldName: SYNT001 2,
       path: SYNTHS,
@@ -1297,7 +1407,7 @@ exports[`check song api mappings 1`] = `
       ],
     },
     {
-      id: 5,
+      id: 6,
       newName: 008 FM Rich Distorted Bass,
       oldName: SYNT008,
       path: SYNTHS,
@@ -1311,7 +1421,7 @@ exports[`check song api mappings 1`] = `
       ],
     },
     {
-      id: 6,
+      id: 7,
       newName: SYNT171 3,
       oldName: SYNT171B,
       path: SYNTHS,
@@ -1325,7 +1435,7 @@ exports[`check song api mappings 1`] = `
       ],
     },
     {
-      id: 7,
+      id: 8,
       newName: SYNT172,
       oldName: SYNT172,
       path: SYNTHS,
@@ -1340,7 +1450,7 @@ exports[`check song api mappings 1`] = `
       ],
     },
     {
-      id: 8,
+      id: 9,
       newName: SYNT187 2,
       oldName: SYNT187A,
       path: SYNTHS,
@@ -1354,7 +1464,7 @@ exports[`check song api mappings 1`] = `
       ],
     },
     {
-      id: 9,
+      id: 10,
       newName: SYNT188 3,
       oldName: SYNT188B,
       path: SYNTHS,
@@ -1368,7 +1478,7 @@ exports[`check song api mappings 1`] = `
       ],
     },
     {
-      id: 10,
+      id: 11,
       newName: SYNT272 3,
       oldName: SYNT272B,
       path: SYNTHS,
@@ -1383,7 +1493,7 @@ exports[`check song api mappings 1`] = `
       ],
     },
     {
-      id: 11,
+      id: 12,
       newName: 000 Rich Saw Bass,
       oldName: SYNT000,
       path: SYNTHS/sub folder,
@@ -1397,7 +1507,7 @@ exports[`check song api mappings 1`] = `
       ],
     },
     {
-      id: 12,
+      id: 13,
       newName: SYNT182,
       oldName: SYNT182,
       path: SYNTHS/sub folder,
@@ -1411,7 +1521,7 @@ exports[`check song api mappings 1`] = `
       ],
     },
     {
-      id: 13,
+      id: 14,
       newName: SYNT282 3,
       oldName: SYNT282B,
       path: SYNTHS/sub folder,
@@ -1434,79 +1544,85 @@ exports[`check song api mappings 2`] = `
     kits: {
       KIT000: {
         KITS: 0,
-        KITS/sub folder: 11,
-      },
-      KIT001: {
-        KITS: 1,
-      },
-      KIT001 2: {
-        KITS: 2,
-      },
-      KIT008: {
-        KITS: 3,
-      },
-      KIT171B: {
-        KITS: 4,
-      },
-      KIT172: {
-        KITS: 5,
-      },
-      KIT182: {
         KITS/sub folder: 12,
       },
-      KIT187A: {
+      KIT000 'copy': {
+        KITS: 1,
+      },
+      KIT001: {
+        KITS: 2,
+      },
+      KIT001 2: {
+        KITS: 3,
+      },
+      KIT008: {
+        KITS: 4,
+      },
+      KIT171B: {
+        KITS: 5,
+      },
+      KIT172: {
         KITS: 6,
       },
-      KIT188B: {
-        KITS: 7,
-      },
-      KIT272B: {
-        KITS: 8,
-      },
-      KIT282B: {
+      KIT182: {
         KITS/sub folder: 13,
       },
-      new kit: {
+      KIT187A: {
+        KITS: 7,
+      },
+      KIT188B: {
+        KITS: 8,
+      },
+      KIT272B: {
         KITS: 9,
       },
-      new kit 2: {
+      KIT282B: {
+        KITS/sub folder: 14,
+      },
+      new kit: {
         KITS: 10,
+      },
+      new kit 2: {
+        KITS: 11,
       },
     },
     synths: {
       SYNT000: {
         SYNTHS: 2,
-        SYNTHS/sub folder: 11,
-      },
-      SYNT001: {
-        SYNTHS: 3,
-      },
-      SYNT001 2: {
-        SYNTHS: 4,
-      },
-      SYNT008: {
-        SYNTHS: 5,
-      },
-      SYNT171B: {
-        SYNTHS: 6,
-      },
-      SYNT172: {
-        SYNTHS: 7,
-      },
-      SYNT182: {
         SYNTHS/sub folder: 12,
       },
-      SYNT187A: {
+      SYNT000 'copy': {
+        SYNTHS: 3,
+      },
+      SYNT001: {
+        SYNTHS: 4,
+      },
+      SYNT001 2: {
+        SYNTHS: 5,
+      },
+      SYNT008: {
+        SYNTHS: 6,
+      },
+      SYNT171B: {
+        SYNTHS: 7,
+      },
+      SYNT172: {
         SYNTHS: 8,
       },
-      SYNT188B: {
+      SYNT182: {
+        SYNTHS/sub folder: 13,
+      },
+      SYNT187A: {
         SYNTHS: 9,
       },
-      SYNT272B: {
+      SYNT188B: {
         SYNTHS: 10,
       },
+      SYNT272B: {
+        SYNTHS: 11,
+      },
       SYNT282B: {
-        SYNTHS/sub folder: 13,
+        SYNTHS/sub folder: 14,
       },
       new synth: {
         SYNTHS: 0,

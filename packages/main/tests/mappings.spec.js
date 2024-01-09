@@ -280,7 +280,9 @@ describe.sequential('mappings that should map to a letter suffixed instrument', 
   });
   it('checks song mappings', () => {
     Deluge.files.songs[0].instruments.forEach(ins => {
-      if (ins.presetName != 'SYNT000' && ins.presetFolder != 'SYNTHS') {
+      if (ins.presetName == 'SYNT000' && ins.presetFolder == 'SYNTHS') {
+        //do nothing
+      } else {
         expect(ins.soundID).toBe(1);
       }
     });
@@ -476,7 +478,7 @@ describe.sequential('mappings that should match by name', async () => {
   });
 });
 
-describe.sequential('mappings that should match by name an suffix', async () => {
+describe.sequential('mappings that should match by name and suffix', async () => {
   const Deluge = await setup([
     // initital actual instruments
     {
@@ -511,7 +513,9 @@ describe.sequential('mappings that should match by name an suffix', async () => 
       // if (ins.soundID != 1) {
       //   ins.printNode();
       // }
-      if (ins.presetName != 'SYNT000' && ins.presetFolder != 'SYNTHS') {
+      if (ins.presetName == 'new synth' && ins.presetFolder == 'SYNTHS') {
+        //do nothing
+      } else {
         expect(ins.soundID).toBe(1);
       }
     });
@@ -561,7 +565,9 @@ describe.sequential('mappings that should match by name and suffix with a folder
       // if (ins.soundID != 1) {
       //   ins.printNode();
       // }
-      if (ins.presetName != 'SYNT000' && ins.presetFolder != 'SYNTHS') {
+      if (ins.presetName == 'new synth 2' && ins.presetFolder == 'SYNTHS') {
+        //do nothing
+      } else {
         expect(ins.soundID).toBe(1);
       }
     });
@@ -611,7 +617,9 @@ describe.sequential('mappings that should match by name and suffix with a folder
       // if (ins.soundID != 1) {
       //   ins.printNode();
       // }
-      if (ins.presetName != 'SYNT000' && ins.presetFolder != 'SYNTHS') {
+      if (ins.presetName == 'new synth 2' && ins.presetFolder == 'SYNTHS') {
+        //do nothing
+      } else {
         expect(ins.soundID).toBe(1);
       }
     });
@@ -631,3 +639,72 @@ describe.sequential('mappings that should match by name and suffix with a folder
     });
   });
 });
+
+describe.sequential(
+  'mappings that should map to a number suffixed instrument with a new sound',
+  async () => {
+    const Deluge = await setup(
+      [
+        // initital actual instruments
+        {
+          type: 'kit',
+          attrs: {presetName: 'KIT000', presetFolder: 'KITS'},
+          hasFile: true,
+        },
+        // test on 'new' type
+        {
+          type: 'kit',
+          attrs: {presetName: 'KIT000 2', presetFolder: 'KITS'},
+          hasFile: false,
+        },
+        // test on 'new' type
+        {
+          type: 'kit',
+          attrs: {presetName: "KIT000 'copy'", presetFolder: 'KITS'},
+          hasFile: true,
+        },
+        // test on 'nameonly' type
+        {
+          type: 'kit',
+          attrs: {presetName: "KIT000 'copy'"},
+          hasFile: false,
+        },
+      ],
+      false,
+    );
+
+    it('checks kit mappings', () => {
+      // console.log(Deluge.files.kits);
+      expect(Deluge.files.kits[0].songIDs.has(0)).toBe(true);
+    });
+    it('checks song mappings', () => {
+      Deluge.files.songs[0].instruments.forEach(ins => {
+        // if (ins.soundID != 0) {
+        //   ins.printNode();
+        // }
+        if (ins.presetName == 'KIT000' && ins.presetFolder == 'KITS') {
+          //do nothing
+        } else if (ins.presetName == "KIT000 'copy'") {
+          //ins.printNode();
+          expect(ins.soundID).toBe(1);
+        } else {
+          expect(ins.soundID).toBe(0);
+        }
+      });
+    });
+    it('checks song names', () => {
+      // console.log(Deluge.files.songs[0].instruments);
+      Deluge.files.songs[0].instruments.forEach(ins => {
+        if (!ins.rewriteName) ins.printNode();
+        expect(ins.rewriteName).toBeTruthy();
+      });
+    });
+    it('checks song folders', () => {
+      // console.log(Deluge.files.songs[0].instruments);
+      Deluge.files.songs[0].instruments.forEach(ins => {
+        if (!ins.rewriteFolder) ins.printNode();
+        expect(ins.rewriteFolder).toBeTruthy();
+      });
+    });
+  },
+);

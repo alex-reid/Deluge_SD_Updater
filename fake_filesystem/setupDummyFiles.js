@@ -134,6 +134,16 @@ const testFiles = [
         attrs: {presetName: 'SYNT197B', presetFolder: 'SYNTHS'},
         hasFile: false,
       },
+      {
+        type: 'kit',
+        attrs: {presetName: "KIT000 'copy'", presetFolder: 'KITS'},
+        hasFile: true,
+      },
+      {
+        type: 'sound',
+        attrs: {presetName: "SYNT000 'copy'", presetFolder: 'SYNTHS'},
+        hasFile: true,
+      },
     ],
   },
   {
@@ -251,6 +261,17 @@ const testFiles = [
         type: 'sound',
         attrs: {presetName: 'SYNT188B'},
         hasFile: true,
+      },
+
+      {
+        type: 'kit',
+        attrs: {presetName: "KIT000 'copy'"},
+        hasFile: false,
+      },
+      {
+        type: 'sound',
+        attrs: {presetName: "SYNT000 'copy'"},
+        hasFile: false,
       },
     ],
   },

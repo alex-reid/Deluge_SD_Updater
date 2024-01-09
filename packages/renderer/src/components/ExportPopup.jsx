@@ -18,9 +18,10 @@ import {
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import {useState} from 'react';
-import {exportFiles} from '#preload';
+import {useEffect, useState} from 'react';
+import {exportFiles, sendFileUpdates, sendFileUpdatesOff} from '#preload';
 import theme from '../theme';
+// import {ipcRenderer} from 'electron';
 
 const style = {
   position: 'absolute',
@@ -40,6 +41,19 @@ const style = {
 
 export default function ExportPopup({open, handleClose, fileExport}) {
   const [confirm, setConfirm] = useState(false);
+  const [output, setOutput] = useState([]);
+
+  useEffect(() => {
+    console.log(output);
+  }, [output]);
+
+  useEffect(() => {
+    sendFileUpdates(files => setOutput(prev => [...prev, ...files]));
+    console.log(sendFileUpdates);
+    return () => {
+      sendFileUpdatesOff();
+    };
+  }, []);
 
   return (
     <div>
@@ -223,6 +237,16 @@ export default function ExportPopup({open, handleClose, fileExport}) {
                   ))}
                 </AccordionDetails>
               </Accordion>
+              {output.length > 0 && (
+                <pre style={{whiteSpace: 'pre-line', fontSize: '1rem'}}>
+                  {output.map((line, i) => (
+                    <span key={i}>
+                      {line}
+                      {'\n'}
+                    </span>
+                  ))}
+                </pre>
+              )}
             </Box>
           )}
           <Box sx={{display: 'flex', justifyContent: 'space-between', pt: 2}}>

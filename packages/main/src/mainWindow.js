@@ -50,7 +50,7 @@ async function createWindow() {
 
   ipcMain.on('export-files', (_event, files) => {
     if (files) {
-      console.log(files);
+      D.handleRewrite(files);
     }
   });
 

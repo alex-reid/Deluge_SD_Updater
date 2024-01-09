@@ -309,6 +309,56 @@ class fileSystem {
       }
     }
   }
+
+  async rewriteInsts(type, files) {
+    const updated = [];
+    for (const file of files) {
+      if (file.willUpdate && this.files[type][file.id]) {
+        await this.files[type][file.id].renameFile(file.rewriteName).then(data => {
+          updated.push(data);
+        });
+      }
+    }
+    return updated;
+  }
+
+  async rewriteSongs(files) {
+    const updated = [];
+
+    for (const song of files) {
+      if (this.files.songs[song.id]) {
+        if (this.files.songs[song.id].validate()) {
+          const done = this.files.songs[song.id].rewriteInstrumentsAndClipsXMLAttributes(
+            song.instruments,
+          );
+          if (this.files.songs[song.id].validate()) {
+            await this.files.songs[song.id].saveXML();
+            updated.push(done);
+          }
+        }
+      }
+    }
+    return updated;
+  }
+
+  handleRewrite(files) {
+    const {synthNames, kitNames, songInsts} = files;
+    this.rewriteInsts('synths', synthNames)
+      .then(done => {
+        this.browserWindow.webContents.send('export-update-results', done);
+        console.log(done);
+        return this.rewriteInsts('kits', kitNames);
+      })
+      .then(done => {
+        this.browserWindow.webContents.send('export-update-results', done);
+        console.log(done);
+        return this.rewriteSongs(songInsts);
+      })
+      .then(done => {
+        this.browserWindow.webContents.send('export-update-results', done);
+      })
+      .catch(err => console.error(err));
+  }
 }
 
 export default fileSystem;

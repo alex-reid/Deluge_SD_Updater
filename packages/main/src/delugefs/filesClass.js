@@ -1,7 +1,13 @@
 import {load} from 'cheerio';
 import fs from 'fs/promises';
 import path from 'path';
-import {getOldTypeAndNumber, getFolderFromFileType, getNameAndSuffix, getPath} from './utils';
+import {
+  getOldTypeAndNumber,
+  getFolderFromFileType,
+  getNameAndSuffix,
+  getPath,
+  // newlineXMLAttrs,
+} from './utils';
 
 import {Instrument, Clip} from './nodesClass';
 import {newNames} from './definitions';
@@ -48,8 +54,9 @@ class File {
 
   async saveXML() {
     // Save the modified XML to a new file
+    // const modifiedXml = newlineXMLAttrs(this.XML.xml());
     const modifiedXml = this.XML.xml();
-    const newXmlFilePath = path.join(this.systemPath, this.fileName + '_v4.XML');
+    const newXmlFilePath = path.join(this.systemPath, this.fileName + '.XML');
     fs.writeFile(newXmlFilePath, modifiedXml, 'utf-8');
   }
 }
@@ -76,6 +83,7 @@ class Song extends File {
     this.getFirmwareVersion();
     this.getInstruments();
     this.getClips();
+    this.addClipIdsToInstruments();
   }
 
   getFirmwareVersion() {
@@ -98,7 +106,6 @@ class Song extends File {
 
   validate() {
     let valid = true;
-    this.addClipIdsToInstruments();
     let instClips = 0;
     this.clips.forEach(clip => {
       if (clip.presetType != 'notsound') instClips++;
@@ -119,6 +126,8 @@ class Song extends File {
   }
 
   rewriteInstrumentsAndClipsXMLAttributes(newNames) {
+    const output = [`Processing song ${this.fileName}\n`];
+    // console.log('insts', this.instruments.length, newNames.length);
     if (this.instruments.length !== newNames.length) {
       throw new Error('new names are not the same length as instruments');
     }
@@ -127,11 +136,16 @@ class Song extends File {
       if (!rewriteName || !rewriteFolder) {
         throw new Error('invalid data in new names array');
       }
+      // console.log(rewriteFolder, rewriteName, index, instrument.clips);
       instrument.rewritePresetToV4(rewriteName, rewriteFolder);
+      const clipIDs = [];
       instrument.clips.forEach(clip => {
         this.clips[clip].rewritePresetToV4(rewriteName, rewriteFolder);
+        clipIDs.push(clip);
       });
+      output.push(`Rewrote sound ${index} to ${rewriteName}. Updated clips ${clipIDs.join(',')}\n`);
     });
+    return output;
   }
 
   getClips() {
@@ -203,6 +217,17 @@ class Sound extends File {
         .then(() => console.log('Renamed', this.fileName + '.XML', 'to', newName + '.XML'))
         .catch(err => console.error(err));
     }
+  }
+
+  async renameFile(newName) {
+    const out = await fs
+      .rename(
+        path.join(this.systemPath, this.fullFileName),
+        path.join(this.systemPath, newName + '.XML'),
+      )
+      .then(() => 'Renamed ' + this.fileName + '.XML ' + 'to ' + newName + '.XML')
+      .catch(err => 'Error naming ' + this.fileName + '.XML ' + 'to ' + newName + '.XML\n' + err);
+    return out;
   }
 }
 /**
