@@ -30,15 +30,15 @@ const App = () => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  // useEffect(() => {
-  //   console.log('songs data', songs);
-  // }, [songs]);
-  // useEffect(() => {
-  //   console.log('synths data', synths);
-  // }, [synths]);
-  // useEffect(() => {
-  //   console.log('kits data', kits);
-  // }, [kits]);
+  useEffect(() => {
+    console.log('songs data', songs);
+  }, [songs]);
+  useEffect(() => {
+    console.log('synths data', synths);
+  }, [synths]);
+  useEffect(() => {
+    console.log('kits data', kits);
+  }, [kits]);
 
   useEffect(() => {
     if (Object.keys(fileExport).length != 0) {

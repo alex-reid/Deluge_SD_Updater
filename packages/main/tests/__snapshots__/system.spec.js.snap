@@ -15,6 +15,7 @@ exports[`check song api mappings 1`] = `
       rewriteName: ,
       rootPath: <PROJECT_DIRECTORY>/fake_filesystem/FAKE_SD_CARD,
       songIDs: [
+        2,
         6,
       ],
     },
@@ -449,7 +450,7 @@ exports[`check song api mappings 1`] = `
       shouldUpdate: true,
     },
     {
-      clipsLength: 16,
+      clipsLength: 20,
       firmwareVersion: [
         4,
         0,
@@ -498,6 +499,46 @@ exports[`check song api mappings 1`] = `
           ],
         },
         {
+          formatType: newsuffix,
+          isNewSound: false,
+          patchName: KIT000,
+          patchSuffix:  2,
+          patchSuffixOld:  2,
+          presetFolder: KITS,
+          presetName: KIT000 2,
+          presetSlot: null,
+          presetSubSlot: null,
+          prettyName: 000 Kit 2,
+          rewriteFolder: KITS,
+          rewriteName: KIT000,
+          soundID: 0,
+          type: kit,
+          usedInClips: [
+            4,
+            5,
+          ],
+        },
+        {
+          formatType: newsuffix,
+          isNewSound: false,
+          patchName: SYNT000,
+          patchSuffix:  2,
+          patchSuffixOld:  2,
+          presetFolder: SYNTHS,
+          presetName: SYNT000 2,
+          presetSlot: null,
+          presetSubSlot: null,
+          prettyName: 000 Synth 2,
+          rewriteFolder: SYNTHS,
+          rewriteName: SYNT000,
+          soundID: 2,
+          type: sound,
+          usedInClips: [
+            6,
+            7,
+          ],
+        },
+        {
           formatType: new,
           isNewSound: false,
           patchName: KIT172,
@@ -513,8 +554,8 @@ exports[`check song api mappings 1`] = `
           soundID: 6,
           type: kit,
           usedInClips: [
-            4,
-            5,
+            8,
+            9,
           ],
         },
         {
@@ -533,8 +574,8 @@ exports[`check song api mappings 1`] = `
           soundID: 8,
           type: sound,
           usedInClips: [
-            6,
-            7,
+            10,
+            11,
           ],
         },
         {
@@ -553,8 +594,8 @@ exports[`check song api mappings 1`] = `
           soundID: new,
           type: kit,
           usedInClips: [
-            8,
-            9,
+            12,
+            13,
           ],
         },
         {
@@ -573,8 +614,8 @@ exports[`check song api mappings 1`] = `
           soundID: new,
           type: sound,
           usedInClips: [
-            10,
-            11,
+            14,
+            15,
           ],
         },
         {
@@ -593,8 +634,8 @@ exports[`check song api mappings 1`] = `
           soundID: 9,
           type: kit,
           usedInClips: [
-            12,
-            13,
+            16,
+            17,
           ],
         },
         {
@@ -613,8 +654,8 @@ exports[`check song api mappings 1`] = `
           soundID: 11,
           type: sound,
           usedInClips: [
-            14,
-            15,
+            18,
+            19,
           ],
         },
       ],
@@ -1359,6 +1400,7 @@ exports[`check song api mappings 1`] = `
       rewriteName: ,
       rootPath: <PROJECT_DIRECTORY>/fake_filesystem/FAKE_SD_CARD,
       songIDs: [
+        2,
         6,
       ],
     },

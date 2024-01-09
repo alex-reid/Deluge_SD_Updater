@@ -162,6 +162,16 @@ const testFiles = [
       },
       {
         type: 'kit',
+        attrs: {presetName: 'KIT000 2', presetFolder: 'KITS'},
+        hasFile: false,
+      },
+      {
+        type: 'sound',
+        attrs: {presetName: 'SYNT000 2', presetFolder: 'SYNTHS'},
+        hasFile: false,
+      },
+      {
+        type: 'kit',
         attrs: {presetName: 'KIT172', presetFolder: 'KITS'},
         hasFile: true,
       },
