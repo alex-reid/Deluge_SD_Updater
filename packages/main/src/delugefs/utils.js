@@ -1,27 +1,7 @@
 import {letterToIndexMap, indexToLetterMap, typeMappings, SUFFIX} from './definitions';
 import path from 'path';
 
-const matchOldNameStrict = /^(SYNT|SONG|KIT|SAMP)(\d*)([a-zA-Z]?)( \d+)?$/i;
 const matchOldName = /^(SYNT|SONG|KIT|SAMP)(\d*)([a-zA-Z]?)( \d+)?(.+)?/i;
-
-/**
- * Parses a string to see if it fits the naming schema for deluge files
- * @param {string} fileName
- * @returns {{isOldName:boolean,presetType:string,presetSlot:number|undefined,presetSubSlot:number|undefined,v4versionNum:string|undefined}}
- */
-function getOldTypeAndNumber(fileName) {
-  const fileData = fileName.match(matchOldNameStrict);
-  if (fileData) {
-    return {
-      isOldName: true,
-      presetType: fileData[1],
-      presetSlot: parseInt(fileData[2]),
-      presetSubSlot: getNumberFromAlpha(fileData[3]),
-      v4versionNum: fileData[4],
-    };
-  }
-  return false;
-}
 
 /**
  * Gets the raw regex components of a file name
@@ -36,65 +16,76 @@ function getNameRegex(fileName) {
   return false;
 }
 
+/**
+ *
+ * @param {string} fileName
+ * @returns {{soundType: string|null, soundNumber: string|null, name: string, baseName: string, fileName: string, suffixLetter: string|null, suffixNumber: string|null, suffixWord: string|null, suffixType: string, suffix: string, suffixV4: string}}
+ */
 function getNameComponents(fileName) {
   const regex = getNameRegex(fileName);
-  let suffixType = SUFFIX.NONE;
-  let suffix = '';
-  let suffixV4 = '';
-  let name = fileName;
+  const defaults = {
+    fileName,
+    baseName: fileName,
+    soundType: null,
+    soundNumber: null,
+    suffixLetter: null,
+    suffixNumber: null,
+    suffixWord: null,
+    suffixType: SUFFIX.NONE,
+    suffix: '',
+    suffixV4: '',
+  };
+
   if (regex) {
     const [, soundType, soundNumber, suffixLetter, suffixNumber, suffixWord] = regex;
-    if (suffixLetter) {
-      suffixType = SUFFIX.LETTER;
-      suffix = suffixLetter;
-      suffixV4 = ' ' + (getNumberFromAlpha(suffixLetter) + 2);
-      name = soundType + soundNumber;
-    }
-    if (suffixNumber) {
-      suffixType = SUFFIX.NUMBER;
-      suffix = suffixNumber;
-      suffixV4 = suffixNumber;
-      name = soundType + soundNumber;
-    }
-    if (suffixWord) {
-      suffixType = SUFFIX.WORD;
-      suffix = suffixWord;
-      suffixV4 = suffixWord;
-      name = soundType + soundNumber;
-    }
-    return {
-      fileName,
-      baseName: soundType + soundNumber,
+    const updatedDefaults = {
+      ...defaults,
       soundType,
       soundNumber,
-      suffixLetter,
-      suffixNumber,
-      suffixWord,
-      suffixType,
-      suffix,
-      suffixV4,
-      name,
+      baseName: soundType + soundNumber,
     };
+    if (suffixLetter) {
+      return {
+        ...updatedDefaults,
+        suffixLetter,
+        suffixType: SUFFIX.LETTER,
+        suffix: suffixLetter,
+        suffixV4: ' ' + (getNumberFromAlpha(suffixLetter) + 2),
+      };
+    }
+    if (suffixNumber) {
+      return {
+        ...updatedDefaults,
+        suffixNumber,
+        suffixType: SUFFIX.NUMBER,
+        suffix: suffixNumber,
+        suffixV4: suffixNumber,
+      };
+    }
+    if (suffixWord) {
+      return {
+        ...updatedDefaults,
+        suffixWord,
+        suffixType: SUFFIX.WORD,
+        suffix: suffixWord,
+        suffixV4: suffixWord,
+      };
+    }
+    return updatedDefaults;
   }
   const numberRegex = fileName.match(/^(.+)(\s\d+)$/);
   if (numberRegex) {
+    const [, base, num] = numberRegex;
     return {
-      fileName,
-      baseName: numberRegex[1],
-      suffixNumber: numberRegex[2],
-      name: numberRegex[1],
-      suffix: numberRegex[2],
-      suffixV4: numberRegex[2],
+      ...defaults,
+      baseName: base,
+      suffixNumber: num,
+      suffix: num,
+      suffixV4: num,
       suffixType: SUFFIX.NUMBER,
     };
   }
-  return {
-    fileName,
-    suffixType,
-    name,
-    suffix,
-    suffixV4,
-  };
+  return defaults;
 }
 
 /**
@@ -114,11 +105,9 @@ function getOldNameFromSlot(presetType, presetSlot, presetSubSlot) {
  * @returns {string} Pretty name
  */
 function prettyName(oldName) {
-  const {name, suffixV4} = getNameComponents(oldName);
-  const fileData = name.match(matchOldName);
-  if (fileData) {
-    const [, type, slot] = fileData;
-    return `${slot} ${getMapping(type, 'file', 'pretty')}${suffixV4}`;
+  const {soundNumber, soundType, suffixV4} = getNameComponents(oldName);
+  if (soundNumber && soundType) {
+    return `${soundNumber} ${getMapping(soundType, 'file', 'pretty')}${suffixV4}`;
   }
   return false;
 }
@@ -249,7 +238,6 @@ function newlineXMLAttrs(xml) {
 }
 
 export {
-  getOldTypeAndNumber,
   getNumberFromAlpha,
   getAlphaFromIndex,
   formatNumber,

@@ -155,7 +155,7 @@ class Instrument extends Node {
   }
 
   getSoundIndex(mappings, debug) {
-    const name = this.sound.name;
+    const name = this.sound.baseName;
     const suffix = this.sound.suffix;
     const folder = this.presetFolder || this.types.folder;
     let hasSuffixFile = false;

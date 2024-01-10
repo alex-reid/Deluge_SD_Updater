@@ -191,13 +191,13 @@ class Sound extends File {
   }
 
   getNewName() {
-    const {name, suffixV4, soundType, soundNumber} = getNameComponents(this.fileName);
+    const {baseName, suffixV4, soundType, soundNumber} = getNameComponents(this.fileName);
     if (soundType && soundNumber) {
       const getName = newNames[getFolderFromFileType(soundType)][parseInt(soundNumber)];
       if (getName) {
         return getName + suffixV4;
       }
-      return name + suffixV4;
+      return baseName + suffixV4;
     }
     return '';
   }

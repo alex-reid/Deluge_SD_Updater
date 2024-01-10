@@ -25,7 +25,7 @@ export const InstrumentListSongList = ({instrument, index}) => {
         >
           <strong style={{display: 'inline-block', width: '2rem'}}>{index + 1}.</strong>
           {icon}
-          &emsp;{instrument.sound.name + instrument.sound.suffix}
+          &emsp;{instrument.sound.baseName + instrument.sound.suffix}
           {instrument.rewriteName && (
             <>
               &ensp;&rarr;&ensp;<strong>{instrument.rewriteName}</strong>
@@ -68,7 +68,7 @@ export const InstrumentListSongList = ({instrument, index}) => {
         variant="h5"
         color="secondary"
       >
-        {index + 1}. {instrument.sound.name || instrument.presetName}{' '}
+        {index + 1}. {instrument.sound.baseName || instrument.presetName}{' '}
         <small>Used in clip row: {instrument.usedInClips.map(v => v + 1).join(', ')}</small>
       </Typography>
       <pre>
