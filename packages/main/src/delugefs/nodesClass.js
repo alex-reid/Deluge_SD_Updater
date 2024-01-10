@@ -1,10 +1,5 @@
-import {
-  getTypeMapping,
-  getOldTypeAndNumber,
-  getOldNameFromSlot,
-  getNameRegex,
-  getNameAndSuffix,
-} from './utils';
+import {FORMATS} from './definitions';
+import {getTypeMapping, getOldNameFromSlot, getNameRegex, getNameAndSuffix} from './utils';
 
 /** @typedef {import('cheerio').CheerioAPI} CheerioAPI */
 /** @enum {("old" | "numsonly" | "newsuffix" | "new" | "nameonly" | "unknown")} FormatType */
@@ -31,6 +26,16 @@ class Node {
     this.presetSlot = null;
     /** @type {number|null} - the preset sub slot */
     this.presetSubSlot = null;
+    this.has = {
+      /** @return {boolean} */
+      presetSlot: () => !isNaN(this.presetSlot) && Number.isInteger(this.presetSlot),
+      /** @return {boolean} */
+      presetSubSlot: () => !isNaN(this.presetSubSlot) && Number.isInteger(this.presetSubSlot),
+      /** @return {boolean} */
+      presetName: () => !!this.presetName,
+      /** @return {boolean} */
+      presetFolder: () => !!this.presetFolder,
+    };
   }
   /**
    * Sets up a nicer interface for Cheerio
@@ -60,14 +65,6 @@ class Node {
 class Instrument extends Node {
   constructor(xmlData, xml) {
     super(xmlData, xml);
-    /** @type {boolean} */
-    this.hasPresetName = false;
-    /** @type {boolean} */
-    this.hasPresetFolder = false;
-    /** @type {boolean} */
-    this.hasPresetSlot = false;
-    /** @type {boolean} */
-    this.hasPresetSubSlot = false;
     this.types = null;
     this.renamed = false;
     this.formatType = null;
@@ -86,57 +83,50 @@ class Instrument extends Node {
    */
   getPresetData() {
     const {$, node} = this.setupXml();
-    this.presetSlot = $(node).attr('presetSlot') || null;
-    this.presetSubSlot = $(node).attr('presetSubSlot') || null;
+    const presetSlot = $(node).attr('presetSlot');
+    const presetSubSlot = $(node).attr('presetSubSlot');
+
+    this.presetSlot = presetSlot ? parseInt(presetSlot) : null;
+    this.presetSubSlot = presetSubSlot ? parseInt(presetSubSlot) : null;
     this.presetName = $(node).attr('presetName') || null;
     this.presetFolder = $(node).attr('presetFolder') || null;
-    this.presetType = $(node)[0].name;
-    this.hasPresetName = !!this.presetName;
-    this.hasPresetFolder = !!this.presetFolder;
-    this.hasPresetSlot = !!this.presetSlot;
-    this.hasPresetSubSlot = !!this.presetSubSlot;
-    this.presetSlot = this.presetSlot && parseInt(this.presetSlot);
-    this.presetSubSlot = this.presetSubSlot && parseInt(this.presetSubSlot);
-    this.types = getTypeMapping(this.presetType, 'xml');
-    this.formatType = this.getPresetType();
+
+    this.types = getTypeMapping($(node)[0].name, 'xml');
+    this.presetType = this.types.xml;
+
+    this.formatType = this.getFormatType();
     this.patchNameAndSuffix();
   }
-  /**
-   *
-   * @returns Old style type, slot and subslot info from the preset name
-   */
-  getDataFromFilename() {
-    return getOldTypeAndNumber(this.presetName);
-  }
+
   /**
    *
    * @returns The type of the deluge preset in this node
    */
-  getPresetType() {
+  getFormatType() {
     const parts = getNameRegex(this.presetName);
-    if (this.hasPresetSlot && this.hasPresetSubSlot) {
-      return 'old';
+    if (this.has.presetSlot() && this.has.presetSubSlot()) {
+      return FORMATS.OLD;
     }
-    if (this.hasPresetName && this.hasPresetFolder) {
+    if (this.has.presetName() && this.has.presetFolder()) {
       if (this.presetName.match(/^\d{3}([a-z])?( \d)?$/i)) {
-        return 'numsonly';
+        return FORMATS.NUMBERS_ONLY;
       }
       if (parts && (parts[3] || parts[4])) {
-        return 'newsuffix';
+        return FORMATS.NEW_SUFFIX;
       }
-      return 'new';
+      return FORMATS.NEW;
     }
-    if (!this.hasPresetFolder && this.hasPresetName) {
-      return 'nameonly';
+    if (!this.has.presetFolder() && this.has.presetName()) {
+      return FORMATS.JUST_NAME;
     }
-    return 'unknown';
+    return FORMATS.UNKNOWN;
   }
 
   patchNameAndSuffix() {
     let rename = this.presetName;
-    if (this.formatType == 'old') {
+    if (this.formatType == FORMATS.OLD) {
       rename = getOldNameFromSlot(this.presetType, this.presetSlot, this.presetSubSlot);
-    } else if (this.formatType == 'numsonly') {
+    } else if (this.formatType == FORMATS.NUMBERS_ONLY) {
       rename = this.types.file + this.presetName;
     }
     if (rename) {
@@ -163,12 +153,21 @@ class Instrument extends Node {
     const name = this.patchName;
     const suffix = this.patchSuffix;
     const folder = this.presetFolder || this.types.folder;
-    let id = mappings.byName[this.types.type][this.presetName]?.[folder];
-    if (!Number.isInteger(id)) id = mappings.byName[this.types.type][name + suffix]?.[folder];
-    if (debug) console.log(id);
-    if (!Number.isInteger(id)) id = mappings.byName[this.types.type][name]?.[folder];
-    if (debug) console.log(id);
-    this.soundID = Number.isInteger(id) ? id : 'new';
+    let hasSuffixFile = false;
+    let id = 'new';
+    const idOnPresetName = mappings.byName[this.types.type][this.presetName]?.[folder];
+    const idOnSuffix = mappings.byName[this.types.type][name + suffix]?.[folder];
+    const idOnPatchname = mappings.byName[this.types.type][name]?.[folder];
+    if (debug) console.log({idOnPresetName, idOnSuffix, idOnPatchname});
+    if (Number.isInteger(idOnPresetName)) {
+      id = idOnPresetName;
+    } else if (Number.isInteger(idOnSuffix)) {
+      id = idOnSuffix;
+      hasSuffixFile = true;
+    } else if (Number.isInteger(idOnPatchname)) {
+      id = idOnPatchname;
+    }
+    this.soundID = id;
     if (debug)
       console.log({
         soundID: this.soundID,
@@ -182,9 +181,10 @@ class Instrument extends Node {
         clean: this.patchSuffixClean,
         teston: mappings.byName[this.types.type][this.presetName]?.[folder],
       });
-    return {id: this.soundID, type: this.types.type};
+    return {id: this.soundID, type: this.types.type, hasSuffix: hasSuffixFile};
   }
 }
+
 class Clip extends Node {
   constructor(xmlData, xml) {
     super(xmlData, xml);
@@ -192,10 +192,14 @@ class Clip extends Node {
   }
   getPresetData() {
     const {$, node} = this.setupXml();
+    const presetSlot = $(node).attr('instrumentPresetSlot');
+    const presetSubSlot = $(node).attr('instrumentPresetSubSlot');
+
+    this.presetSlot = presetSlot ? parseInt(presetSlot) : null;
+    this.presetSubSlot = presetSubSlot ? parseInt(presetSubSlot) : null;
+
     this.presetName = $(node).attr('instrumentPresetName') || null;
     this.presetFolder = $(node).attr('instrumentPresetFolder') || null;
-    this.presetSlot = $(node).attr('instrumentPresetSlot') || null;
-    this.presetSubSlot = $(node).attr('instrumentPresetSubSlot') || null;
     this.presetType =
       $(node).find('kitParams, soundParams')?.[0]?.name.replace('Params', '') || 'notsound';
   }

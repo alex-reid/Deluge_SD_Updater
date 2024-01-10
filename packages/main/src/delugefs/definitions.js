@@ -289,4 +289,19 @@ const typeMappings = [
   {type: 'songs', folder: 'SONGS', xml: 'song', file: 'SONG', pretty: 'Song'},
 ];
 
+export const FORMATS = {
+  /** Old style slot + sub slot. */
+  OLD: 'old style slot subslot',
+  /** V4-ish. Just three numbers and folder  */
+  NUMBERS_ONLY: 'three numbers only',
+  /** A new name with an added suffix */
+  NEW_SUFFIX: 'new style with suffix',
+  /** V4 file and folder */
+  NEW: 'new v4',
+  /** just a preset name */
+  JUST_NAME: 'name only',
+  /** Hopefully never see this one */
+  UNKNOWN: 'unknown type',
+};
+
 export {letterToIndexMap, indexToLetterMap, newNames, typeMappings};

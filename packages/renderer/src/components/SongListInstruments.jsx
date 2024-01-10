@@ -4,6 +4,7 @@ import InfoIcon from '@mui/icons-material/Info';
 import FiberNewIcon from '@mui/icons-material/FiberNew';
 import PianoIcon from '@mui/icons-material/Piano';
 import AppsIcon from '@mui/icons-material/Apps';
+import {FORMATS} from '../../../main/src/delugefs/definitions';
 
 export const InstrumentListSongList = ({instrument, index}) => {
   const [desc, ...types] = showType(instrument);
@@ -90,36 +91,36 @@ export const InstrumentListSongList = ({instrument, index}) => {
 
 const showType = instrument => {
   switch (instrument.formatType) {
-    case 'old':
+    case FORMATS.OLD:
       return [
         'Old ( < v4 ) style preset slot and subslot. Needs to be updated for v4+',
         {name: 'Preset Slot', val: instrument.presetSlot},
         {name: 'Preset Sub Slot', val: instrument.presetSubSlot},
       ];
-    case 'numsonly':
+    case FORMATS.NUMBERS_ONLY:
       return [
         'Numbers only display from v4 onwards. Will be updated to look a bit nicer.',
         {name: 'Preset Name', val: instrument.presetName},
         {name: 'Preset Folder', val: instrument.presetFolder},
       ];
-    case 'new':
+    case FORMATS.NEW:
       return [
         'The good stuff. All set for v4+',
         {name: 'Preset Name', val: instrument.presetName},
         {name: 'Preset Folder', val: instrument.presetFolder},
       ];
-    case 'newsuffix':
+    case FORMATS.NEW_SUFFIX:
       return [
         'This one has a suffix added. Still all set for v4+',
         {name: 'Preset Name', val: instrument.presetName},
         {name: 'Preset Folder', val: instrument.presetFolder},
       ];
-    case 'nameonly':
+    case FORMATS.JUST_NAME:
       return [
         'Needs to have a folder added to it for this to be v4+',
         {name: 'Preset Name', val: instrument.presetName},
       ];
-    case 'unknown':
+    case FORMATS.UNKNOWN:
       return [
         <Typography
           key={0}
