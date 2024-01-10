@@ -1,5 +1,5 @@
 import {FORMATS} from './definitions';
-import {getTypeMapping, getOldNameFromSlot, getNameRegex, getNameAndSuffix} from './utils';
+import {getTypeMapping, getOldNameFromSlot, getNameRegex, getNameComponents} from './utils';
 
 /** @typedef {import('cheerio').CheerioAPI} CheerioAPI */
 /** @enum {("old" | "numsonly" | "newsuffix" | "new" | "nameonly" | "unknown")} FormatType */
@@ -128,12 +128,7 @@ class Instrument extends Node {
    * fetch the intended patch name and suffix from the XML preset data
    */
   patchNameAndSuffix() {
-    const [name, suffix, suffixV4] = getNameAndSuffix(this.getSoundNameFromXML());
-    this.sound = {
-      name,
-      suffix,
-      suffixV4,
-    };
+    this.sound = getNameComponents(this.getSoundNameFromXML());
   }
 
   getSoundNameFromXML() {

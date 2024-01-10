@@ -1,14 +1,7 @@
 import {load} from 'cheerio';
 import fs from 'fs/promises';
 import path from 'path';
-import {
-  getOldTypeAndNumber,
-  getFolderFromFileType,
-  getNameAndSuffix,
-  getPath,
-  // getNameComponents,
-  // newlineXMLAttrs,
-} from './utils';
+import {getFolderFromFileType, getPath, getNameComponents} from './utils';
 
 import {Instrument, Clip} from './nodesClass';
 import {newNames} from './definitions';
@@ -198,13 +191,13 @@ class Sound extends File {
   }
 
   getNewName() {
-    const [name, , suffix] = getNameAndSuffix(this.fileName);
-    if (name) {
-      let newName = name;
-      const fileData = getOldTypeAndNumber(name);
-      if (fileData)
-        newName = newNames[getFolderFromFileType(fileData.presetType)][fileData.presetSlot] || name;
-      return newName + suffix;
+    const {name, suffixV4, soundType, soundNumber} = getNameComponents(this.fileName);
+    if (soundType && soundNumber) {
+      const getName = newNames[getFolderFromFileType(soundType)][parseInt(soundNumber)];
+      if (getName) {
+        return getName + suffixV4;
+      }
+      return name + suffixV4;
     }
     return '';
   }
