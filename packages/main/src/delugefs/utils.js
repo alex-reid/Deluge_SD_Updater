@@ -1,4 +1,4 @@
-import {letterToIndexMap, indexToLetterMap, typeMappings} from './definitions';
+import {letterToIndexMap, indexToLetterMap, typeMappings, SUFFIX} from './definitions';
 import path from 'path';
 
 const matchOldNameStrict = /^(SYNT|SONG|KIT|SAMP)(\d*)([a-zA-Z]?)( \d+)?$/i;
@@ -25,12 +25,49 @@ function getOldTypeAndNumber(fileName) {
 
 /**
  * Gets the raw regex components of a file name
+ *
+ * [1]:type,[2]:digits,[3]:slot letter,[4]:slot number,[5]:any additional data
+ *
  * @param {string} fileName
- * @returns {string[]|null}
+ * @returns {['input','type','digits','letter','number','additional data']|null}
  */
 function getNameRegex(fileName) {
   if (typeof fileName == 'string') return fileName.match(matchOldName);
   return false;
+}
+
+function getNameComponents(fileName) {
+  const regex = getNameRegex(fileName);
+  let suffixType = SUFFIX.NONE;
+  if (regex) {
+    const [, soundType, soundNumber, suffixLetter, suffixNumber, suffixWord] = regex;
+    if (suffixLetter) suffixType = SUFFIX.LETTER;
+    if (suffixNumber) suffixType = SUFFIX.NUMBER;
+    if (suffixWord) suffixType = SUFFIX.WORD;
+    return {
+      fileName,
+      baseName: soundType + soundNumber,
+      soundType,
+      soundNumber,
+      suffixLetter,
+      suffixNumber,
+      suffixWord,
+      suffixType,
+    };
+  }
+  const numberRegex = fileName.match(/^(.+)(\s\d+)$/);
+  if (numberRegex) {
+    return {
+      fileName,
+      baseName: numberRegex[1],
+      suffixNumber: numberRegex[2],
+      suffixType: SUFFIX.NUMBER,
+    };
+  }
+  return {
+    fileName,
+    suffixType,
+  };
 }
 
 /**
@@ -62,34 +99,24 @@ function prettyName(oldName) {
 /**
  * Returns a name and suffix for old style names
  * @param {string} oldName
- * @returns {[patchName:string, patchSuffix:string, patchSuffixClean:string]}
+ * @returns {[name:string, suffix:string, V4Suffix:string]}
  */
 function getNameAndSuffix(oldName) {
-  // console.log(oldName);
-  let patchName = oldName;
-  let patchSuffixClean = '';
-  let patchSuffix = '';
-  const name = getNameRegex(oldName);
-  const v4suffix = oldName.match(/(.+)(\s\d+)$/);
-  // console.log(v4suffix, name);
-  if (name) {
-    patchName = name[1] + name[2];
-    if (name[5]) {
-      patchSuffixClean = name[5];
-      patchSuffix = name[5];
-    }
-    if (name[3] || name[4]) {
-      const num = getNumberFromAlpha(name[3]);
-      patchSuffixClean = `${Number.isInteger(num) ? ' ' + (num + 2) : ''}${name[4] ? name[4] : ''}`;
-      patchSuffix = `${name[3] ? name[3] : ''}${name[4] ? name[4] : ''}`;
-    }
-  } else if (v4suffix) {
-    patchName = v4suffix[1];
-    patchSuffix = v4suffix[2];
-    patchSuffixClean = v4suffix[2];
+  const {fileName, baseName, suffixLetter, suffixNumber, suffixWord, suffixType} =
+    getNameComponents(oldName);
+
+  let suffixV4;
+  switch (suffixType) {
+    case SUFFIX.LETTER:
+      suffixV4 = ' ' + (getNumberFromAlpha(suffixLetter) + 2);
+      return [baseName, suffixLetter, suffixV4];
+    case SUFFIX.NUMBER:
+      return [baseName, suffixNumber, suffixNumber];
+    case SUFFIX.WORD:
+      return [baseName, suffixWord, suffixWord];
+    default:
+      return [fileName, '', ''];
   }
-  // console.log({patchName, patchSuffix, patchSuffixClean});
-  return [patchName, patchSuffix, patchSuffixClean];
 }
 
 /**
@@ -232,6 +259,7 @@ export {
   getOldNameFromSlot,
   getNameRegex,
   getNameAndSuffix,
+  getNameComponents,
   getPath,
   newlineXMLAttrs,
 };

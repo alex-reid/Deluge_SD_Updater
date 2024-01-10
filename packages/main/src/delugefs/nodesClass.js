@@ -68,9 +68,11 @@ class Instrument extends Node {
     this.types = null;
     this.renamed = false;
     this.formatType = null;
-    this.patchName = '';
-    this.patchSuffix = '';
-    this.patchSuffixClean = '';
+    this.sound = {
+      name: null,
+      suffix: null,
+      suffixV4: null,
+    };
     this.clips = null;
     this.soundID = null;
     this.rewriteName = '';
@@ -111,7 +113,7 @@ class Instrument extends Node {
       if (this.presetName.match(/^\d{3}([a-z])?( \d)?$/i)) {
         return FORMATS.NUMBERS_ONLY;
       }
-      if (parts && (parts[3] || parts[4])) {
+      if (parts && (parts[3] || parts[4] || parts[5])) {
         return FORMATS.NEW_SUFFIX;
       }
       return FORMATS.NEW;
@@ -122,18 +124,26 @@ class Instrument extends Node {
     return FORMATS.UNKNOWN;
   }
 
+  /**
+   * fetch the intended patch name and suffix from the XML preset data
+   */
   patchNameAndSuffix() {
-    let rename = this.presetName;
-    if (this.formatType == FORMATS.OLD) {
-      rename = getOldNameFromSlot(this.presetType, this.presetSlot, this.presetSubSlot);
-    } else if (this.formatType == FORMATS.NUMBERS_ONLY) {
-      rename = this.types.file + this.presetName;
-    }
-    if (rename) {
-      const [name, suffix, suffixClean] = getNameAndSuffix(rename);
-      this.patchName = name;
-      this.patchSuffix = suffix;
-      this.patchSuffixClean = suffixClean;
+    const [name, suffix, suffixV4] = getNameAndSuffix(this.getSoundNameFromXML());
+    this.sound = {
+      name,
+      suffix,
+      suffixV4,
+    };
+  }
+
+  getSoundNameFromXML() {
+    switch (this.formatType) {
+      case FORMATS.OLD:
+        return getOldNameFromSlot(this.presetType, this.presetSlot, this.presetSubSlot);
+      case FORMATS.NUMBERS_ONLY:
+        return this.types.file + this.presetName;
+      default:
+        return this.presetName;
     }
   }
 
@@ -150,22 +160,23 @@ class Instrument extends Node {
   }
 
   getSoundIndex(mappings, debug) {
-    const name = this.patchName;
-    const suffix = this.patchSuffix;
+    const name = this.sound.name;
+    const suffix = this.sound.suffix;
     const folder = this.presetFolder || this.types.folder;
     let hasSuffixFile = false;
     let id = 'new';
+
     const idOnPresetName = mappings.byName[this.types.type][this.presetName]?.[folder];
-    const idOnSuffix = mappings.byName[this.types.type][name + suffix]?.[folder];
-    const idOnPatchname = mappings.byName[this.types.type][name]?.[folder];
-    if (debug) console.log({idOnPresetName, idOnSuffix, idOnPatchname});
+    const idOnSoundSuffix = mappings.byName[this.types.type][name + suffix]?.[folder];
+    const idOnSoundName = mappings.byName[this.types.type][name]?.[folder];
+    if (debug) console.log({idOnPresetName, idOnSoundSuffix, idOnSoundName});
     if (Number.isInteger(idOnPresetName)) {
       id = idOnPresetName;
-    } else if (Number.isInteger(idOnSuffix)) {
-      id = idOnSuffix;
+    } else if (Number.isInteger(idOnSoundSuffix)) {
+      id = idOnSoundSuffix;
       hasSuffixFile = true;
-    } else if (Number.isInteger(idOnPatchname)) {
-      id = idOnPatchname;
+    } else if (Number.isInteger(idOnSoundName)) {
+      id = idOnSoundName;
     }
     this.soundID = id;
     if (debug)
@@ -178,7 +189,7 @@ class Instrument extends Node {
         id,
         map: mappings.byName,
         type: this.presetType,
-        clean: this.patchSuffixClean,
+        clean: this.sound.suffixV4,
         teston: mappings.byName[this.types.type][this.presetName]?.[folder],
       });
     return {id: this.soundID, type: this.types.type, hasSuffix: hasSuffixFile};

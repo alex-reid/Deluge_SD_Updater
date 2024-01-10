@@ -304,4 +304,11 @@ export const FORMATS = {
   UNKNOWN: 'unknown type',
 };
 
+export const SUFFIX = {
+  NONE: 'no_suffix',
+  LETTER: 'letter_suffix',
+  NUMBER: 'number_suffix',
+  WORD: 'word_suffix',
+};
+
 export {letterToIndexMap, indexToLetterMap, newNames, typeMappings};

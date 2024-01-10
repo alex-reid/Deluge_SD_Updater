@@ -296,15 +296,28 @@ class fileSystem {
     for (const [songIndex, song] of this.files.songs.entries()) {
       for (const instrument of song.instruments) {
         //instrument.getSoundIndex(this.mappings);
-        const {id, type} = instrument.getSoundIndex(this.mappings, this.debug);
-        if (id != 'new') {
+        const {id, type, hasSuffixFile} = instrument.getSoundIndex(this.mappings, this.debug);
+        const {formatType} = instrument;
+        if (id == 'new') {
+          instrument.rewriteName = instrument.sound.name + instrument.sound.suffix;
+          instrument.rewriteFolder = instrument.presetFolder || instrument.types.folder;
+        } else {
+          if (this.debug)
+            console.log({
+              id,
+              type,
+              formatType,
+              soundName: instrument.sound.name,
+              soundSuffix: instrument.sound.suffix,
+              newSound: this.files[type][id],
+              hasSuffixFile,
+            });
+          // instrument.rewritNname = this.files[type][id].fileName + instrument.sound.suffix;
+          // if (hasSuffixFile)
           instrument.rewriteName = this.files[type][id].fileName;
           instrument.rewriteFolder = this.files[type][id].path;
           this.files[type][id].songIDs.add(songIndex);
           // console.log(this.files[type][id].songIDs);
-        } else {
-          instrument.rewriteName = instrument.patchName + instrument.patchSuffix;
-          instrument.rewriteFolder = instrument.presetFolder || instrument.types.folder;
         }
       }
     }

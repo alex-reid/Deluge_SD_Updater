@@ -231,11 +231,8 @@ exports[`check song api mappings 1`] = `
       id: 0,
       instruments: [
         {
-          formatType: nameonly,
+          formatType: name only,
           isNewSound: false,
-          patchName: KIT008,
-          patchSuffix: ,
-          patchSuffixOld: ,
           presetFolder: null,
           presetName: KIT008,
           presetSlot: null,
@@ -243,6 +240,11 @@ exports[`check song api mappings 1`] = `
           prettyName: 008 Kit,
           rewriteFolder: KITS,
           rewriteName: KIT008,
+          sound: {
+            name: KIT008,
+            suffix: ,
+            suffixV4: ,
+          },
           soundID: 4,
           type: kit,
           usedInClips: [
@@ -251,11 +253,8 @@ exports[`check song api mappings 1`] = `
           ],
         },
         {
-          formatType: nameonly,
+          formatType: name only,
           isNewSound: false,
-          patchName: SYNT008,
-          patchSuffix: ,
-          patchSuffixOld: ,
           presetFolder: null,
           presetName: SYNT008,
           presetSlot: null,
@@ -263,6 +262,11 @@ exports[`check song api mappings 1`] = `
           prettyName: 008 Synth,
           rewriteFolder: SYNTHS,
           rewriteName: SYNT008,
+          sound: {
+            name: SYNT008,
+            suffix: ,
+            suffixV4: ,
+          },
           soundID: 6,
           type: sound,
           usedInClips: [
@@ -271,11 +275,8 @@ exports[`check song api mappings 1`] = `
           ],
         },
         {
-          formatType: nameonly,
+          formatType: name only,
           isNewSound: false,
-          patchName: KIT188,
-          patchSuffix:  3,
-          patchSuffixOld: B,
           presetFolder: null,
           presetName: KIT188B,
           presetSlot: null,
@@ -283,6 +284,11 @@ exports[`check song api mappings 1`] = `
           prettyName: 188 Kit 3,
           rewriteFolder: KITS,
           rewriteName: KIT188B,
+          sound: {
+            name: KIT188,
+            suffix: B,
+            suffixV4:  3,
+          },
           soundID: 8,
           type: kit,
           usedInClips: [
@@ -291,11 +297,8 @@ exports[`check song api mappings 1`] = `
           ],
         },
         {
-          formatType: nameonly,
+          formatType: name only,
           isNewSound: false,
-          patchName: SYNT188,
-          patchSuffix:  3,
-          patchSuffixOld: B,
           presetFolder: null,
           presetName: SYNT188B,
           presetSlot: null,
@@ -303,6 +306,11 @@ exports[`check song api mappings 1`] = `
           prettyName: 188 Synth 3,
           rewriteFolder: SYNTHS,
           rewriteName: SYNT188B,
+          sound: {
+            name: SYNT188,
+            suffix: B,
+            suffixV4:  3,
+          },
           soundID: 10,
           type: sound,
           usedInClips: [
@@ -311,11 +319,8 @@ exports[`check song api mappings 1`] = `
           ],
         },
         {
-          formatType: nameonly,
+          formatType: name only,
           isNewSound: false,
-          patchName: KIT000,
-          patchSuffix:  'copy',
-          patchSuffixOld:  'copy',
           presetFolder: null,
           presetName: KIT000 'copy',
           presetSlot: null,
@@ -323,6 +328,11 @@ exports[`check song api mappings 1`] = `
           prettyName: 000 Kit 'copy',
           rewriteFolder: KITS,
           rewriteName: KIT000 'copy',
+          sound: {
+            name: KIT000,
+            suffix:  'copy',
+            suffixV4:  'copy',
+          },
           soundID: 1,
           type: kit,
           usedInClips: [
@@ -331,11 +341,8 @@ exports[`check song api mappings 1`] = `
           ],
         },
         {
-          formatType: nameonly,
+          formatType: name only,
           isNewSound: false,
-          patchName: SYNT000,
-          patchSuffix:  'copy',
-          patchSuffixOld:  'copy',
           presetFolder: null,
           presetName: SYNT000 'copy',
           presetSlot: null,
@@ -343,6 +350,11 @@ exports[`check song api mappings 1`] = `
           prettyName: 000 Synth 'copy',
           rewriteFolder: SYNTHS,
           rewriteName: SYNT000 'copy',
+          sound: {
+            name: SYNT000,
+            suffix:  'copy',
+            suffixV4:  'copy',
+          },
           soundID: 3,
           type: sound,
           usedInClips: [
@@ -365,11 +377,8 @@ exports[`check song api mappings 1`] = `
       id: 1,
       instruments: [
         {
-          formatType: nameonly,
+          formatType: name only,
           isNewSound: false,
-          patchName: new kit,
-          patchSuffix: ,
-          patchSuffixOld: ,
           presetFolder: null,
           presetName: new kit,
           presetSlot: null,
@@ -377,6 +386,11 @@ exports[`check song api mappings 1`] = `
           prettyName: false,
           rewriteFolder: KITS,
           rewriteName: new kit,
+          sound: {
+            name: new kit,
+            suffix: ,
+            suffixV4: ,
+          },
           soundID: 10,
           type: kit,
           usedInClips: [
@@ -385,11 +399,8 @@ exports[`check song api mappings 1`] = `
           ],
         },
         {
-          formatType: nameonly,
+          formatType: name only,
           isNewSound: false,
-          patchName: new synth,
-          patchSuffix: ,
-          patchSuffixOld: ,
           presetFolder: null,
           presetName: new synth,
           presetSlot: null,
@@ -397,6 +408,11 @@ exports[`check song api mappings 1`] = `
           prettyName: false,
           rewriteFolder: SYNTHS,
           rewriteName: new synth,
+          sound: {
+            name: new synth,
+            suffix: ,
+            suffixV4: ,
+          },
           soundID: 0,
           type: sound,
           usedInClips: [
@@ -405,11 +421,8 @@ exports[`check song api mappings 1`] = `
           ],
         },
         {
-          formatType: nameonly,
+          formatType: name only,
           isNewSound: false,
-          patchName: new kit,
-          patchSuffix:  2,
-          patchSuffixOld:  2,
           presetFolder: null,
           presetName: new kit 2,
           presetSlot: null,
@@ -417,6 +430,11 @@ exports[`check song api mappings 1`] = `
           prettyName: false 2,
           rewriteFolder: KITS,
           rewriteName: new kit 2,
+          sound: {
+            name: new kit,
+            suffix:  2,
+            suffixV4:  2,
+          },
           soundID: 11,
           type: kit,
           usedInClips: [
@@ -425,11 +443,8 @@ exports[`check song api mappings 1`] = `
           ],
         },
         {
-          formatType: nameonly,
+          formatType: name only,
           isNewSound: false,
-          patchName: new synth,
-          patchSuffix:  2,
-          patchSuffixOld:  2,
           presetFolder: null,
           presetName: new synth 2,
           presetSlot: null,
@@ -437,6 +452,11 @@ exports[`check song api mappings 1`] = `
           prettyName: false 2,
           rewriteFolder: SYNTHS,
           rewriteName: new synth 2,
+          sound: {
+            name: new synth,
+            suffix:  2,
+            suffixV4:  2,
+          },
           soundID: 1,
           type: sound,
           usedInClips: [
@@ -459,11 +479,8 @@ exports[`check song api mappings 1`] = `
       id: 2,
       instruments: [
         {
-          formatType: new,
+          formatType: new v4,
           isNewSound: false,
-          patchName: KIT001,
-          patchSuffix: ,
-          patchSuffixOld: ,
           presetFolder: KITS,
           presetName: KIT001,
           presetSlot: null,
@@ -471,6 +488,11 @@ exports[`check song api mappings 1`] = `
           prettyName: 001 Kit,
           rewriteFolder: KITS,
           rewriteName: KIT001,
+          sound: {
+            name: KIT001,
+            suffix: ,
+            suffixV4: ,
+          },
           soundID: 2,
           type: kit,
           usedInClips: [
@@ -479,11 +501,8 @@ exports[`check song api mappings 1`] = `
           ],
         },
         {
-          formatType: new,
+          formatType: new v4,
           isNewSound: false,
-          patchName: SYNT001,
-          patchSuffix: ,
-          patchSuffixOld: ,
           presetFolder: SYNTHS,
           presetName: SYNT001,
           presetSlot: null,
@@ -491,6 +510,11 @@ exports[`check song api mappings 1`] = `
           prettyName: 001 Synth,
           rewriteFolder: SYNTHS,
           rewriteName: SYNT001,
+          sound: {
+            name: SYNT001,
+            suffix: ,
+            suffixV4: ,
+          },
           soundID: 4,
           type: sound,
           usedInClips: [
@@ -499,11 +523,8 @@ exports[`check song api mappings 1`] = `
           ],
         },
         {
-          formatType: newsuffix,
+          formatType: new style with suffix,
           isNewSound: false,
-          patchName: KIT000,
-          patchSuffix:  2,
-          patchSuffixOld:  2,
           presetFolder: KITS,
           presetName: KIT000 2,
           presetSlot: null,
@@ -511,6 +532,11 @@ exports[`check song api mappings 1`] = `
           prettyName: 000 Kit 2,
           rewriteFolder: KITS,
           rewriteName: KIT000,
+          sound: {
+            name: KIT000,
+            suffix:  2,
+            suffixV4:  2,
+          },
           soundID: 0,
           type: kit,
           usedInClips: [
@@ -519,11 +545,8 @@ exports[`check song api mappings 1`] = `
           ],
         },
         {
-          formatType: newsuffix,
+          formatType: new style with suffix,
           isNewSound: false,
-          patchName: SYNT000,
-          patchSuffix:  2,
-          patchSuffixOld:  2,
           presetFolder: SYNTHS,
           presetName: SYNT000 2,
           presetSlot: null,
@@ -531,6 +554,11 @@ exports[`check song api mappings 1`] = `
           prettyName: 000 Synth 2,
           rewriteFolder: SYNTHS,
           rewriteName: SYNT000,
+          sound: {
+            name: SYNT000,
+            suffix:  2,
+            suffixV4:  2,
+          },
           soundID: 2,
           type: sound,
           usedInClips: [
@@ -539,11 +567,8 @@ exports[`check song api mappings 1`] = `
           ],
         },
         {
-          formatType: new,
+          formatType: new v4,
           isNewSound: false,
-          patchName: KIT172,
-          patchSuffix: ,
-          patchSuffixOld: ,
           presetFolder: KITS,
           presetName: KIT172,
           presetSlot: null,
@@ -551,6 +576,11 @@ exports[`check song api mappings 1`] = `
           prettyName: 172 Kit,
           rewriteFolder: KITS,
           rewriteName: KIT172,
+          sound: {
+            name: KIT172,
+            suffix: ,
+            suffixV4: ,
+          },
           soundID: 6,
           type: kit,
           usedInClips: [
@@ -559,11 +589,8 @@ exports[`check song api mappings 1`] = `
           ],
         },
         {
-          formatType: new,
+          formatType: new v4,
           isNewSound: false,
-          patchName: SYNT172,
-          patchSuffix: ,
-          patchSuffixOld: ,
           presetFolder: SYNTHS,
           presetName: SYNT172,
           presetSlot: null,
@@ -571,6 +598,11 @@ exports[`check song api mappings 1`] = `
           prettyName: 172 Synth,
           rewriteFolder: SYNTHS,
           rewriteName: SYNT172,
+          sound: {
+            name: SYNT172,
+            suffix: ,
+            suffixV4: ,
+          },
           soundID: 8,
           type: sound,
           usedInClips: [
@@ -579,11 +611,8 @@ exports[`check song api mappings 1`] = `
           ],
         },
         {
-          formatType: new,
+          formatType: new v4,
           isNewSound: true,
-          patchName: KIT173,
-          patchSuffix: ,
-          patchSuffixOld: ,
           presetFolder: KITS,
           presetName: KIT173,
           presetSlot: null,
@@ -591,6 +620,11 @@ exports[`check song api mappings 1`] = `
           prettyName: 173 Kit,
           rewriteFolder: KITS,
           rewriteName: KIT173,
+          sound: {
+            name: KIT173,
+            suffix: ,
+            suffixV4: ,
+          },
           soundID: new,
           type: kit,
           usedInClips: [
@@ -599,11 +633,8 @@ exports[`check song api mappings 1`] = `
           ],
         },
         {
-          formatType: new,
+          formatType: new v4,
           isNewSound: true,
-          patchName: SYNT173,
-          patchSuffix: ,
-          patchSuffixOld: ,
           presetFolder: SYNTHS,
           presetName: SYNT173,
           presetSlot: null,
@@ -611,6 +642,11 @@ exports[`check song api mappings 1`] = `
           prettyName: 173 Synth,
           rewriteFolder: SYNTHS,
           rewriteName: SYNT173,
+          sound: {
+            name: SYNT173,
+            suffix: ,
+            suffixV4: ,
+          },
           soundID: new,
           type: sound,
           usedInClips: [
@@ -619,11 +655,8 @@ exports[`check song api mappings 1`] = `
           ],
         },
         {
-          formatType: newsuffix,
+          formatType: new style with suffix,
           isNewSound: false,
-          patchName: KIT272,
-          patchSuffix:  3,
-          patchSuffixOld: B,
           presetFolder: KITS,
           presetName: KIT272B,
           presetSlot: null,
@@ -631,6 +664,11 @@ exports[`check song api mappings 1`] = `
           prettyName: 272 Kit 3,
           rewriteFolder: KITS,
           rewriteName: KIT272B,
+          sound: {
+            name: KIT272,
+            suffix: B,
+            suffixV4:  3,
+          },
           soundID: 9,
           type: kit,
           usedInClips: [
@@ -639,11 +677,8 @@ exports[`check song api mappings 1`] = `
           ],
         },
         {
-          formatType: newsuffix,
+          formatType: new style with suffix,
           isNewSound: false,
-          patchName: SYNT272,
-          patchSuffix:  3,
-          patchSuffixOld: B,
           presetFolder: SYNTHS,
           presetName: SYNT272B,
           presetSlot: null,
@@ -651,6 +686,11 @@ exports[`check song api mappings 1`] = `
           prettyName: 272 Synth 3,
           rewriteFolder: SYNTHS,
           rewriteName: SYNT272B,
+          sound: {
+            name: SYNT272,
+            suffix: B,
+            suffixV4:  3,
+          },
           soundID: 11,
           type: sound,
           usedInClips: [
@@ -673,11 +713,8 @@ exports[`check song api mappings 1`] = `
       id: 3,
       instruments: [
         {
-          formatType: new,
+          formatType: new v4,
           isNewSound: false,
-          patchName: KIT000,
-          patchSuffix: ,
-          patchSuffixOld: ,
           presetFolder: KITS/sub folder,
           presetName: KIT000,
           presetSlot: null,
@@ -685,6 +722,11 @@ exports[`check song api mappings 1`] = `
           prettyName: 000 Kit,
           rewriteFolder: KITS/sub folder,
           rewriteName: KIT000,
+          sound: {
+            name: KIT000,
+            suffix: ,
+            suffixV4: ,
+          },
           soundID: 12,
           type: kit,
           usedInClips: [
@@ -693,11 +735,8 @@ exports[`check song api mappings 1`] = `
           ],
         },
         {
-          formatType: new,
+          formatType: new v4,
           isNewSound: false,
-          patchName: SYNT000,
-          patchSuffix: ,
-          patchSuffixOld: ,
           presetFolder: SYNTHS/sub folder,
           presetName: SYNT000,
           presetSlot: null,
@@ -705,6 +744,11 @@ exports[`check song api mappings 1`] = `
           prettyName: 000 Synth,
           rewriteFolder: SYNTHS/sub folder,
           rewriteName: SYNT000,
+          sound: {
+            name: SYNT000,
+            suffix: ,
+            suffixV4: ,
+          },
           soundID: 12,
           type: sound,
           usedInClips: [
@@ -713,11 +757,8 @@ exports[`check song api mappings 1`] = `
           ],
         },
         {
-          formatType: new,
+          formatType: new v4,
           isNewSound: false,
-          patchName: KIT182,
-          patchSuffix: ,
-          patchSuffixOld: ,
           presetFolder: KITS/sub folder,
           presetName: KIT182,
           presetSlot: null,
@@ -725,6 +766,11 @@ exports[`check song api mappings 1`] = `
           prettyName: 182 Kit,
           rewriteFolder: KITS/sub folder,
           rewriteName: KIT182,
+          sound: {
+            name: KIT182,
+            suffix: ,
+            suffixV4: ,
+          },
           soundID: 13,
           type: kit,
           usedInClips: [
@@ -733,11 +779,8 @@ exports[`check song api mappings 1`] = `
           ],
         },
         {
-          formatType: new,
+          formatType: new v4,
           isNewSound: false,
-          patchName: SYNT182,
-          patchSuffix: ,
-          patchSuffixOld: ,
           presetFolder: SYNTHS/sub folder,
           presetName: SYNT182,
           presetSlot: null,
@@ -745,6 +788,11 @@ exports[`check song api mappings 1`] = `
           prettyName: 182 Synth,
           rewriteFolder: SYNTHS/sub folder,
           rewriteName: SYNT182,
+          sound: {
+            name: SYNT182,
+            suffix: ,
+            suffixV4: ,
+          },
           soundID: 13,
           type: sound,
           usedInClips: [
@@ -753,11 +801,8 @@ exports[`check song api mappings 1`] = `
           ],
         },
         {
-          formatType: new,
+          formatType: new v4,
           isNewSound: true,
-          patchName: KIT183,
-          patchSuffix: ,
-          patchSuffixOld: ,
           presetFolder: KITS/sub folder,
           presetName: KIT183,
           presetSlot: null,
@@ -765,6 +810,11 @@ exports[`check song api mappings 1`] = `
           prettyName: 183 Kit,
           rewriteFolder: KITS/sub folder,
           rewriteName: KIT183,
+          sound: {
+            name: KIT183,
+            suffix: ,
+            suffixV4: ,
+          },
           soundID: new,
           type: kit,
           usedInClips: [
@@ -773,11 +823,8 @@ exports[`check song api mappings 1`] = `
           ],
         },
         {
-          formatType: new,
+          formatType: new v4,
           isNewSound: true,
-          patchName: SYNT183,
-          patchSuffix: ,
-          patchSuffixOld: ,
           presetFolder: SYNTHS/sub folder,
           presetName: SYNT183,
           presetSlot: null,
@@ -785,6 +832,11 @@ exports[`check song api mappings 1`] = `
           prettyName: 183 Synth,
           rewriteFolder: SYNTHS/sub folder,
           rewriteName: SYNT183,
+          sound: {
+            name: SYNT183,
+            suffix: ,
+            suffixV4: ,
+          },
           soundID: new,
           type: sound,
           usedInClips: [
@@ -793,11 +845,8 @@ exports[`check song api mappings 1`] = `
           ],
         },
         {
-          formatType: newsuffix,
+          formatType: new style with suffix,
           isNewSound: false,
-          patchName: KIT282,
-          patchSuffix:  3,
-          patchSuffixOld: B,
           presetFolder: KITS/sub folder,
           presetName: KIT282B,
           presetSlot: null,
@@ -805,6 +854,11 @@ exports[`check song api mappings 1`] = `
           prettyName: 282 Kit 3,
           rewriteFolder: KITS/sub folder,
           rewriteName: KIT282B,
+          sound: {
+            name: KIT282,
+            suffix: B,
+            suffixV4:  3,
+          },
           soundID: 14,
           type: kit,
           usedInClips: [
@@ -813,11 +867,8 @@ exports[`check song api mappings 1`] = `
           ],
         },
         {
-          formatType: newsuffix,
+          formatType: new style with suffix,
           isNewSound: false,
-          patchName: SYNT282,
-          patchSuffix:  3,
-          patchSuffixOld: B,
           presetFolder: SYNTHS/sub folder,
           presetName: SYNT282B,
           presetSlot: null,
@@ -825,6 +876,11 @@ exports[`check song api mappings 1`] = `
           prettyName: 282 Synth 3,
           rewriteFolder: SYNTHS/sub folder,
           rewriteName: SYNT282B,
+          sound: {
+            name: SYNT282,
+            suffix: B,
+            suffixV4:  3,
+          },
           soundID: 14,
           type: sound,
           usedInClips: [
@@ -847,11 +903,8 @@ exports[`check song api mappings 1`] = `
       id: 4,
       instruments: [
         {
-          formatType: newsuffix,
+          formatType: new style with suffix,
           isNewSound: false,
-          patchName: KIT001,
-          patchSuffix:  2,
-          patchSuffixOld:  2,
           presetFolder: KITS,
           presetName: KIT001 2,
           presetSlot: null,
@@ -859,6 +912,11 @@ exports[`check song api mappings 1`] = `
           prettyName: 001 Kit 2,
           rewriteFolder: KITS,
           rewriteName: KIT001 2,
+          sound: {
+            name: KIT001,
+            suffix:  2,
+            suffixV4:  2,
+          },
           soundID: 3,
           type: kit,
           usedInClips: [
@@ -867,11 +925,8 @@ exports[`check song api mappings 1`] = `
           ],
         },
         {
-          formatType: newsuffix,
+          formatType: new style with suffix,
           isNewSound: false,
-          patchName: SYNT001,
-          patchSuffix:  2,
-          patchSuffixOld:  2,
           presetFolder: SYNTHS,
           presetName: SYNT001 2,
           presetSlot: null,
@@ -879,6 +934,11 @@ exports[`check song api mappings 1`] = `
           prettyName: 001 Synth 2,
           rewriteFolder: SYNTHS,
           rewriteName: SYNT001 2,
+          sound: {
+            name: SYNT001,
+            suffix:  2,
+            suffixV4:  2,
+          },
           soundID: 5,
           type: sound,
           usedInClips: [
@@ -887,11 +947,8 @@ exports[`check song api mappings 1`] = `
           ],
         },
         {
-          formatType: newsuffix,
+          formatType: new style with suffix,
           isNewSound: true,
-          patchName: KIT181,
-          patchSuffix:  10,
-          patchSuffixOld:  10,
           presetFolder: KITS,
           presetName: KIT181 10,
           presetSlot: null,
@@ -899,6 +956,11 @@ exports[`check song api mappings 1`] = `
           prettyName: 181 Kit 10,
           rewriteFolder: KITS,
           rewriteName: KIT181 10,
+          sound: {
+            name: KIT181,
+            suffix:  10,
+            suffixV4:  10,
+          },
           soundID: new,
           type: kit,
           usedInClips: [
@@ -907,11 +969,8 @@ exports[`check song api mappings 1`] = `
           ],
         },
         {
-          formatType: newsuffix,
+          formatType: new style with suffix,
           isNewSound: true,
-          patchName: SYNT181,
-          patchSuffix:  10,
-          patchSuffixOld:  10,
           presetFolder: SYNTHS,
           presetName: SYNT181 10,
           presetSlot: null,
@@ -919,6 +978,11 @@ exports[`check song api mappings 1`] = `
           prettyName: 181 Synth 10,
           rewriteFolder: SYNTHS,
           rewriteName: SYNT181 10,
+          sound: {
+            name: SYNT181,
+            suffix:  10,
+            suffixV4:  10,
+          },
           soundID: new,
           type: sound,
           usedInClips: [
@@ -927,11 +991,8 @@ exports[`check song api mappings 1`] = `
           ],
         },
         {
-          formatType: newsuffix,
+          formatType: new style with suffix,
           isNewSound: false,
-          patchName: KIT187,
-          patchSuffix:  2,
-          patchSuffixOld: A,
           presetFolder: KITS,
           presetName: KIT187A,
           presetSlot: null,
@@ -939,6 +1000,11 @@ exports[`check song api mappings 1`] = `
           prettyName: 187 Kit 2,
           rewriteFolder: KITS,
           rewriteName: KIT187A,
+          sound: {
+            name: KIT187,
+            suffix: A,
+            suffixV4:  2,
+          },
           soundID: 7,
           type: kit,
           usedInClips: [
@@ -947,11 +1013,8 @@ exports[`check song api mappings 1`] = `
           ],
         },
         {
-          formatType: newsuffix,
+          formatType: new style with suffix,
           isNewSound: false,
-          patchName: SYNT187,
-          patchSuffix:  2,
-          patchSuffixOld: A,
           presetFolder: SYNTHS,
           presetName: SYNT187A,
           presetSlot: null,
@@ -959,6 +1022,11 @@ exports[`check song api mappings 1`] = `
           prettyName: 187 Synth 2,
           rewriteFolder: SYNTHS,
           rewriteName: SYNT187A,
+          sound: {
+            name: SYNT187,
+            suffix: A,
+            suffixV4:  2,
+          },
           soundID: 9,
           type: sound,
           usedInClips: [
@@ -967,11 +1035,8 @@ exports[`check song api mappings 1`] = `
           ],
         },
         {
-          formatType: newsuffix,
+          formatType: new style with suffix,
           isNewSound: true,
-          patchName: KIT197,
-          patchSuffix:  3,
-          patchSuffixOld: B,
           presetFolder: KITS,
           presetName: KIT197B,
           presetSlot: null,
@@ -979,6 +1044,11 @@ exports[`check song api mappings 1`] = `
           prettyName: 197 Kit 3,
           rewriteFolder: KITS,
           rewriteName: KIT197B,
+          sound: {
+            name: KIT197,
+            suffix: B,
+            suffixV4:  3,
+          },
           soundID: new,
           type: kit,
           usedInClips: [
@@ -987,11 +1057,8 @@ exports[`check song api mappings 1`] = `
           ],
         },
         {
-          formatType: newsuffix,
+          formatType: new style with suffix,
           isNewSound: true,
-          patchName: SYNT197,
-          patchSuffix:  3,
-          patchSuffixOld: B,
           presetFolder: SYNTHS,
           presetName: SYNT197B,
           presetSlot: null,
@@ -999,6 +1066,11 @@ exports[`check song api mappings 1`] = `
           prettyName: 197 Synth 3,
           rewriteFolder: SYNTHS,
           rewriteName: SYNT197B,
+          sound: {
+            name: SYNT197,
+            suffix: B,
+            suffixV4:  3,
+          },
           soundID: new,
           type: sound,
           usedInClips: [
@@ -1007,11 +1079,8 @@ exports[`check song api mappings 1`] = `
           ],
         },
         {
-          formatType: new,
+          formatType: new style with suffix,
           isNewSound: false,
-          patchName: KIT000,
-          patchSuffix:  'copy',
-          patchSuffixOld:  'copy',
           presetFolder: KITS,
           presetName: KIT000 'copy',
           presetSlot: null,
@@ -1019,6 +1088,11 @@ exports[`check song api mappings 1`] = `
           prettyName: 000 Kit 'copy',
           rewriteFolder: KITS,
           rewriteName: KIT000 'copy',
+          sound: {
+            name: KIT000,
+            suffix:  'copy',
+            suffixV4:  'copy',
+          },
           soundID: 1,
           type: kit,
           usedInClips: [
@@ -1027,11 +1101,8 @@ exports[`check song api mappings 1`] = `
           ],
         },
         {
-          formatType: new,
+          formatType: new style with suffix,
           isNewSound: false,
-          patchName: SYNT000,
-          patchSuffix:  'copy',
-          patchSuffixOld:  'copy',
           presetFolder: SYNTHS,
           presetName: SYNT000 'copy',
           presetSlot: null,
@@ -1039,6 +1110,11 @@ exports[`check song api mappings 1`] = `
           prettyName: 000 Synth 'copy',
           rewriteFolder: SYNTHS,
           rewriteName: SYNT000 'copy',
+          sound: {
+            name: SYNT000,
+            suffix:  'copy',
+            suffixV4:  'copy',
+          },
           soundID: 3,
           type: sound,
           usedInClips: [
@@ -1061,11 +1137,8 @@ exports[`check song api mappings 1`] = `
       id: 5,
       instruments: [
         {
-          formatType: numsonly,
+          formatType: three numbers only,
           isNewSound: false,
-          patchName: KIT001,
-          patchSuffix: ,
-          patchSuffixOld: ,
           presetFolder: KITS,
           presetName: 001,
           presetSlot: null,
@@ -1073,6 +1146,11 @@ exports[`check song api mappings 1`] = `
           prettyName: 001 Kit,
           rewriteFolder: KITS,
           rewriteName: KIT001,
+          sound: {
+            name: KIT001,
+            suffix: ,
+            suffixV4: ,
+          },
           soundID: 2,
           type: kit,
           usedInClips: [
@@ -1081,11 +1159,8 @@ exports[`check song api mappings 1`] = `
           ],
         },
         {
-          formatType: numsonly,
+          formatType: three numbers only,
           isNewSound: false,
-          patchName: SYNT001,
-          patchSuffix: ,
-          patchSuffixOld: ,
           presetFolder: SYNTHS,
           presetName: 001,
           presetSlot: null,
@@ -1093,6 +1168,11 @@ exports[`check song api mappings 1`] = `
           prettyName: 001 Synth,
           rewriteFolder: SYNTHS,
           rewriteName: SYNT001,
+          sound: {
+            name: SYNT001,
+            suffix: ,
+            suffixV4: ,
+          },
           soundID: 4,
           type: sound,
           usedInClips: [
@@ -1101,11 +1181,8 @@ exports[`check song api mappings 1`] = `
           ],
         },
         {
-          formatType: numsonly,
+          formatType: three numbers only,
           isNewSound: false,
-          patchName: KIT172,
-          patchSuffix: ,
-          patchSuffixOld: ,
           presetFolder: KITS,
           presetName: 172,
           presetSlot: null,
@@ -1113,6 +1190,11 @@ exports[`check song api mappings 1`] = `
           prettyName: 172 Kit,
           rewriteFolder: KITS,
           rewriteName: KIT172,
+          sound: {
+            name: KIT172,
+            suffix: ,
+            suffixV4: ,
+          },
           soundID: 6,
           type: kit,
           usedInClips: [
@@ -1121,11 +1203,8 @@ exports[`check song api mappings 1`] = `
           ],
         },
         {
-          formatType: numsonly,
+          formatType: three numbers only,
           isNewSound: false,
-          patchName: SYNT172,
-          patchSuffix: ,
-          patchSuffixOld: ,
           presetFolder: SYNTHS,
           presetName: 172,
           presetSlot: null,
@@ -1133,6 +1212,11 @@ exports[`check song api mappings 1`] = `
           prettyName: 172 Synth,
           rewriteFolder: SYNTHS,
           rewriteName: SYNT172,
+          sound: {
+            name: SYNT172,
+            suffix: ,
+            suffixV4: ,
+          },
           soundID: 8,
           type: sound,
           usedInClips: [
@@ -1141,11 +1225,8 @@ exports[`check song api mappings 1`] = `
           ],
         },
         {
-          formatType: numsonly,
+          formatType: three numbers only,
           isNewSound: true,
-          patchName: KIT173,
-          patchSuffix: ,
-          patchSuffixOld: ,
           presetFolder: KITS,
           presetName: 173,
           presetSlot: null,
@@ -1153,6 +1234,11 @@ exports[`check song api mappings 1`] = `
           prettyName: 173 Kit,
           rewriteFolder: KITS,
           rewriteName: KIT173,
+          sound: {
+            name: KIT173,
+            suffix: ,
+            suffixV4: ,
+          },
           soundID: new,
           type: kit,
           usedInClips: [
@@ -1161,11 +1247,8 @@ exports[`check song api mappings 1`] = `
           ],
         },
         {
-          formatType: numsonly,
+          formatType: three numbers only,
           isNewSound: true,
-          patchName: SYNT173,
-          patchSuffix: ,
-          patchSuffixOld: ,
           presetFolder: SYNTHS,
           presetName: 173,
           presetSlot: null,
@@ -1173,6 +1256,11 @@ exports[`check song api mappings 1`] = `
           prettyName: 173 Synth,
           rewriteFolder: SYNTHS,
           rewriteName: SYNT173,
+          sound: {
+            name: SYNT173,
+            suffix: ,
+            suffixV4: ,
+          },
           soundID: new,
           type: sound,
           usedInClips: [
@@ -1181,11 +1269,8 @@ exports[`check song api mappings 1`] = `
           ],
         },
         {
-          formatType: numsonly,
+          formatType: three numbers only,
           isNewSound: false,
-          patchName: KIT272,
-          patchSuffix:  3,
-          patchSuffixOld: B,
           presetFolder: KITS,
           presetName: 272B,
           presetSlot: null,
@@ -1193,6 +1278,11 @@ exports[`check song api mappings 1`] = `
           prettyName: 272 Kit 3,
           rewriteFolder: KITS,
           rewriteName: KIT272B,
+          sound: {
+            name: KIT272,
+            suffix: B,
+            suffixV4:  3,
+          },
           soundID: 9,
           type: kit,
           usedInClips: [
@@ -1201,11 +1291,8 @@ exports[`check song api mappings 1`] = `
           ],
         },
         {
-          formatType: numsonly,
+          formatType: three numbers only,
           isNewSound: false,
-          patchName: SYNT272,
-          patchSuffix:  3,
-          patchSuffixOld: B,
           presetFolder: SYNTHS,
           presetName: 272B,
           presetSlot: null,
@@ -1213,6 +1300,11 @@ exports[`check song api mappings 1`] = `
           prettyName: 272 Synth 3,
           rewriteFolder: SYNTHS,
           rewriteName: SYNT272B,
+          sound: {
+            name: SYNT272,
+            suffix: B,
+            suffixV4:  3,
+          },
           soundID: 11,
           type: sound,
           usedInClips: [
@@ -1235,11 +1327,8 @@ exports[`check song api mappings 1`] = `
       id: 6,
       instruments: [
         {
-          formatType: old,
+          formatType: old style slot subslot,
           isNewSound: false,
-          patchName: KIT000,
-          patchSuffix: ,
-          patchSuffixOld: ,
           presetFolder: null,
           presetName: null,
           presetSlot: 0,
@@ -1247,6 +1336,11 @@ exports[`check song api mappings 1`] = `
           prettyName: 000 Kit,
           rewriteFolder: KITS,
           rewriteName: KIT000,
+          sound: {
+            name: KIT000,
+            suffix: ,
+            suffixV4: ,
+          },
           soundID: 0,
           type: kit,
           usedInClips: [
@@ -1255,11 +1349,8 @@ exports[`check song api mappings 1`] = `
           ],
         },
         {
-          formatType: old,
+          formatType: old style slot subslot,
           isNewSound: false,
-          patchName: SYNT000,
-          patchSuffix: ,
-          patchSuffixOld: ,
           presetFolder: null,
           presetName: null,
           presetSlot: 0,
@@ -1267,6 +1358,11 @@ exports[`check song api mappings 1`] = `
           prettyName: 000 Synth,
           rewriteFolder: SYNTHS,
           rewriteName: SYNT000,
+          sound: {
+            name: SYNT000,
+            suffix: ,
+            suffixV4: ,
+          },
           soundID: 2,
           type: sound,
           usedInClips: [
@@ -1275,11 +1371,8 @@ exports[`check song api mappings 1`] = `
           ],
         },
         {
-          formatType: old,
+          formatType: old style slot subslot,
           isNewSound: false,
-          patchName: KIT171,
-          patchSuffix:  3,
-          patchSuffixOld: B,
           presetFolder: null,
           presetName: null,
           presetSlot: 171,
@@ -1287,6 +1380,11 @@ exports[`check song api mappings 1`] = `
           prettyName: 171 Kit 3,
           rewriteFolder: KITS,
           rewriteName: KIT171B,
+          sound: {
+            name: KIT171,
+            suffix: B,
+            suffixV4:  3,
+          },
           soundID: 5,
           type: kit,
           usedInClips: [
@@ -1295,11 +1393,8 @@ exports[`check song api mappings 1`] = `
           ],
         },
         {
-          formatType: old,
+          formatType: old style slot subslot,
           isNewSound: false,
-          patchName: SYNT171,
-          patchSuffix:  3,
-          patchSuffixOld: B,
           presetFolder: null,
           presetName: null,
           presetSlot: 171,
@@ -1307,6 +1402,11 @@ exports[`check song api mappings 1`] = `
           prettyName: 171 Synth 3,
           rewriteFolder: SYNTHS,
           rewriteName: SYNT171B,
+          sound: {
+            name: SYNT171,
+            suffix: B,
+            suffixV4:  3,
+          },
           soundID: 7,
           type: sound,
           usedInClips: [
@@ -1315,11 +1415,8 @@ exports[`check song api mappings 1`] = `
           ],
         },
         {
-          formatType: old,
+          formatType: old style slot subslot,
           isNewSound: true,
-          patchName: KIT271,
-          patchSuffix: ,
-          patchSuffixOld: ,
           presetFolder: null,
           presetName: null,
           presetSlot: 271,
@@ -1327,6 +1424,11 @@ exports[`check song api mappings 1`] = `
           prettyName: 271 Kit,
           rewriteFolder: KITS,
           rewriteName: KIT271,
+          sound: {
+            name: KIT271,
+            suffix: ,
+            suffixV4: ,
+          },
           soundID: new,
           type: kit,
           usedInClips: [
@@ -1335,11 +1437,8 @@ exports[`check song api mappings 1`] = `
           ],
         },
         {
-          formatType: old,
+          formatType: old style slot subslot,
           isNewSound: true,
-          patchName: SYNT271,
-          patchSuffix: ,
-          patchSuffixOld: ,
           presetFolder: null,
           presetName: null,
           presetSlot: 271,
@@ -1347,6 +1446,11 @@ exports[`check song api mappings 1`] = `
           prettyName: 271 Synth,
           rewriteFolder: SYNTHS,
           rewriteName: SYNT271,
+          sound: {
+            name: SYNT271,
+            suffix: ,
+            suffixV4: ,
+          },
           soundID: new,
           type: sound,
           usedInClips: [

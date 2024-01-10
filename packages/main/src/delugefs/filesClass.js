@@ -6,6 +6,7 @@ import {
   getFolderFromFileType,
   getNameAndSuffix,
   getPath,
+  // getNameComponents,
   // newlineXMLAttrs,
 } from './utils';
 
@@ -193,6 +194,7 @@ class Sound extends File {
     this.songIDs = new Set();
     /** @type {('KIT'|'SYNT')} */
     this.presetType = '';
+    //console.log(getNameComponents(this.fileName));
   }
 
   getNewName() {
