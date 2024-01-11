@@ -1,4 +1,4 @@
-import {prettyName} from './utils';
+import {prettyName} from '../../../common/utils';
 
 function getMainDelugeInfo(D) {
   return {
@@ -10,7 +10,7 @@ function getMainDelugeInfo(D) {
       rewriteName: '',
       oldName: kit.fileName,
       newName: kit.newName,
-      prettyName: prettyName(kit.sound) || '',
+      prettyName: prettyName(kit.sound),
       presetType: kit.presetType,
       presetName: kit.presetName,
       songIDs: Array.from(kit.songIDs),
@@ -23,7 +23,7 @@ function getMainDelugeInfo(D) {
       rewriteName: '',
       oldName: synth.fileName,
       newName: synth.newName,
-      prettyName: prettyName(synth.sound) || '',
+      prettyName: prettyName(synth.sound),
       presetType: synth.presetType,
       presetName: synth.presetName,
       songIDs: Array.from(synth.songIDs),

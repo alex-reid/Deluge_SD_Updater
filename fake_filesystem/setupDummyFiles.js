@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import beautify from 'xml-beautifier';
-import {getOldNameFromSlot} from '../packages/main/src/delugefs/utils';
+import {getOldNameFromSlot} from '../packages/common/utils';
 const {load} = require('cheerio');
 
 /*

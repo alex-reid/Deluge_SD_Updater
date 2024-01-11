@@ -4,7 +4,7 @@ import InfoIcon from '@mui/icons-material/Info';
 import FiberNewIcon from '@mui/icons-material/FiberNew';
 import PianoIcon from '@mui/icons-material/Piano';
 import AppsIcon from '@mui/icons-material/Apps';
-import {FORMATS} from '../../../main/src/delugefs/definitions';
+import {FORMATS} from '../../../common/definitions';
 
 export const InstrumentListSongList = ({instrument, index}) => {
   const [desc, ...types] = showType(instrument);

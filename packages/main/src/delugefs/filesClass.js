@@ -1,10 +1,10 @@
 import {load} from 'cheerio';
 import fs from 'fs/promises';
 import path from 'path';
-import {getFolderFromFileType, getPath, getNameComponents} from './utils';
+import {getFolderFromFileType, getPath, getNameComponents} from '../../../common/utils';
 
 import {Instrument, Clip} from './nodesClass';
-import {newNames} from './definitions';
+import {newNames} from '../../../common/definitions';
 
 /**
  * Class representing an XML file on the deluge

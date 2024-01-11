@@ -1,5 +1,10 @@
-import {FORMATS} from './definitions';
-import {getTypeMapping, getOldNameFromSlot, getNameRegex, getNameComponents} from './utils';
+import {FORMATS} from '../../../common/definitions';
+import {
+  getTypeMapping,
+  getOldNameFromSlot,
+  getNameRegex,
+  getNameComponents,
+} from '../../../common/utils';
 
 /** @typedef {import('cheerio').CheerioAPI} CheerioAPI */
 /** @enum {("old" | "numsonly" | "newsuffix" | "new" | "nameonly" | "unknown")} FormatType */

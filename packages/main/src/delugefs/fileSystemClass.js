@@ -299,7 +299,7 @@ class fileSystem {
         const {id, type, hasSuffixFile} = instrument.getSoundIndex(this.mappings, this.debug);
         const {formatType} = instrument;
         if (id == 'new') {
-          instrument.rewriteName = instrument.sound.baseName + instrument.sound.suffix;
+          instrument.rewriteName = instrument.sound.baseName + instrument.sound.suffixV4;
           instrument.rewriteFolder = instrument.presetFolder || instrument.types.folder;
         } else {
           if (this.debug)
@@ -312,9 +312,9 @@ class fileSystem {
               newSound: this.files[type][id],
               hasSuffixFile,
             });
-          // instrument.rewritNname = this.files[type][id].fileName + instrument.sound.suffix;
+          // instrument.rewriteName = this.files[type][id].fileName + instrument.sound.suffix;
           // if (hasSuffixFile)
-          instrument.rewriteName = this.files[type][id].fileName;
+          instrument.rewriteName = this.files[type][id].sound.baseName + instrument.sound.suffix;
           instrument.rewriteFolder = this.files[type][id].path;
           this.files[type][id].songIDs.add(songIndex);
           // console.log(this.files[type][id].songIDs);
