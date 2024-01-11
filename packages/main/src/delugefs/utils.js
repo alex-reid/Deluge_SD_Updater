@@ -110,12 +110,12 @@ function getOldNameFromSlot(presetType, presetSlot, presetSubSlot) {
  * @param {string} oldName
  * @returns {string} Pretty name
  */
-function prettyName(oldName) {
-  const {soundNumber, soundType, suffixV4} = getNameComponents(oldName);
+function prettyName(sound) {
+  const {soundNumber, soundType, suffixV4} = sound;
   if (soundNumber && soundType) {
     return `${soundNumber} ${getMapping(soundType, 'file', 'pretty')}${suffixV4}`;
   }
-  return false;
+  return '';
 }
 
 /**
