@@ -22,7 +22,6 @@ function getNameRegex(fileName) {
  * @returns {{soundType: string|null, soundNumber: string|null, name: string, baseName: string, fileName: string, suffixLetter: string|null, suffixNumber: string|null, suffixWord: string|null, suffixType: string, suffix: string, suffixV4: string}}
  */
 function getNameComponents(fileName) {
-  const regex = getNameRegex(fileName);
   const defaults = {
     fileName,
     baseName: fileName,
@@ -36,14 +35,17 @@ function getNameComponents(fileName) {
     suffixV4: '',
   };
 
-  if (regex) {
-    const [, soundType, soundNumber, suffixLetter, suffixNumber, suffixWord] = regex;
+  // check to see if name is an old style name ie. "SYNT014" or "KIT172"
+  const nameRegex = getNameRegex(fileName);
+  if (nameRegex) {
+    const [, soundType, soundNumber, suffixLetter, suffixNumber, suffixWord] = nameRegex;
     const updatedDefaults = {
       ...defaults,
       soundType,
       soundNumber,
       baseName: soundType + soundNumber,
     };
+    // check if old name has a letter suffix ie. "KIT123B"
     if (suffixLetter) {
       return {
         ...updatedDefaults,
@@ -53,6 +55,7 @@ function getNameComponents(fileName) {
         suffixV4: ' ' + (getNumberFromAlpha(suffixLetter) + 2),
       };
     }
+    // check if old name has a number suffix ie. "KIT123 2"
     if (suffixNumber) {
       return {
         ...updatedDefaults,
@@ -62,6 +65,7 @@ function getNameComponents(fileName) {
         suffixV4: suffixNumber,
       };
     }
+    // check if old name has a word as a suffix ie. "KIT123 new"
     if (suffixWord) {
       return {
         ...updatedDefaults,
@@ -73,18 +77,20 @@ function getNameComponents(fileName) {
     }
     return updatedDefaults;
   }
+  // check if the name has a number after it ie. "my new synth 2"
   const numberRegex = fileName.match(/^(.+)(\s\d+)$/);
   if (numberRegex) {
-    const [, base, num] = numberRegex;
+    const [, baseName, suffixNumber] = numberRegex;
     return {
       ...defaults,
-      baseName: base,
-      suffixNumber: num,
-      suffix: num,
-      suffixV4: num,
+      baseName,
+      suffixNumber,
+      suffix: suffixNumber,
+      suffixV4: suffixNumber,
       suffixType: SUFFIX.NUMBER,
     };
   }
+  // return anything else ie. "my new synth"
   return defaults;
 }
 

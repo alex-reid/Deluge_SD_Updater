@@ -183,15 +183,15 @@ class Sound extends File {
     /** @type {number|null} */
     this.soundID = null;
     this.presetName = fileName.replace(/\.xml$/i, '');
+    this.sound = getNameComponents(this.presetName);
     this.newName = this.getNewName();
     this.songIDs = new Set();
     /** @type {('KIT'|'SYNT')} */
     this.presetType = '';
-    //console.log(getNameComponents(this.fileName));
   }
 
   getNewName() {
-    const {baseName, suffixV4, soundType, soundNumber} = getNameComponents(this.fileName);
+    const {baseName, suffixV4, soundType, soundNumber} = this.sound;
     if (soundType && soundNumber) {
       const getName = newNames[getFolderFromFileType(soundType)][parseInt(soundNumber)];
       if (getName) {

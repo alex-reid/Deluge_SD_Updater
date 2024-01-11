@@ -14,6 +14,7 @@ function getMainDelugeInfo(D) {
       presetType: kit.presetType,
       presetName: kit.presetName,
       songIDs: Array.from(kit.songIDs),
+      sound: kit.sound,
     })),
     synths: D.files.synths.map(synth => ({
       id: synth.soundID,
@@ -26,6 +27,7 @@ function getMainDelugeInfo(D) {
       presetType: synth.presetType,
       presetName: synth.presetName,
       songIDs: Array.from(synth.songIDs),
+      sound: synth.sound,
     })),
     songs: D.files.songs.map(song => {
       return {
