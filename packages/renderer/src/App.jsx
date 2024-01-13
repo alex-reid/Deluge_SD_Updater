@@ -17,7 +17,7 @@ import InstrumentList from './components/instrumentList';
 import SongList from './components/SongList';
 import {DragBox} from './components/DragBox';
 import {INST, instrumentReducer, SONG, songReducer} from './reducers/reducers';
-import ExportPopup from './components/ExportPopup';
+import ExportPopup, {getFileExportInfo} from './components/ExportPopup';
 
 const App = () => {
   const [synths, dispatchSynths] = useReducer(instrumentReducer, []);
@@ -30,15 +30,15 @@ const App = () => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  useEffect(() => {
-    console.log('songs data', songs);
-  }, [songs]);
-  useEffect(() => {
-    console.log('synths data', synths);
-  }, [synths]);
-  useEffect(() => {
-    console.log('kits data', kits);
-  }, [kits]);
+  // useEffect(() => {
+  //   console.log('songs data', songs);
+  // }, [songs]);
+  // useEffect(() => {
+  //   console.log('synths data', synths);
+  // }, [synths]);
+  // useEffect(() => {
+  //   console.log('kits data', kits);
+  // }, [kits]);
 
   useEffect(() => {
     if (Object.keys(fileExport).length != 0) {
@@ -89,8 +89,8 @@ const App = () => {
     dispatchSynths({type: INST.RENAME_ALL_PRETTY});
     dispatchKits({type: INST.RENAME_ALL_PRETTY});
     dispatchSongs({type: SONG.RENAME_ALL_PRETTY});
-    // console.log(synths, kits);
   };
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -264,76 +264,3 @@ const App = () => {
   );
 };
 export default App;
-
-function getFileExportInfo(synths, kits, songs) {
-  console.log('run export');
-  const synthNames = synths.reduce(
-    (acc, synth) => [
-      ...acc,
-      {
-        id: synth.id,
-        oldName: synth.oldName,
-        oldPath: synth.path,
-        rewriteName: synth.rewriteName || synth.oldName,
-        rewriteFolder: synth.rewriteFolder || synth.path,
-        willUpdate: !!synth.rewriteName,
-      },
-    ],
-    [],
-  );
-  const kitNames = kits.reduce(
-    (acc, kit) => [
-      ...acc,
-      {
-        id: kit.id,
-        oldName: kit.oldName,
-        oldPath: kit.path,
-        rewriteName: kit.rewriteName || kit.oldName,
-        rewriteFolder: kit.rewriteFolder || kit.path,
-        willUpdate: !!kit.rewriteName,
-      },
-    ],
-    [],
-  );
-  const songInsts = songs.reduce(
-    (acc, song) => [
-      ...acc,
-      {
-        id: song.id,
-        name: song.name,
-        path: song.path,
-        instruments: song.instruments.reduce(
-          (acc, inst) => [
-            ...acc,
-            {
-              updateName: inst.presetName != inst.rewriteName,
-              updateFolder: inst.presetFolder != inst.rewriteFolder,
-              rewriteName: inst.rewriteName,
-              rewriteFolder: inst.rewriteFolder,
-              formatType: inst.formatType,
-            },
-          ],
-          [],
-        ),
-      },
-    ],
-    [],
-  );
-  const getSongUpdates = song => {
-    return song.instruments.reduce((a, c) => {
-      if (!a) return c.updateFolder || c.updateName;
-      return a;
-    }, false);
-  };
-  const info = {
-    hasDuplicateSynths: synths.reduce((a, c) => (c.duplicate ? true : a), false),
-    hasDuplicateKits: kits.reduce((a, c) => (c.duplicate ? true : a), false),
-    synthsToUpdate: synthNames.reduce((a, c) => (a += c.willUpdate ? 1 : 0), 0),
-    synthsTotal: synthNames.length,
-    kitsToUpdate: kitNames.reduce((a, c) => (a += c.willUpdate ? 1 : 0), 0),
-    kitsTotal: kitNames.length,
-    songsToUpdate: songInsts.reduce((a, c) => (a += getSongUpdates(c) ? 1 : 0), 0),
-    songsTotal: songInsts.length,
-  };
-  return {synthNames, kitNames, songInsts, info};
-}

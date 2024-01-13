@@ -64,27 +64,6 @@ export const InstrumentListSongList = ({instrument, index}) => {
         </Tooltip>
       </Box>
       <Divider sx={{borderWidth: '1px'}} />
-      {/* <Typography
-        variant="h5"
-        color="secondary"
-      >
-        {index + 1}. {instrument.sound.baseName || instrument.presetName}{' '}
-        <small>Used in clip row: {instrument.usedInClips.map(v => v + 1).join(', ')}</small>
-      </Typography>
-      <pre>
-        {desc}
-        {types.map(({name, val}, i) => (
-          <span key={i}>
-            <br />
-            {name}: {val}
-          </span>
-        ))}
-        <br />
-        &darr; <br />
-        <strong>Name:</strong> {instrument.rewriteName}
-        <br />
-        <strong>Path:</strong> {instrument.rewriteFolder}
-      </pre>*/}
     </>
   );
 };

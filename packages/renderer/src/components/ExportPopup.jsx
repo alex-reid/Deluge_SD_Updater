@@ -39,17 +39,90 @@ const style = {
   flexDirection: 'column',
 };
 
+export function getFileExportInfo(synths, kits, songs) {
+  console.log('run export');
+  const synthNames = synths.reduce(
+    (acc, synth) => [
+      ...acc,
+      {
+        id: synth.id,
+        oldName: synth.oldName,
+        oldPath: synth.path,
+        rewriteName: synth.rewriteName || synth.oldName,
+        rewriteFolder: synth.rewriteFolder || synth.path,
+        willUpdate: !!synth.rewriteName,
+      },
+    ],
+    [],
+  );
+  const kitNames = kits.reduce(
+    (acc, kit) => [
+      ...acc,
+      {
+        id: kit.id,
+        oldName: kit.oldName,
+        oldPath: kit.path,
+        rewriteName: kit.rewriteName || kit.oldName,
+        rewriteFolder: kit.rewriteFolder || kit.path,
+        willUpdate: !!kit.rewriteName,
+      },
+    ],
+    [],
+  );
+  const songInsts = songs.reduce(
+    (acc, song) => [
+      ...acc,
+      {
+        id: song.id,
+        name: song.name,
+        path: song.path,
+        instruments: song.instruments.reduce(
+          (acc, inst) => [
+            ...acc,
+            {
+              updateName: inst.presetName != inst.rewriteName,
+              updateFolder: inst.presetFolder != inst.rewriteFolder,
+              rewriteName: inst.rewriteName,
+              rewriteFolder: inst.rewriteFolder,
+              formatType: inst.formatType,
+            },
+          ],
+          [],
+        ),
+      },
+    ],
+    [],
+  );
+  const getSongUpdates = song => {
+    return song.instruments.reduce((a, c) => {
+      if (!a) return c.updateFolder || c.updateName;
+      return a;
+    }, false);
+  };
+  const info = {
+    hasDuplicateSynths: synths.reduce((a, c) => (c.duplicate ? true : a), false),
+    hasDuplicateKits: kits.reduce((a, c) => (c.duplicate ? true : a), false),
+    synthsToUpdate: synthNames.reduce((a, c) => (a += c.willUpdate ? 1 : 0), 0),
+    synthsTotal: synthNames.length,
+    kitsToUpdate: kitNames.reduce((a, c) => (a += c.willUpdate ? 1 : 0), 0),
+    kitsTotal: kitNames.length,
+    songsToUpdate: songInsts.reduce((a, c) => (a += getSongUpdates(c) ? 1 : 0), 0),
+    songsTotal: songInsts.length,
+  };
+  return {synthNames, kitNames, songInsts, info};
+}
+
 export default function ExportPopup({open, handleClose, fileExport}) {
   const [confirm, setConfirm] = useState(false);
   const [output, setOutput] = useState([]);
 
-  useEffect(() => {
-    console.log(output);
-  }, [output]);
+  // useEffect(() => {
+  //   console.log(output);
+  // }, [output]);
 
   useEffect(() => {
     sendFileUpdates(files => setOutput(prev => [...prev, ...files]));
-    console.log(sendFileUpdates);
+    // console.log(sendFileUpdates);
     return () => {
       sendFileUpdatesOff();
     };

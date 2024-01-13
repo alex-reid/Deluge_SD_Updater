@@ -103,7 +103,6 @@ export const songReducer = (state, action) => {
 
             if (!inst.isNewSound && file.rewriteName) {
               newName = file.rewriteName;
-              console.log('sound', file.sound, inst.sound);
 
               if (file.sound.suffixType == inst.sound.suffixType) {
                 newName = file.rewriteName;
