@@ -243,6 +243,16 @@ function newlineXMLAttrs(xml) {
   return out.join('\n');
 }
 
+function fixXMLEscapedAttributes(xml) {
+  //&#x24;
+  xml = xml.replaceAll('&#x24;', '$');
+  //&amp;
+  xml = xml.replaceAll('&amp;', '&');
+  //&apos;
+  xml = xml.replaceAll('&apos;', "'");
+  return xml;
+}
+
 export {
   getNumberFromAlpha,
   getAlphaFromIndex,
@@ -259,4 +269,5 @@ export {
   getNameComponents,
   getPath,
   newlineXMLAttrs,
+  fixXMLEscapedAttributes,
 };

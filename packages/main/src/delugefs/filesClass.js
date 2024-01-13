@@ -1,10 +1,16 @@
 import {load} from 'cheerio';
 import fs from 'fs/promises';
 import path from 'path';
-import {getFolderFromFileType, getPath, getNameComponents} from '../../../common/utils';
+import {
+  getFolderFromFileType,
+  getPath,
+  getNameComponents,
+  fixXMLEscapedAttributes,
+} from '../../../common/utils';
 
 import {Instrument, Clip} from './nodesClass';
 import {newNames} from '../../../common/definitions';
+import beautifyXML from './beautifyXML';
 
 /**
  * Class representing an XML file on the deluge
@@ -27,7 +33,6 @@ class File {
         xmlContent,
         {
           xmlMode: true, // Set xmlMode to true for XML parsing
-          pretty: true, // Enable pretty printing
           onParseError: err => console.error('parse error', err),
         },
         false,
@@ -48,8 +53,7 @@ class File {
 
   async saveXML() {
     // Save the modified XML to a new file
-    // const modifiedXml = newlineXMLAttrs(this.XML.xml());
-    const modifiedXml = this.XML.xml();
+    const modifiedXml = fixXMLEscapedAttributes(beautifyXML(this.XML.xml()));
     const newXmlFilePath = path.join(this.systemPath, this.fileName + '.XML');
     fs.writeFile(newXmlFilePath, modifiedXml, 'utf-8');
   }
