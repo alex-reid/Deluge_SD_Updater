@@ -160,16 +160,17 @@ class Instrument extends Node {
   }
 
   getSoundIndex(mappings, debug) {
-    const name = this.sound.baseName;
-    const suffix = this.sound.suffix;
+    const {baseName, suffix} = this.sound;
     const folder = this.presetFolder || this.types.folder;
     let hasSuffixFile = false;
     let id = 'new';
 
     const idOnPresetName = mappings.byName[this.types.type][this.presetName]?.[folder];
-    const idOnSoundSuffix = mappings.byName[this.types.type][name + suffix]?.[folder];
-    const idOnSoundName = mappings.byName[this.types.type][name]?.[folder];
+    const idOnSoundSuffix = mappings.byName[this.types.type][baseName + suffix]?.[folder];
+    const idOnSoundName = mappings.byName[this.types.type][baseName]?.[folder];
+
     if (debug) console.log({idOnPresetName, idOnSoundSuffix, idOnSoundName});
+
     if (Number.isInteger(idOnPresetName)) {
       id = idOnPresetName;
     } else if (Number.isInteger(idOnSoundSuffix)) {
@@ -178,11 +179,12 @@ class Instrument extends Node {
     } else if (Number.isInteger(idOnSoundName)) {
       id = idOnSoundName;
     }
+
     this.soundID = id;
     if (debug)
       console.log({
         soundID: this.soundID,
-        name,
+        name: baseName,
         suffix,
         folder,
         presetName: this.presetName,

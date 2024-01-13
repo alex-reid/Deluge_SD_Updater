@@ -795,7 +795,7 @@ exports[`check song api mappings 1`] = `
           presetSubSlot: null,
           prettyName: 000 Kit 2,
           rewriteFolder: KITS,
-          rewriteName: KIT000,
+          rewriteName: KIT000 2,
           sound: {
             baseName: KIT000,
             fileName: KIT000 2,
@@ -824,7 +824,7 @@ exports[`check song api mappings 1`] = `
           presetSubSlot: null,
           prettyName: 000 Synth 2,
           rewriteFolder: SYNTHS,
-          rewriteName: SYNT000,
+          rewriteName: SYNT000 2,
           sound: {
             baseName: SYNT000,
             fileName: SYNT000 2,
@@ -1461,7 +1461,7 @@ exports[`check song api mappings 1`] = `
           presetSubSlot: null,
           prettyName: 197 Kit 3,
           rewriteFolder: KITS,
-          rewriteName: KIT197B,
+          rewriteName: KIT197 3,
           sound: {
             baseName: KIT197,
             fileName: KIT197B,
@@ -1490,7 +1490,7 @@ exports[`check song api mappings 1`] = `
           presetSubSlot: null,
           prettyName: 197 Synth 3,
           rewriteFolder: SYNTHS,
-          rewriteName: SYNT197B,
+          rewriteName: SYNT197 3,
           sound: {
             baseName: SYNT197,
             fileName: SYNT197B,
