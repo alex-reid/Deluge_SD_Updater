@@ -1,3 +1,5 @@
+import {SUFFIX} from '../../../common/definitions';
+
 function checkDuplicates(state) {
   const dups = new Array(state.length).fill(false);
   for (let indexA = 0; indexA < state.length; indexA++) {
@@ -93,20 +95,30 @@ export const songReducer = (state, action) => {
         return {
           ...song,
           instruments: song.instruments.map(inst => {
-            let newName = inst.sound.baseName;
-            if (inst.type == 'sound' && !inst.isNewSound) {
-              newName = action.synths[inst.soundID]?.rewriteName;
-              // console.log('sound', newName, inst.sound.suffixV4, action.synths[inst.soundID]);
-            }
-            if (inst.type == 'kit' && !inst.isNewSound) {
-              newName = action.kits[inst.soundID]?.rewriteName;
-              // console.log('kit', newName, inst.sound.suffixV4, action.kits[inst.soundID]);
+            let insts;
+            if (inst.type == 'sound') insts = action.synths;
+            if (inst.type == 'kit') insts = action.kits;
+            const file = insts[inst.soundID];
+            let newName = inst.sound.baseName + inst.sound.suffixV4;
+
+            if (!inst.isNewSound && file.rewriteName) {
+              newName = file.rewriteName;
+              console.log('sound', file.sound, inst.sound);
+
+              if (file.sound.suffixType == inst.sound.suffixType) {
+                newName = file.rewriteName;
+              } else if (
+                file.sound.suffixType == SUFFIX.NONE &&
+                inst.sound.suffixType != SUFFIX.NONE
+              ) {
+                newName = file.rewriteName + inst.sound.suffixV4;
+              }
             }
             // if (newName != inst.sound.baseName)
             shouldUpdate = true;
             return {
               ...inst,
-              rewriteName: newName + inst.sound.suffixV4,
+              rewriteName: newName,
             };
           }),
           shouldUpdate,
