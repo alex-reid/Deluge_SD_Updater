@@ -326,6 +326,8 @@ function getFileExportInfo(synths, kits, songs) {
     }, false);
   };
   const info = {
+    hasDuplicateSynths: synths.reduce((a, c) => (c.duplicate ? true : a), false),
+    hasDuplicateKits: kits.reduce((a, c) => (c.duplicate ? true : a), false),
     synthsToUpdate: synthNames.reduce((a, c) => (a += c.willUpdate ? 1 : 0), 0),
     synthsTotal: synthNames.length,
     kitsToUpdate: kitNames.reduce((a, c) => (a += c.willUpdate ? 1 : 0), 0),

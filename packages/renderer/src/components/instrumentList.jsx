@@ -15,16 +15,17 @@ const InstrumentList = ({
   updateHandler,
   rewriteName,
   songIDs,
+  duplicate,
 }) => {
   const [name, setName] = useState(rewriteName);
-  const [error, setError] = useState('');
+  const [error, setError] = useState(false);
+  const [allowSave, setAllowSave] = useState(true);
 
   useEffect(() => {
     if (!name) setName(rewriteName);
   }, [rewriteName]);
 
   useEffect(() => {
-    setError('');
     if (name && name.length > 0) {
       //eslint-disable-next-line
       let rg1 = /^[^\\/:\*\?"<>\|]+$/; // forbidden characters \ / : * ? " < > |
@@ -32,15 +33,27 @@ const InstrumentList = ({
       let rg3 = /^(nul|prn|con|lpt[0-9]|com[0-9])(\.|$)/i; // forbidden file names
       if (!rg1.test(name)) {
         setError('Filename can\'t contain characters  / : * ? " < > |');
+        setAllowSave(false);
       } else if (rg2.test(name)) {
         setError('Filename cannot start with a dot');
+        setAllowSave(false);
       } else if (rg3.test(name)) {
         setError('Filename is forbidden');
+        setAllowSave(false);
+      } else if (duplicate) {
+        setError('Duplicate file name. Please rename.');
+        setAllowSave(true);
       } else {
-        setError('');
+        setError(false);
       }
+    } else if (duplicate) {
+      setError('Duplicate file name. Please rename.');
+      setAllowSave(true);
+    } else {
+      setError(false);
+      setAllowSave(true);
     }
-  }, [name]);
+  }, [name, duplicate]);
   return (
     <ListItem sx={{borderBottom: 1, borderColor: 'divider'}}>
       <ListItemIcon>
@@ -67,7 +80,7 @@ const InstrumentList = ({
               onChange={e => setName(e.target.value)}
               value={name}
               onBlur={e => {
-                if (!error) updateHandler(index, e.target.value);
+                if (allowSave) updateHandler(index, e.target.value);
               }}
               onKeyDown={e => {
                 if (e.code === 'Enter') {
@@ -95,4 +108,7 @@ const InstrumentList = ({
   );
 };
 
-export default memo(InstrumentList, (prev, next) => prev.rewriteName == next.rewriteName);
+export default memo(
+  InstrumentList,
+  (prev, next) => !(prev.rewriteName != next.rewriteName || prev.duplicate != next.duplicate),
+);
