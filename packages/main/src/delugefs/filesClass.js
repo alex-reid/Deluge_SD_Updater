@@ -124,7 +124,7 @@ class Song extends File {
   }
 
   rewriteInstrumentsAndClipsXMLAttributes(newNames) {
-    const output = [`Processing song ${this.fileName}\n`];
+    const output = [{type: 'song', data: `Processing song ${this.fileName}\n`}];
     // console.log('insts', this.instruments.length, newNames.length);
     if (this.instruments.length !== newNames.length) {
       throw new Error('new names are not the same length as instruments');
@@ -141,7 +141,10 @@ class Song extends File {
         this.clips[clip].rewritePresetToV4(rewriteName, rewriteFolder);
         clipIDs.push(clip);
       });
-      output.push(`Rewrote sound ${index} to ${rewriteName}. Updated clips ${clipIDs.join(',')}\n`);
+      output.push({
+        type: 'success',
+        data: `Rewrote sound ${index} to ${rewriteName}. Updated clips ${clipIDs.join(',')}\n`,
+      });
     });
     return output;
   }
@@ -224,8 +227,14 @@ class Sound extends File {
         path.join(this.systemPath, this.fullFileName),
         path.join(this.systemPath, newName + '.XML'),
       )
-      .then(() => 'Renamed ' + this.fileName + '.XML ' + 'to ' + newName + '.XML')
-      .catch(err => 'Error naming ' + this.fileName + '.XML ' + 'to ' + newName + '.XML\n' + err);
+      .then(() => ({
+        type: 'success',
+        data: 'Renamed ' + this.fileName + '.XML ' + 'to ' + newName + '.XML',
+      }))
+      .catch(err => ({
+        type: 'fail',
+        data: 'Error naming ' + this.fileName + '.XML ' + 'to ' + newName + '.XML\n' + err,
+      }));
     return out;
   }
 }

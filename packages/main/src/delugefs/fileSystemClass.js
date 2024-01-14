@@ -328,6 +328,7 @@ class fileSystem {
     for (const file of files) {
       if (file.willUpdate && this.files[type][file.id]) {
         await this.files[type][file.id].renameFile(file.rewriteName).then(data => {
+          this.browserWindow.webContents.send('export-update-results', [data]);
           updated.push(data);
         });
       }
@@ -346,6 +347,7 @@ class fileSystem {
           );
           if (this.files.songs[song.id].validate()) {
             await this.files.songs[song.id].saveXML();
+            this.browserWindow.webContents.send('export-update-results', done);
             updated.push(done);
           }
         }
@@ -356,19 +358,43 @@ class fileSystem {
 
   handleRewrite(files) {
     const {synthNames, kitNames, songInsts} = files;
+    const totals = {kits: {good: 0, bad: 0}, synths: {good: 0, bad: 0}, songs: {good: 0, bad: 0}};
     this.rewriteInsts('synths', synthNames)
       .then(done => {
-        this.browserWindow.webContents.send('export-update-results', done);
-        console.log(done);
+        totals.synths = done.reduce(
+          (a, c) => {
+            if (c.type == 'success') return {good: a.good + 1, bad: a.bad};
+            if (c.type == 'fail') return {good: a.good, bad: a.bad + 1};
+            return a;
+          },
+          {good: 0, bad: 0},
+        );
         return this.rewriteInsts('kits', kitNames);
       })
       .then(done => {
-        this.browserWindow.webContents.send('export-update-results', done);
-        console.log(done);
+        totals.kits = done.reduce(
+          (a, c) => {
+            if (c.type == 'success') return {good: a.good + 1, bad: a.bad};
+            if (c.type == 'fail') return {good: a.good, bad: a.bad + 1};
+            return a;
+          },
+          {good: 0, bad: 0},
+        );
         return this.rewriteSongs(songInsts);
       })
       .then(done => {
-        this.browserWindow.webContents.send('export-update-results', done);
+        this.browserWindow.webContents.send('export-update-results', [
+          {type: 'total', data: done.length + ' songs successfully processed'},
+          {
+            type: 'total',
+            data:
+              totals.synths.good + ' synths successfully renamed, ' + totals.synths.bad + ' failed',
+          },
+          {
+            type: 'total',
+            data: totals.kits.good + ' kits successfully renamed, ' + totals.kits.bad + ' failed',
+          },
+        ]);
       })
       .catch(err => console.error(err));
   }

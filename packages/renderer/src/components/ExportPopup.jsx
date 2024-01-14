@@ -5,6 +5,7 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
+  Alert,
   Button,
   Checkbox,
   Divider,
@@ -18,7 +19,7 @@ import {
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import {useEffect, useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
 import {exportFiles, sendFileUpdates, sendFileUpdatesOff} from '#preload';
 import theme from '../theme';
 // import {ipcRenderer} from 'electron';
@@ -115,14 +116,16 @@ export function getFileExportInfo(synths, kits, songs) {
 export default function ExportPopup({open, handleClose, fileExport}) {
   const [confirm, setConfirm] = useState(false);
   const [output, setOutput] = useState([]);
+  const scrollEnd = useRef();
 
-  // useEffect(() => {
-  //   console.log(output);
-  // }, [output]);
+  useEffect(() => {
+    if (scrollEnd.current) {
+      scrollEnd.current.scrollIntoView({behaviour: 'smooth'});
+    }
+  }, [output]);
 
   useEffect(() => {
     sendFileUpdates(files => setOutput(prev => [...prev, ...files]));
-    // console.log(sendFileUpdates);
     return () => {
       sendFileUpdatesOff();
     };
@@ -130,174 +133,95 @@ export default function ExportPopup({open, handleClose, fileExport}) {
 
   return (
     <div>
-      <Modal
-        open={open}
-        onClose={handleClose}
-      >
-        <Paper
-          elevation={6}
-          sx={style}
-        >
-          <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
-            <Typography
-              variant="h5"
-              component="h2"
-            >
-              Update Files
-            </Typography>
-            <IconButton
-              onClick={handleClose}
-              sx={{transform: 'translate(50%,-50%)'}}
-            >
-              <CloseIcon />
-            </IconButton>
-          </Box>
-          {fileExport.synthNames && fileExport.kitNames && fileExport.songInsts && (
-            <Box
-              sx={{
-                width: '100%',
-                height: '100%',
-                overflow: 'auto',
-                '&::-webkit-scrollbar': {
-                  width: '0.8rem',
-                },
-                '&::-webkit-scrollbar-track': {
-                  backgroundColor: 'rgba(255,255,255,.1)',
-                  borderRadius: '0.4rem',
-                },
-                '&::-webkit-scrollbar-thumb': {
-                  backgroundColor: theme.palette.primary.main,
-                  borderRadius: '0.4rem',
-                },
-              }}
-            >
-              <Accordion TransitionProps={{timeout: 300}}>
-                <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                  <Typography
-                    variant="h6"
-                    component="h3"
-                    sx={{
-                      width: '33%',
-                      minWidth: '200px',
-                    }}
-                  >
-                    Synths
-                  </Typography>
-                  <Typography component="h3">
-                    Updating {fileExport.info.synthsToUpdate} out of {fileExport.info.synthsTotal}{' '}
-                    Synths
-                  </Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                  {/* <pre>{JSON.stringify(fileExport.synthNames, null, 2)}</pre> */}
-                  <List dense>
-                    {fileExport.synthNames &&
-                      fileExport.synthNames.map((synth, index) => (
-                        <Box key={index}>
-                          <ListItem>
-                            <ListItemText
-                              primary={
-                                <Typography color={synth.willUpdate ? 'secondary' : ''}>
-                                  {synth.oldName} &rarr; <strong>{synth.rewriteName}</strong>
-                                </Typography>
-                              }
-                              secondary={
-                                <Typography variant="caption">
-                                  {synth.oldPath} &rarr; <strong>{synth.rewriteFolder}</strong>
-                                </Typography>
-                              }
-                            />
-                          </ListItem>
-                          <Divider />
-                        </Box>
-                      ))}
-                  </List>
-                </AccordionDetails>
-              </Accordion>
-              <Accordion TransitionProps={{timeout: 300}}>
-                <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                  <Typography
-                    variant="h6"
-                    component="h3"
-                    sx={{
-                      width: '33%',
-                      minWidth: '200px',
-                    }}
-                  >
-                    Kits
-                  </Typography>
-                  <Typography component="h3">
-                    Updating {fileExport.info.kitsToUpdate} out of {fileExport.info.kitsTotal} Kits
-                  </Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                  {/* <pre>{JSON.stringify(fileExport.kitNames, null, 2)}</pre> */}
-                  <List dense>
-                    {fileExport.kitNames &&
-                      fileExport.kitNames.map((kit, index) => (
-                        <Box key={index}>
-                          <ListItem>
-                            <ListItemText
-                              primary={
-                                <Typography color={kit.willUpdate ? 'secondary' : ''}>
-                                  {kit.oldName} &rarr; <strong>{kit.rewriteName}</strong>
-                                </Typography>
-                              }
-                              secondary={
-                                <Typography variant="caption">
-                                  {kit.oldPath} &rarr; <strong>{kit.rewriteFolder}</strong>
-                                </Typography>
-                              }
-                            />
-                          </ListItem>
-                          <Divider />
-                        </Box>
-                      ))}
-                  </List>
-                </AccordionDetails>
-              </Accordion>
-              <Accordion TransitionProps={{timeout: 300}}>
-                <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                  <Typography
-                    variant="h6"
-                    component="h3"
-                    sx={{
-                      width: '33%',
-                      minWidth: '200px',
-                    }}
-                  >
-                    Songs
-                  </Typography>
-                  <Typography component="h3">
-                    Updating {fileExport.info.songsToUpdate} out of {fileExport.info.songsTotal}{' '}
-                    Songs
-                  </Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                  {fileExport.songInsts.map((song, index) => (
-                    <Box key={index}>
-                      <Typography variant="h5">{song.name}</Typography>
-                      <Typography variant="h6">{song.path}</Typography>
-                      <List dense>
-                        {song.instruments.map((inst, index) => (
+      {fileExport && (
+        <Modal open={open}>
+          <Paper
+            elevation={6}
+            sx={style}
+          >
+            <Box sx={{display: 'flex', justifyContent: 'space-between', mb: 2}}>
+              <Typography
+                variant="h5"
+                component="h2"
+              >
+                Update Deluge Files
+              </Typography>
+              <IconButton
+                onClick={handleClose}
+                sx={{transform: 'translate(50%,-50%)'}}
+              >
+                <CloseIcon />
+              </IconButton>
+            </Box>
+
+            {fileExport.info.hasDuplicateKits && (
+              <Alert
+                severity="error"
+                sx={{mb: 2}}
+              >
+                Duplicate Kit Names Found. Please close this window and fix the duplicate names.
+              </Alert>
+            )}
+            {fileExport.info.hasDuplicateSynths && (
+              <Alert
+                severity="error"
+                sx={{mb: 2}}
+              >
+                Duplicate Synth Names Found. Please close this window and fix the duplicate names.
+              </Alert>
+            )}
+            {fileExport.synthNames && fileExport.kitNames && fileExport.songInsts && (
+              <Box
+                sx={{
+                  width: '100%',
+                  height: '100%',
+                  overflow: 'auto',
+                  '&::-webkit-scrollbar': {
+                    width: '0.8rem',
+                  },
+                  '&::-webkit-scrollbar-track': {
+                    backgroundColor: 'rgba(255,255,255,.1)',
+                    borderRadius: '0.4rem',
+                  },
+                  '&::-webkit-scrollbar-thumb': {
+                    backgroundColor: theme.palette.primary.main,
+                    borderRadius: '0.4rem',
+                  },
+                }}
+              >
+                <Accordion TransitionProps={{timeout: 300}}>
+                  <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                    <Typography
+                      variant="h6"
+                      component="h3"
+                      sx={{
+                        width: '33%',
+                        minWidth: '200px',
+                      }}
+                    >
+                      Synths
+                    </Typography>
+                    <Typography component="h3">
+                      Updating {fileExport.info.synthsToUpdate} out of {fileExport.info.synthsTotal}{' '}
+                      Synths
+                    </Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    {/* <pre>{JSON.stringify(fileExport.synthNames, null, 2)}</pre> */}
+                    <List dense>
+                      {fileExport.synthNames &&
+                        fileExport.synthNames.map((synth, index) => (
                           <Box key={index}>
                             <ListItem>
                               <ListItemText
                                 primary={
-                                  <Typography
-                                    sx={{m: 0, p: 0}}
-                                    color={inst.updateName ? 'secondary' : ''}
-                                  >
-                                    {inst.rewriteName}
+                                  <Typography color={synth.willUpdate ? 'secondary' : ''}>
+                                    {synth.oldName} &rarr; <strong>{synth.rewriteName}</strong>
                                   </Typography>
                                 }
                                 secondary={
-                                  <Typography
-                                    sx={{m: 0, p: 0}}
-                                    color={inst.updateFolder ? 'secondary' : ''}
-                                    variant="caption"
-                                  >
-                                    {inst.rewriteFolder}
+                                  <Typography variant="caption">
+                                    {synth.oldPath} &rarr; <strong>{synth.rewriteFolder}</strong>
                                   </Typography>
                                 }
                               />
@@ -305,46 +229,160 @@ export default function ExportPopup({open, handleClose, fileExport}) {
                             <Divider />
                           </Box>
                         ))}
-                      </List>
-                    </Box>
-                  ))}
-                </AccordionDetails>
-              </Accordion>
-              {output.length > 0 && (
-                <pre style={{whiteSpace: 'pre-line', fontSize: '1rem'}}>
-                  {output.map((line, i) => (
-                    <span key={i}>
-                      {line}
-                      {'\n'}
-                    </span>
-                  ))}
-                </pre>
-              )}
-            </Box>
-          )}
-          <Box sx={{display: 'flex', justifyContent: 'space-between', pt: 2}}>
-            <FormGroup>
-              <FormControlLabel
-                required
-                control={
-                  <Checkbox
-                    checked={confirm}
-                    onChange={() => setConfirm(!confirm)}
-                  />
+                    </List>
+                  </AccordionDetails>
+                </Accordion>
+                <Accordion TransitionProps={{timeout: 300}}>
+                  <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                    <Typography
+                      variant="h6"
+                      component="h3"
+                      sx={{
+                        width: '33%',
+                        minWidth: '200px',
+                      }}
+                    >
+                      Kits
+                    </Typography>
+                    <Typography component="h3">
+                      Updating {fileExport.info.kitsToUpdate} out of {fileExport.info.kitsTotal}{' '}
+                      Kits
+                    </Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    {/* <pre>{JSON.stringify(fileExport.kitNames, null, 2)}</pre> */}
+                    <List dense>
+                      {fileExport.kitNames &&
+                        fileExport.kitNames.map((kit, index) => (
+                          <Box key={index}>
+                            <ListItem>
+                              <ListItemText
+                                primary={
+                                  <Typography color={kit.willUpdate ? 'secondary' : ''}>
+                                    {kit.oldName} &rarr; <strong>{kit.rewriteName}</strong>
+                                  </Typography>
+                                }
+                                secondary={
+                                  <Typography variant="caption">
+                                    {kit.oldPath} &rarr; <strong>{kit.rewriteFolder}</strong>
+                                  </Typography>
+                                }
+                              />
+                            </ListItem>
+                            <Divider />
+                          </Box>
+                        ))}
+                    </List>
+                  </AccordionDetails>
+                </Accordion>
+                <Accordion TransitionProps={{timeout: 300}}>
+                  <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                    <Typography
+                      variant="h6"
+                      component="h3"
+                      sx={{
+                        width: '33%',
+                        minWidth: '200px',
+                      }}
+                    >
+                      Songs
+                    </Typography>
+                    <Typography component="h3">
+                      Updating {fileExport.info.songsToUpdate} out of {fileExport.info.songsTotal}{' '}
+                      Songs
+                    </Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    {fileExport.songInsts.map((song, index) => (
+                      <Box key={index}>
+                        <Typography variant="h5">{song.name}</Typography>
+                        <Typography variant="h6">{song.path}</Typography>
+                        <List dense>
+                          {song.instruments.map((inst, index) => (
+                            <Box key={index}>
+                              <ListItem>
+                                <ListItemText
+                                  primary={
+                                    <Typography
+                                      sx={{m: 0, p: 0}}
+                                      color={inst.updateName ? 'secondary' : ''}
+                                    >
+                                      {inst.rewriteName}
+                                    </Typography>
+                                  }
+                                  secondary={
+                                    <Typography
+                                      sx={{m: 0, p: 0}}
+                                      color={inst.updateFolder ? 'secondary' : ''}
+                                      variant="caption"
+                                    >
+                                      {inst.rewriteFolder}
+                                    </Typography>
+                                  }
+                                />
+                              </ListItem>
+                              <Divider />
+                            </Box>
+                          ))}
+                        </List>
+                      </Box>
+                    ))}
+                  </AccordionDetails>
+                </Accordion>
+                {output.length > 0 && (
+                  <pre
+                    id="console_out"
+                    style={{whiteSpace: 'pre-line', fontSize: '1rem'}}
+                  >
+                    {output.map((line, i) => (
+                      <span key={i}>
+                        {line.type == 'success' && (
+                          <span style={{color: theme.palette.secondary.main}}>{line.data}</span>
+                        )}
+                        {line.type == 'song' && <strong>{line.data}</strong>}
+                        {line.type == 'fail' && (
+                          <span style={{color: theme.palette.primary.main}}>{line.data}</span>
+                        )}
+                        {line.type == 'total' && (
+                          <strong style={{fontSize: '1.3rem'}}>{line.data}</strong>
+                        )}
+                        {'\n'}
+                      </span>
+                    ))}
+                  </pre>
+                )}
+                <div
+                  id="scroll_to"
+                  ref={scrollEnd}
+                ></div>
+              </Box>
+            )}
+            <Box sx={{display: 'flex', justifyContent: 'space-between', pt: 2}}>
+              <FormGroup>
+                <FormControlLabel
+                  required
+                  control={
+                    <Checkbox
+                      checked={confirm}
+                      onChange={() => setConfirm(!confirm)}
+                    />
+                  }
+                  label="I have backed up my SD card"
+                />
+              </FormGroup>
+              <Button
+                variant="contained"
+                disabled={
+                  !confirm || fileExport.info.hasDuplicateKits || fileExport.info.hasDuplicateSynths
                 }
-                label="I have backed up my SD card"
-              />
-            </FormGroup>
-            <Button
-              variant="contained"
-              disabled={!confirm}
-              onClick={() => exportFiles(fileExport)}
-            >
-              Update Files
-            </Button>
-          </Box>
-        </Paper>
-      </Modal>
+                onClick={() => exportFiles(fileExport)}
+              >
+                Update Files
+              </Button>
+            </Box>
+          </Paper>
+        </Modal>
+      )}
     </div>
   );
 }

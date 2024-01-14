@@ -25,7 +25,7 @@ const App = () => {
   const [songs, dispatchSongs] = useReducer(songReducer, []);
   const [tab, setTab] = useState('tab-synths');
   const [initialised, setInitialised] = useState(false);
-  const [fileExport, setFileExport] = useState({});
+  const [fileExport, setFileExport] = useState(null);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -41,7 +41,12 @@ const App = () => {
   // }, [kits]);
 
   useEffect(() => {
-    if (Object.keys(fileExport).length != 0) {
+    if (
+      fileExport?.info &&
+      fileExport?.synthNames &&
+      fileExport?.kitNames &&
+      fileExport?.songInsts
+    ) {
       console.log(fileExport);
       handleOpen();
     }
@@ -206,25 +211,28 @@ const App = () => {
                 </div>
               </Box>
 
-              <Box m={2}>
-                <Button
-                  variant="contained"
-                  onClick={loadV4Names}
-                  size="small"
-                  color="secondary"
-                  sx={{mr: 2}}
-                >
-                  Load V4 Names
-                </Button>
-                <Button
-                  variant="contained"
-                  onClick={loadPrettyNames}
-                  size="small"
-                  color="secondary"
-                  sx={{mr: 4}}
-                >
-                  Prettify Old Names
-                </Button>
+              <Box sx={{m: 2, display: 'flex', justifyContent: 'space-between'}}>
+                <Box>
+                  <Button
+                    variant="contained"
+                    onClick={loadV4Names}
+                    size="small"
+                    color="secondary"
+                    sx={{mr: 2}}
+                  >
+                    Load V4 Names
+                  </Button>
+                  <Button
+                    variant="contained"
+                    onClick={loadPrettyNames}
+                    size="small"
+                    color="secondary"
+                    sx={{mr: 4}}
+                  >
+                    Prettify Old Names
+                  </Button>
+                </Box>
+
                 <Button
                   variant="contained"
                   onClick={doExport}
@@ -233,12 +241,14 @@ const App = () => {
                 >
                   Update Files
                 </Button>
+              </Box>
+              {fileExport && (
                 <ExportPopup
                   open={open}
                   handleClose={handleClose}
                   fileExport={fileExport}
                 />
-              </Box>
+              )}
             </>
           ) : (
             <DragBox />
