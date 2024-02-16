@@ -1,4 +1,23 @@
-MIT License
+CC BY-NC License
+
+Copyright (c) 2024 Alex Reid
+
+This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.
+
+You are free to:
+- Share — copy and redistribute the material in any medium or format
+- Adapt — remix, transform, and build upon the material
+
+Under the following terms:
+- Attribution — You must give appropriate credit, provide a link to the license, and indicate if changes were made. You may do so in any reasonable manner, but not in any way that suggests the licensor endorses you or your use.
+- NonCommercial — You may not use the material for commercial purposes.
+- No additional restrictions — You may not apply legal terms or technological measures that legally restrict others from doing anything the license permits.
+
+This is a human-readable summary of (and not a substitute for) the license. For the full license text, please visit https://creativecommons.org/licenses/by-nc/4.0/legalcode.
+
+-------------------
+
+MIT License (for portions of this software based off https://github.com/cawa-93/vite-electron-builder)
 
 Copyright (c) 2021 Alex Kozack
 
