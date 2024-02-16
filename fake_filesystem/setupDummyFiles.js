@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import beautify from 'xml-beautifier';
-import {getOldNameFromSlot} from '../packages/main/src/delugefs/utils';
+import {getOldNameFromSlot} from '../packages/common/utils';
 const {load} = require('cheerio');
 
 /*
@@ -134,6 +134,16 @@ const testFiles = [
         attrs: {presetName: 'SYNT197B', presetFolder: 'SYNTHS'},
         hasFile: false,
       },
+      {
+        type: 'kit',
+        attrs: {presetName: "KIT000 'copy'", presetFolder: 'KITS'},
+        hasFile: true,
+      },
+      {
+        type: 'sound',
+        attrs: {presetName: "SYNT000 'copy'", presetFolder: 'SYNTHS'},
+        hasFile: true,
+      },
     ],
   },
   {
@@ -149,6 +159,16 @@ const testFiles = [
         type: 'sound',
         attrs: {presetName: 'SYNT001', presetFolder: 'SYNTHS'},
         hasFile: true,
+      },
+      {
+        type: 'kit',
+        attrs: {presetName: 'KIT000 2', presetFolder: 'KITS'},
+        hasFile: false,
+      },
+      {
+        type: 'sound',
+        attrs: {presetName: 'SYNT000 2', presetFolder: 'SYNTHS'},
+        hasFile: false,
       },
       {
         type: 'kit',
@@ -251,6 +271,17 @@ const testFiles = [
         type: 'sound',
         attrs: {presetName: 'SYNT188B'},
         hasFile: true,
+      },
+
+      {
+        type: 'kit',
+        attrs: {presetName: "KIT000 'copy'"},
+        hasFile: false,
+      },
+      {
+        type: 'sound',
+        attrs: {presetName: "SYNT000 'copy'"},
+        hasFile: false,
       },
     ],
   },

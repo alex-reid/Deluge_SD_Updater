@@ -1,10 +1,16 @@
 import {load} from 'cheerio';
 import fs from 'fs/promises';
 import path from 'path';
-import {getOldTypeAndNumber, getFolderFromFileType, getNameAndSuffix, getPath} from './utils';
+import {
+  getFolderFromFileType,
+  getPath,
+  getNameComponents,
+  fixXMLEscapedAttributes,
+} from '../../../common/utils';
 
 import {Instrument, Clip} from './nodesClass';
-import {newNames} from './definitions';
+import {newNames} from '../../../common/definitions';
+import beautifyXML from './beautifyXML';
 
 /**
  * Class representing an XML file on the deluge
@@ -27,7 +33,6 @@ class File {
         xmlContent,
         {
           xmlMode: true, // Set xmlMode to true for XML parsing
-          pretty: true, // Enable pretty printing
           onParseError: err => console.error('parse error', err),
         },
         false,
@@ -48,8 +53,8 @@ class File {
 
   async saveXML() {
     // Save the modified XML to a new file
-    const modifiedXml = this.XML.xml();
-    const newXmlFilePath = path.join(this.systemPath, this.fileName + '_v4.XML');
+    const modifiedXml = fixXMLEscapedAttributes(beautifyXML(this.XML.xml()));
+    const newXmlFilePath = path.join(this.systemPath, this.fileName + '.XML');
     fs.writeFile(newXmlFilePath, modifiedXml, 'utf-8');
   }
 }
@@ -69,12 +74,14 @@ class Song extends File {
     /** @type {Clip[]} */
     this.clips = [];
     this.firmwareVersion = null;
+    this.songID = null;
   }
 
   onXMLLoaded() {
     this.getFirmwareVersion();
     this.getInstruments();
     this.getClips();
+    this.addClipIdsToInstruments();
   }
 
   getFirmwareVersion() {
@@ -97,7 +104,6 @@ class Song extends File {
 
   validate() {
     let valid = true;
-    this.addClipIdsToInstruments();
     let instClips = 0;
     this.clips.forEach(clip => {
       if (clip.presetType != 'notsound') instClips++;
@@ -118,6 +124,8 @@ class Song extends File {
   }
 
   rewriteInstrumentsAndClipsXMLAttributes(newNames) {
+    const output = [{type: 'song', data: `Processing song ${this.fileName}\n`}];
+    // console.log('insts', this.instruments.length, newNames.length);
     if (this.instruments.length !== newNames.length) {
       throw new Error('new names are not the same length as instruments');
     }
@@ -126,11 +134,19 @@ class Song extends File {
       if (!rewriteName || !rewriteFolder) {
         throw new Error('invalid data in new names array');
       }
+      // console.log(rewriteFolder, rewriteName, index, instrument.clips);
       instrument.rewritePresetToV4(rewriteName, rewriteFolder);
+      const clipIDs = [];
       instrument.clips.forEach(clip => {
         this.clips[clip].rewritePresetToV4(rewriteName, rewriteFolder);
+        clipIDs.push(clip);
+      });
+      output.push({
+        type: 'success',
+        data: `Rewrote sound ${index} to ${rewriteName}. Updated clips ${clipIDs.join(',')}\n`,
       });
     });
+    return output;
   }
 
   getClips() {
@@ -174,6 +190,7 @@ class Sound extends File {
     /** @type {number|null} */
     this.soundID = null;
     this.presetName = fileName.replace(/\.xml$/i, '');
+    this.sound = getNameComponents(this.presetName);
     this.newName = this.getNewName();
     this.songIDs = new Set();
     /** @type {('KIT'|'SYNT')} */
@@ -181,13 +198,13 @@ class Sound extends File {
   }
 
   getNewName() {
-    const [name, , suffix] = getNameAndSuffix(this.fileName);
-    if (name) {
-      let newName = name;
-      const fileData = getOldTypeAndNumber(name);
-      if (fileData)
-        newName = newNames[getFolderFromFileType(fileData.presetType)][fileData.presetSlot] || name;
-      return newName + suffix;
+    const {baseName, suffixV4, soundType, soundNumber} = this.sound;
+    if (soundType && soundNumber) {
+      const getName = newNames[getFolderFromFileType(soundType)][parseInt(soundNumber)];
+      if (getName) {
+        return getName + suffixV4;
+      }
+      return baseName + suffixV4;
     }
     return '';
   }
@@ -202,6 +219,23 @@ class Sound extends File {
         .then(() => console.log('Renamed', this.fileName + '.XML', 'to', newName + '.XML'))
         .catch(err => console.error(err));
     }
+  }
+
+  async renameFile(newName) {
+    const out = await fs
+      .rename(
+        path.join(this.systemPath, this.fullFileName),
+        path.join(this.systemPath, newName + '.XML'),
+      )
+      .then(() => ({
+        type: 'success',
+        data: 'Renamed ' + this.fileName + '.XML ' + 'to ' + newName + '.XML',
+      }))
+      .catch(err => ({
+        type: 'fail',
+        data: 'Error naming ' + this.fileName + '.XML ' + 'to ' + newName + '.XML\n' + err,
+      }));
+    return out;
   }
 }
 /**

@@ -1,32 +1,37 @@
-import {prettyName} from './utils';
+import {prettyName} from '../../../common/utils';
 
 function getMainDelugeInfo(D) {
   return {
     initialised: true,
     kits: D.files.kits.map(kit => ({
+      id: kit.soundID,
       path: kit.path,
       rootPath: kit.rootPath,
       rewriteName: '',
       oldName: kit.fileName,
       newName: kit.newName,
-      prettyName: prettyName(kit.presetName) || '',
+      prettyName: prettyName(kit.sound),
       presetType: kit.presetType,
       presetName: kit.presetName,
       songIDs: Array.from(kit.songIDs),
+      sound: kit.sound,
     })),
     synths: D.files.synths.map(synth => ({
+      id: synth.soundID,
       path: synth.path,
       rootPath: synth.rootPath,
       rewriteName: '',
       oldName: synth.fileName,
       newName: synth.newName,
-      prettyName: prettyName(synth.presetName) || '',
+      prettyName: prettyName(synth.sound),
       presetType: synth.presetType,
       presetName: synth.presetName,
       songIDs: Array.from(synth.songIDs),
+      sound: synth.sound,
     })),
     songs: D.files.songs.map(song => {
       return {
+        id: song.songID,
         name: song.fileName,
         path: song.path,
         clipsLength: song.clips.length,
@@ -42,13 +47,11 @@ function getMainDelugeInfo(D) {
               presetSlot: curr.presetSlot,
               presetSubSlot: curr.presetSubSlot,
               formatType: curr.formatType,
-              patchName: curr.patchName,
-              patchSuffix: curr.patchSuffixClean,
-              patchSuffixOld: curr.patchSuffix,
+              sound: curr.sound,
               usedInClips: song.getInstrumentClipIndexs(curr),
               rewriteName: curr.rewriteName,
               rewriteFolder: curr.rewriteFolder,
-              prettyName: prettyName(curr.patchName) + curr.patchSuffixClean || '',
+              prettyName: prettyName(curr.sound),
               soundID: curr.soundID,
               isNewSound: curr.soundID == 'new',
             },

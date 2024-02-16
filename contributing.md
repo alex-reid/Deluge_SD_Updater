@@ -1,7 +1,7 @@
 # Contributing
 
-First and foremost, thank you! We appreciate that you want to contribute to vite-electron-builder, your time is
-valuable, and your contributions mean a lot to us.
+Thanks for getting as far as reading this document! If you would like to help out, please feel free to fork this repo and have a play with the code. 
+Unfortately I have limited time to spend on this software, but I'll endeavour to keep things updated and minimise bugs etc. 
 
 ## Issues
 
@@ -29,6 +29,5 @@ The package manager used to install and link dependencies must be npm v7 or late
 1. `npm run watch` start electron app in watch mode.
 1. `npm run compile` build app but for local debugging only.
 1. `npm run lint` lint your code.
-1. `npm run typecheck` Run typescript check.
 1. `npm run test` Run app test.
 1. `npm run format` Reformat all codebase to project code style.

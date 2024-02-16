@@ -4,6 +4,7 @@ import InfoIcon from '@mui/icons-material/Info';
 import FiberNewIcon from '@mui/icons-material/FiberNew';
 import PianoIcon from '@mui/icons-material/Piano';
 import AppsIcon from '@mui/icons-material/Apps';
+import {FORMATS} from '../../../common/definitions';
 
 export const InstrumentListSongList = ({instrument, index}) => {
   const [desc, ...types] = showType(instrument);
@@ -24,7 +25,7 @@ export const InstrumentListSongList = ({instrument, index}) => {
         >
           <strong style={{display: 'inline-block', width: '2rem'}}>{index + 1}.</strong>
           {icon}
-          &emsp;{instrument.patchName + instrument.patchSuffixOld}
+          &emsp;{instrument.sound.baseName + instrument.sound.suffix}
           {instrument.rewriteName && (
             <>
               &ensp;&rarr;&ensp;<strong>{instrument.rewriteName}</strong>
@@ -63,63 +64,42 @@ export const InstrumentListSongList = ({instrument, index}) => {
         </Tooltip>
       </Box>
       <Divider sx={{borderWidth: '1px'}} />
-      {/* <Typography
-        variant="h5"
-        color="secondary"
-      >
-        {index + 1}. {instrument.patchName || instrument.presetName}{' '}
-        <small>Used in clip row: {instrument.usedInClips.map(v => v + 1).join(', ')}</small>
-      </Typography>
-      <pre>
-        {desc}
-        {types.map(({name, val}, i) => (
-          <span key={i}>
-            <br />
-            {name}: {val}
-          </span>
-        ))}
-        <br />
-        &darr; <br />
-        <strong>Name:</strong> {instrument.rewriteName}
-        <br />
-        <strong>Path:</strong> {instrument.rewriteFolder}
-      </pre>*/}
     </>
   );
 };
 
 const showType = instrument => {
   switch (instrument.formatType) {
-    case 'old':
+    case FORMATS.OLD:
       return [
         'Old ( < v4 ) style preset slot and subslot. Needs to be updated for v4+',
         {name: 'Preset Slot', val: instrument.presetSlot},
         {name: 'Preset Sub Slot', val: instrument.presetSubSlot},
       ];
-    case 'numsonly':
+    case FORMATS.NUMBERS_ONLY:
       return [
         'Numbers only display from v4 onwards. Will be updated to look a bit nicer.',
         {name: 'Preset Name', val: instrument.presetName},
         {name: 'Preset Folder', val: instrument.presetFolder},
       ];
-    case 'new':
+    case FORMATS.NEW:
       return [
         'The good stuff. All set for v4+',
         {name: 'Preset Name', val: instrument.presetName},
         {name: 'Preset Folder', val: instrument.presetFolder},
       ];
-    case 'newsuffix':
+    case FORMATS.NEW_SUFFIX:
       return [
         'This one has a suffix added. Still all set for v4+',
         {name: 'Preset Name', val: instrument.presetName},
         {name: 'Preset Folder', val: instrument.presetFolder},
       ];
-    case 'nameonly':
+    case FORMATS.JUST_NAME:
       return [
         'Needs to have a folder added to it for this to be v4+',
         {name: 'Preset Name', val: instrument.presetName},
       ];
-    case 'unknown':
+    case FORMATS.UNKNOWN:
       return [
         <Typography
           key={0}

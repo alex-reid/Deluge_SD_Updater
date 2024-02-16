@@ -17,7 +17,7 @@ import InstrumentList from './components/instrumentList';
 import SongList from './components/SongList';
 import {DragBox} from './components/DragBox';
 import {INST, instrumentReducer, SONG, songReducer} from './reducers/reducers';
-import ExportPopup from './components/ExportPopup';
+import ExportPopup, {getFileExportInfo} from './components/ExportPopup';
 
 const App = () => {
   const [synths, dispatchSynths] = useReducer(instrumentReducer, []);
@@ -25,7 +25,7 @@ const App = () => {
   const [songs, dispatchSongs] = useReducer(songReducer, []);
   const [tab, setTab] = useState('tab-synths');
   const [initialised, setInitialised] = useState(false);
-  const [fileExport, setFileExport] = useState({});
+  const [fileExport, setFileExport] = useState(null);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -41,7 +41,12 @@ const App = () => {
   // }, [kits]);
 
   useEffect(() => {
-    if (Object.keys(fileExport).length != 0) {
+    if (
+      fileExport?.info &&
+      fileExport?.synthNames &&
+      fileExport?.kitNames &&
+      fileExport?.songInsts
+    ) {
       console.log(fileExport);
       handleOpen();
     }
@@ -89,8 +94,8 @@ const App = () => {
     dispatchSynths({type: INST.RENAME_ALL_PRETTY});
     dispatchKits({type: INST.RENAME_ALL_PRETTY});
     dispatchSongs({type: SONG.RENAME_ALL_PRETTY});
-    // console.log(synths, kits);
   };
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -206,25 +211,28 @@ const App = () => {
                 </div>
               </Box>
 
-              <Box m={2}>
-                <Button
-                  variant="contained"
-                  onClick={loadV4Names}
-                  size="small"
-                  color="secondary"
-                  sx={{mr: 2}}
-                >
-                  Load V4 Names
-                </Button>
-                <Button
-                  variant="contained"
-                  onClick={loadPrettyNames}
-                  size="small"
-                  color="secondary"
-                  sx={{mr: 4}}
-                >
-                  Prettify Old Names
-                </Button>
+              <Box sx={{m: 2, display: 'flex', justifyContent: 'space-between'}}>
+                <Box>
+                  <Button
+                    variant="contained"
+                    onClick={loadV4Names}
+                    size="small"
+                    color="secondary"
+                    sx={{mr: 2}}
+                  >
+                    Load V4 Names
+                  </Button>
+                  <Button
+                    variant="contained"
+                    onClick={loadPrettyNames}
+                    size="small"
+                    color="secondary"
+                    sx={{mr: 4}}
+                  >
+                    Prettify Old Names
+                  </Button>
+                </Box>
+
                 <Button
                   variant="contained"
                   onClick={doExport}
@@ -233,12 +241,14 @@ const App = () => {
                 >
                   Update Files
                 </Button>
+              </Box>
+              {fileExport && (
                 <ExportPopup
                   open={open}
                   handleClose={handleClose}
                   fileExport={fileExport}
                 />
-              </Box>
+              )}
             </>
           ) : (
             <DragBox />
@@ -264,48 +274,3 @@ const App = () => {
   );
 };
 export default App;
-
-function getFileExportInfo(synths, kits, songs) {
-  const synthNames = synths.reduce(
-    (acc, synth) => [
-      ...acc,
-      {
-        oldName: synth.oldName,
-        oldPath: synth.path,
-        rewriteName: synth.rewriteName || synth.oldName,
-        rewriteFolder: synth.rewriteFolder || synth.path,
-      },
-    ],
-    [],
-  );
-  const kitNames = kits.reduce(
-    (acc, kit) => [
-      ...acc,
-      {
-        oldName: kit.oldName,
-        oldPath: kit.path,
-        rewriteName: kit.rewriteName || kit.oldName,
-        rewriteFolder: kit.rewriteFolder || kit.path,
-      },
-    ],
-    [],
-  );
-  const songInsts = songs.reduce(
-    (acc, song) => [
-      ...acc,
-      {
-        name: song.name,
-        path: song.path,
-        instruments: song.instruments.reduce(
-          (acc, inst) => [
-            ...acc,
-            {rewriteName: inst.rewriteName, rewriteFolder: inst.rewriteFolder},
-          ],
-          [],
-        ),
-      },
-    ],
-    [],
-  );
-  return {synthNames, kitNames, songInsts};
-}

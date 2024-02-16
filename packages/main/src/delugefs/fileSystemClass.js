@@ -280,7 +280,8 @@ class fileSystem {
   async loadSongs() {
     if (this.files.songs.length > 0) {
       let loaded = 0;
-      for (const song of this.files.songs) {
+      for (const [songID, song] of this.files.songs.entries()) {
+        song.songID = songID;
         await song
           .loadXML()
           .then(() => loaded++)
@@ -295,18 +296,107 @@ class fileSystem {
     for (const [songIndex, song] of this.files.songs.entries()) {
       for (const instrument of song.instruments) {
         //instrument.getSoundIndex(this.mappings);
-        const {id, type} = instrument.getSoundIndex(this.mappings, this.debug);
-        if (id != 'new') {
-          instrument.rewriteName = this.files[type][id].fileName;
+        const {id, type, hasSuffixFile} = instrument.getSoundIndex(this.mappings, this.debug);
+        const {formatType} = instrument;
+        if (id == 'new') {
+          instrument.rewriteName = instrument.sound.baseName + instrument.sound.suffixV4;
+          instrument.rewriteFolder = instrument.presetFolder || instrument.types.folder;
+        } else {
+          if (this.debug)
+            console.log({
+              id,
+              type,
+              formatType,
+              soundName: instrument.sound.baseName,
+              soundSuffix: instrument.sound.suffix,
+              newSound: this.files[type][id],
+              hasSuffixFile,
+            });
+          // instrument.rewriteName = this.files[type][id].fileName + instrument.sound.suffix;
+          // if (hasSuffixFile)
+          instrument.rewriteName = this.files[type][id].sound.baseName + instrument.sound.suffix;
           instrument.rewriteFolder = this.files[type][id].path;
           this.files[type][id].songIDs.add(songIndex);
           // console.log(this.files[type][id].songIDs);
-        } else {
-          instrument.rewriteName = instrument.patchName + instrument.patchSuffix;
-          instrument.rewriteFolder = instrument.presetFolder || instrument.types.folder;
         }
       }
     }
+  }
+
+  async rewriteInsts(type, files) {
+    const updated = [];
+    for (const file of files) {
+      if (file.willUpdate && this.files[type][file.id]) {
+        await this.files[type][file.id].renameFile(file.rewriteName).then(data => {
+          this.browserWindow.webContents.send('export-update-results', [data]);
+          updated.push(data);
+        });
+      }
+    }
+    return updated;
+  }
+
+  async rewriteSongs(files) {
+    const updated = [];
+
+    for (const song of files) {
+      if (this.files.songs[song.id]) {
+        if (this.files.songs[song.id].validate()) {
+          const done = this.files.songs[song.id].rewriteInstrumentsAndClipsXMLAttributes(
+            song.instruments,
+          );
+          if (this.files.songs[song.id].validate()) {
+            await this.files.songs[song.id].saveXML();
+            this.browserWindow.webContents.send('export-update-results', done);
+            updated.push(done);
+          }
+        }
+      }
+    }
+    return updated;
+  }
+
+  handleRewrite(files) {
+    const {synthNames, kitNames, songInsts} = files;
+    const totals = {kits: {good: 0, bad: 0}, synths: {good: 0, bad: 0}, songs: {good: 0, bad: 0}};
+    this.rewriteInsts('synths', synthNames)
+      .then(done => {
+        totals.synths = done.reduce(
+          (a, c) => {
+            if (c.type == 'success') return {good: a.good + 1, bad: a.bad};
+            if (c.type == 'fail') return {good: a.good, bad: a.bad + 1};
+            return a;
+          },
+          {good: 0, bad: 0},
+        );
+        return this.rewriteInsts('kits', kitNames);
+      })
+      .then(done => {
+        totals.kits = done.reduce(
+          (a, c) => {
+            if (c.type == 'success') return {good: a.good + 1, bad: a.bad};
+            if (c.type == 'fail') return {good: a.good, bad: a.bad + 1};
+            return a;
+          },
+          {good: 0, bad: 0},
+        );
+        return this.rewriteSongs(songInsts);
+      })
+      .then(done => {
+        this.browserWindow.webContents.send('export-update-results', [
+          {type: 'total', data: done.length + ' songs successfully processed'},
+          {
+            type: 'total',
+            data:
+              totals.synths.good + ' synths successfully renamed, ' + totals.synths.bad + ' failed',
+          },
+          {
+            type: 'total',
+            data: totals.kits.good + ' kits successfully renamed, ' + totals.kits.bad + ' failed',
+          },
+        ]);
+      })
+      .catch(err => console.error(err));
   }
 }
 
